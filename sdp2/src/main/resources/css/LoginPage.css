@@ -1,0 +1,15 @@
+.textfield {
+    -fx-background-color: rgba(29, 53, 87, 0.6); /* Witte achtergrond */
+    -fx-text-fill: white;/* Kleur van de prompt text */
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.button {
+    -fx-background-color: #EF463C;
+    -fx-text-fill: white;
+    -fx-background-radius: 4px;
+}
+
+.button:hover {
+    -fx-background-color: #cb3b33;
+}
