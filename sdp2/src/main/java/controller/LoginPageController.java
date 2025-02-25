@@ -1,4 +1,4 @@
-package gui;
+package controller;
 
 import domein.user.LoginService;
 import javafx.fxml.FXML;
@@ -6,6 +6,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
+
+import java.io.IOException;
 
 public class LoginPageController {
 
@@ -18,10 +20,10 @@ public class LoginPageController {
     @FXML
     private Button loginButton;
 
-    private final LoginService loginController;
+    private final LoginService loginSerivce;
 
     public LoginPageController() {
-        this.loginController = new LoginService();
+        this.loginSerivce = new LoginService();
     }
 
     @FXML
@@ -29,8 +31,13 @@ public class LoginPageController {
         String email = emailField.getText();
         String password = passwordField.getText();
 
-        if (loginController.login(email, password)) {
-            showAlert("Login Succesvol!", "Welkom, " + email + "!", Alert.AlertType.INFORMATION);
+        if (loginSerivce.login(email, password)) {
+            try{
+                SceneSwitcher.switchScene("/view/LandingPage.fxml");
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+
         } else {
             showAlert("Login Mislukt", "Ongeldige gebruikersnaam of wachtwoord.", Alert.AlertType.ERROR);
         }
