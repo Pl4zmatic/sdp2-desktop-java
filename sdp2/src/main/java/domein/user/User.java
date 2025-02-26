@@ -1,6 +1,8 @@
 package domein.user;
 import jakarta.persistence.*;
 import lombok.*;
+import utils.Rollen;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.Serializable;
@@ -26,7 +28,17 @@ public class User implements Serializable {
     @Column(nullable = false) //Dit zorgt dat wachtwoord niet leeg kan zijn
     private String password;
 
+    @Column(nullable = false, unique = true)
     private String email;
+    
+    @Column(nullable = false)
+    private String adres;
+    
+    @Column(nullable = true, unique = true)
+    private String gsmNummer;
+    
+    @Column(nullable = false)
+    private Rollen rol;
 
     public User(String firstName, String lastName, String email, String password)
     {
@@ -45,5 +57,7 @@ public class User implements Serializable {
     {
         return BCrypt.checkpw(inputPw, this.password);
     }
+    
+    
 
 }

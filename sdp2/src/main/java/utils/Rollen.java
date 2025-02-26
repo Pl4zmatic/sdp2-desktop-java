@@ -1,0 +1,5 @@
+package utils;
+
+public enum Rollen {
+	ADMINISTRATOR, VERANTWOORDELIJKE, TECHNIEKER, MANAGER;
+}
