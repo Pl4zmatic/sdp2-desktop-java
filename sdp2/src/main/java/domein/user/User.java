@@ -50,6 +50,8 @@ public class User implements Serializable {
 
     public void setPassword(String password)
     {
+    	checkString(password);
+    	
         this.password = BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
@@ -58,6 +60,52 @@ public class User implements Serializable {
         return BCrypt.checkpw(inputPw, this.password);
     }
     
+    public void setLastName(String naam) {
+    	checkString(naam);
+    	
+    	this.lastName = naam;
+    }
+    
+    public void setFirstName(String voornaam) {
+    	checkString(voornaam);
+    	
+    	this.firstName = voornaam;
+    }
+    
+    public void setEmail(String email) {
+    	checkString(email);
+    	
+    	this.email = email;
+    }
+    
+    public void setAdres(String adres) {
+    	checkString(adres);
+    	
+    	this.adres = adres;
+    }
+    
+    public void setGsmNummer(String gsm) {
+    	if(this.rol == Rollen.TECHNIEKER) {
+    		checkString(gsm);
+    	}
+    	
+    	this.gsmNummer = gsm;
+    }
+    
+    public void setRol(Rollen rol) {
+    	if(rol == null) {
+    		throw new IllegalArgumentException("Role has to be filled in");
+    	}
+    	
+    	this.rol = rol;
+    }
+    
+    public boolean checkString(String string) {
+    	if(string == null || string.isEmpty() || string.isBlank()) {
+    		throw new IllegalArgumentException(String.format("%s has to be filled in", string));
+    	}
+    	return true;
+    }
     
 
 }
