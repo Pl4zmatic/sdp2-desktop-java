@@ -1,104 +1,256 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="1024.0" prefWidth="1440.0" style="-fx-background-color: #1A1E30;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="1024.0" prefWidth="1440.0" style="-fx-background-color: #1A1E30;" stylesheets="@../css/LandingPage.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LandingPageController">
    <children>
-      <BorderPane prefHeight="1024.0" prefWidth="290.0" style="-fx-background-color: #171B2D;">
-         <top>
-            <ImageView fitHeight="140.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-               <image>
-                  <Image url="@../../../../../../../../../../Downloads/Logo_delaware.png" />
-               </image>
-            </ImageView>
-         </top>
+      <BorderPane prefHeight="1024.0" prefWidth="1441.0">
+         <left>
+            <BorderPane prefHeight="1024.0" prefWidth="290.0" style="-fx-background-color: #171B2D;" BorderPane.alignment="CENTER">
+               <left>
+                  <VBox fx:id="menuContainer" prefHeight="727.0" prefWidth="273.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox fx:id="menuItem1">
+                           <Button fx:id="btnMenu1" styleClass="menuItem" stylesheets="@../css/LandingPage.css" text="Administrator">
+                              <font>
+                                 <Font name="Inter Medium" size="12.0" />
+                              </font>
+                              <cursor>
+                                 <Cursor fx:constant="HAND" />
+                              </cursor></Button>
+                           <VBox fx:id="subMenu1">
+                              <Button styleClass="subMenuItem" stylesheets="@../css/LandingPage.css" text="Beheer Gebruikers">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button styleClass="subMenuItem" stylesheets="@../css/LandingPage.css" text="Logs">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                           </VBox>
+                        </VBox>
+      
+                        <VBox fx:id="menuItem2">
+                           <Button fx:id="btnMenu2" styleClass="menuItem" stylesheets="@../css/LandingPage.css" text="Verantwoordelijke">
+                              <font>
+                                 <Font name="Inter Medium" size="12.0" />
+                              </font>
+                              <cursor>
+                                 <Cursor fx:constant="HAND" />
+                              </cursor></Button>
+                           <VBox fx:id="subMenu2">
+                              <Button styleClass="subMenuItem" stylesheets="@../css/LandingPage.css" text="Beheer Sites">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button styleClass="subMenuItem" stylesheets="@../css/LandingPage.css" text="Onderhoud">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button styleClass="subMenuItem" stylesheets="@../css/LandingPage.css" text="Beheer Machines">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button styleClass="subMenuItem" stylesheets="@../css/LandingPage.css" text="Beheer Notificaties">
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </VBox>
+                        </VBox>
+                        <VBox fx:id="menuItem3">
+                           <children>
+                              <Button fx:id="btnMenu3" styleClass="menuItem" stylesheets="@../css/LandingPage.css" text="Technieker">
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <VBox fx:id="subMenu3">
+                                 <children>
+                                    <Button styleClass="subMenuItem" stylesheets="@../css/LandingPage.css" text="Onderhoud">
+                                       <VBox.margin>
+                                          <Insets left="30.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font name="Inter Medium" size="12.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <BorderPane.margin>
+                        <Insets top="30.0" />
+                     </BorderPane.margin>
+                  </VBox>
+               </left>
+               <top>
+                  <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="290.0" spacing="10.0">
+                           <children>
+                              <Text fx:id="profileName" fill="#adb3cc" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profileText" text="John Doe" wrappingWidth="200.0">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </Text>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/User_fill@3x.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets right="20.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </HBox>
+                        <Line endX="160.0" startX="-100.0" stroke="WHITE" strokeDashOffset="100.0" strokeWidth="2.0" styleClass="dottedLine" />
+                     </children>
+                  </VBox>
+               </top>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+               <bottom>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="290.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
+                     <children>
+                        <Text fill="#adb3cc" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profileText" text="Notifications" wrappingWidth="200.0">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Inter Medium" size="22.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9">
+                           <image>
+                              <Image url="@../images/Bell_duotone_line@3x.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </HBox>
+               </bottom>
+            </BorderPane>
+         </left>
          <center>
-            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="40.0" BorderPane.alignment="CENTER">
                <children>
-                  <MenuButton mnemonicParsing="false" prefHeight="24.0" prefWidth="290.0" style="-fx-background-color: #171B2D;" text="Administrator" textFill="#adb3cc">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="Action 1" />
-                      <MenuItem mnemonicParsing="false" text="Action 2" />
-                    </items>
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </MenuButton>
-                  <MenuButton mnemonicParsing="false" prefWidth="290.0" style="-fx-background-color: #171B2D;" text="Verantwoordelijke" textFill="#adb3cc">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="Action 1" />
-                      <MenuItem mnemonicParsing="false" text="Action 2" />
-                    </items>
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </MenuButton>
-                  <MenuButton mnemonicParsing="false" prefHeight="24.0" prefWidth="290.0" style="-fx-background-color: #171B2D;" text="Technieker" textFill="#adb3cc">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="Action 1" />
-                      <MenuItem mnemonicParsing="false" text="Action 2" />
-                    </items>
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </MenuButton>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1119.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcomeText" text="Welcome">
+                           <font>
+                              <Font name="Inter Semi Bold" size="89.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="welcomeName" fill="#ef463c" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="nameText" text="John Doe">
+                           <font>
+                              <Font name="Inter Semi Bold" size="80.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </VBox>
+                  <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="67.0" prefWidth="268.0" spacing="50.0" styleClass="shortcutContainer">
+                     <children>
+                        <Text fill="#adb3cc" strokeType="OUTSIDE" strokeWidth="0.0" text="A">
+                           <font>
+                              <Font name="Inter Semi Bold" size="25.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Text>
+                        <Text fill="#adb3cc" strokeType="OUTSIDE" strokeWidth="0.0" text="V">
+                           <font>
+                              <Font name="Inter Semi Bold" size="25.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Text>
+                        <Text fill="#adb3cc" strokeType="OUTSIDE" strokeWidth="0.0" text="T">
+                           <font>
+                              <Font name="Inter Semi Bold" size="25.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Text>
+                     </children>
+                  </HBox>
                </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
             </VBox>
          </center>
-         <bottom>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Label layoutX="62.0" layoutY="43.0" text="Administrator" textFill="#adb3cc">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <ImageView fitHeight="79.0" fitWidth="38.0" layoutX="200.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../../../../Downloads/user-2-account-icon-1024x1022-juiy5a5b.png" />
-                     </image>
-                  </ImageView>
-                  <Label layoutX="62.0" layoutY="106.0" text="Notifications" textFill="#adb3cc">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="201.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../../../../Downloads/Bell.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
-         </bottom>
       </BorderPane>
-      <Text fill="#ef463c" layoutX="352.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Administrator">
-         <font>
-            <Font size="40.0" />
-         </font>
-      </Text>
-      <Line endX="822.3333740234375" layoutX="480.0" layoutY="393.0" startX="-128.0" stroke="WHITE" />
-      <Button layoutX="351.0" layoutY="431.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="944.0" style="-fx-background-color: #37394e; -fx-background-radius: 20;" text="Beheer gebruikers" textFill="WHITE">
-         <font>
-            <Font size="32.0" />
-         </font>
-      </Button>
-      <Button layoutX="353.0" layoutY="517.0" mnemonicParsing="false" prefWidth="944.0" style="-fx-background-color: #37394e; -fx-background-radius: 20;" text="Logs" textFill="WHITE">
-         <font>
-            <Font size="32.0" />
-         </font>
-      </Button>
    </children>
 </AnchorPane>

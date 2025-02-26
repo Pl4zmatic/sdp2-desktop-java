@@ -50,18 +50,16 @@ public class User implements Serializable {
         setRol(rol);
     }
 
-    public void setPassword(String password)
-    {
-    	checkString(password);
-    	
-        this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+    public void setPassword(String password) {
+        checkString(password);
+        // Alleen hashen als het wachtwoord nog niet gehashed is.
+        if (!password.startsWith("$2a$")) {
+            this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+        } else {
+            this.password = password;
+        }
     }
 
-    public boolean checkPassword(String inputPw)
-    {
-        return BCrypt.checkpw(inputPw, this.password);
-    }
-    
     public void setLastName(String naam) {
     	checkString(naam);
     	
@@ -119,6 +117,9 @@ public class User implements Serializable {
     	}
     	return true;
     }
-    
+
+    public String getFullName() {
+        return String.format("%s %s",getFirstName(), getLastName());
+    }
 
 }

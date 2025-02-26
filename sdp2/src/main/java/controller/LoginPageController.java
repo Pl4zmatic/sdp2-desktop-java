@@ -30,6 +30,9 @@ public class LoginPageController {
     private void handleLogin() {
         String email = emailField.getText();
         String password = passwordField.getText();
+        System.out.println("DIT: " + password);
+
+
 
         if (loginSerivce.login(email, password)) {
             try{

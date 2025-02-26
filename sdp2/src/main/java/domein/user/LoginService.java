@@ -1,8 +1,8 @@
 package domein.user;
 
 import domein.Session;
-//import jakarta.persistence.EntityNotFoundException;
 import repository.UserDaoJpa;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class LoginService {
     private final UserDaoJpa userDao;
@@ -11,17 +11,21 @@ public class LoginService {
         this.userDao = new UserDaoJpa();
     }
 
-    public boolean login(String email, String password)
-    {
+    public boolean login(String email, String password) {
         try {
-            User user = userDao.getUserByEmail(email);
+            // Haal het gehashte wachtwoord op uit de database
+            String hashedPassword = userDao.getHashedPasswordByEmail(email);
 
-            if (user != null && user.checkPassword(password))
+            if (hashedPassword != null && BCrypt.checkpw(password, hashedPassword)) {
+                // Zet de ingelogde gebruiker in de sessie als het wachtwoord klopt
+                User user = userDao.getUserByEmail(email);
                 Session.setCurrentUser(user);
                 return true;
-
+            }
         } catch (Exception e) {
-            return false;
+            e.printStackTrace();
         }
+
+        return false;  // Return false als login mislukt
     }
 }

@@ -26,7 +26,6 @@ public class UserTest {
         assertEquals("Test", user.getFirstName());
         assertEquals("De Tester", user.getLastName());
         assertEquals("test@mail.com", user.getEmail());
-        assertTrue(user.checkPassword("test"));
         assertEquals("Testlaan", user.getAdres());
         assertEquals("123", user.getGsmNummer());
         assertEquals(Rollen.TECHNIEKER, user.getRol());
@@ -45,16 +44,6 @@ public class UserTest {
     void testSetFirstNameValid(String input) {
         user.setFirstName(input);
         assertEquals(input, user.getFirstName());
-    }
-
-    @ParameterizedTest
-    @CsvSource({
-            "newPassword123, true",
-            "wrongPassword, false"
-    })
-    void testCheckPassword(String input, boolean expected) {
-        user.setPassword("newPassword123");
-        assertEquals(expected, user.checkPassword(input));
     }
 
     @ParameterizedTest

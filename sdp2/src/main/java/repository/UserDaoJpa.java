@@ -1,7 +1,7 @@
 package repository;
 
 import domein.user.User;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
 public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao {
@@ -11,13 +11,23 @@ public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao {
     }
 
     @Override
-    public User getUserByEmail(String email) throws EntityNotFoundException {
+    public User getUserByEmail(String email) {
         try {
             return em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
                     .setParameter("email", email)
                     .getSingleResult();
         } catch (NoResultException ex) {
-            throw new EntityNotFoundException("User with email " + email + " not found.");
+            return null;
+        }
+    }
+
+    public String getHashedPasswordByEmail(String email) {
+        try {
+            return em.createQuery("SELECT u.password FROM User u WHERE u.email = :email", String.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
         }
     }
 }
