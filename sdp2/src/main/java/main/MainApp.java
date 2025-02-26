@@ -1,3 +1,4 @@
+package main;
 import controller.SceneSwitcher;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

@@ -1,7 +1,7 @@
 package domein.user;
 
 import domein.Session;
-import jakarta.persistence.EntityNotFoundException;
+//import jakarta.persistence.EntityNotFoundException;
 import repository.UserDaoJpa;
 
 public class LoginService {
@@ -20,7 +20,7 @@ public class LoginService {
                 Session.setCurrentUser(user);
                 return true;
 
-        } catch (EntityNotFoundException e) {
+        } catch (Exception e) {
             return false;
         }
     }
