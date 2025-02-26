@@ -39,12 +39,15 @@ public class User implements Serializable {
     @Column(nullable = false)
     private Rollen rol;
 
-    public User(String firstName, String lastName, String email, String password)
+    public User(String firstName, String lastName, String email, String password, String adres, String gsmNummer, Rollen rol)
     {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setPassword(password);
+        setAdres(adres);
+        setGsmNummer(gsmNummer);
+        setRol(rol);
     }
 
     public void setPassword(String password)
