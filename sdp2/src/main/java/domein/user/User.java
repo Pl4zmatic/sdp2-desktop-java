@@ -11,7 +11,6 @@ import java.io.Serializable;
 @Table(name = "users")
 @NoArgsConstructor
 @Getter
-@Setter
 @ToString
 public class User implements Serializable {
 
@@ -98,6 +97,17 @@ public class User implements Serializable {
     	}
     	
     	this.rol = rol;
+    }
+    
+    public void beheerGebruiker(String firstName, String lastName, String password, 
+    		String email, String adres, String gsmNummer, Rollen rol) {
+    	setFirstName(firstName);
+    	setLastName(lastName);
+    	setPassword(password);
+    	setEmail(email);
+    	setAdres(adres);
+    	setGsmNummer(gsmNummer);
+    	setRol(rol);
     }
     
     public boolean checkString(String string) {
