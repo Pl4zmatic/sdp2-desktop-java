@@ -5,4 +5,5 @@ import jakarta.persistence.EntityNotFoundException;
 
 public interface UserDao extends GenericDao<User> {
     User getUserByEmail(String email) throws EntityNotFoundException;
+    String getHashedPasswordByEmail(String email) throws EntityNotFoundException;
 }

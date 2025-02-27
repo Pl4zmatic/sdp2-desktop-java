@@ -15,7 +15,7 @@
 
 .menuItem {
     -fx-background-color: transparent;
-    -fx-text-fill: #ADB3CC;
+    -fx-text-fill: #3B3535;
     -fx-font-size: 20px;
     -fx-cursor: hand;
     -fx-font-family: "Inter Medium";
@@ -33,31 +33,31 @@
 
 .profileText {
     -fx-font-family: "Inter Semi Bold";
-    -fx-text-fill: #ADB3CC;
+    -fx-text-fill: #3B3535;
     -fx-font-size: 22px;
 }
 
 .dottedLine {
     -fx-stroke-width: 1;
     -fx-stroke-dash-array: 5, 10;
-    -fx-stroke: #ADB3CC;
+    -fx-stroke: #3B3535;
 }
 
 .notifText{
     -fx-font-family: "Inter Medium";
-    -fx-text-fill: #ADB3CC;
+    -fx-text-fill: #3B3535;
     -fx-font-size: 22px;
 }
 
 .subMenuItem {
     -fx-background-color: transparent;
-    -fx-text-fill: #ADB3CC;
+    -fx-text-fill: #3B3535;
     -fx-font-size: 20px;
     -fx-cursor: hand;
     -fx-font-family: "Inter";
 }
 
 .shortcutContainer {
-    -fx-background-color: rgba(74, 84, 133, 0.21);
+    -fx-background-color: #FAFAFA;
     -fx-background-radius: 5px;
 }

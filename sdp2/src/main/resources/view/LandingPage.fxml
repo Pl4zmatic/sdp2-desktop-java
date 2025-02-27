@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -13,11 +14,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="1024.0" prefWidth="1440.0" style="-fx-background-color: #1A1E30;" stylesheets="@../css/LandingPage.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LandingPageController">
+<AnchorPane prefHeight="1024.0" prefWidth="1440.0" style="-fx-background-color: #FAFAFA;" stylesheets="@../css/LandingPage.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GebruikersBeheerderController">
    <children>
       <BorderPane prefHeight="1024.0" prefWidth="1441.0">
          <left>
-            <BorderPane prefHeight="1024.0" prefWidth="290.0" style="-fx-background-color: #171B2D;" BorderPane.alignment="CENTER">
+            <BorderPane prefHeight="1024.0" prefWidth="290.0" style="-fx-background-color: #FAFAFA;" BorderPane.alignment="CENTER">
                <left>
                   <VBox fx:id="menuContainer" prefHeight="727.0" prefWidth="273.0" BorderPane.alignment="CENTER">
                      <children>
@@ -28,7 +29,8 @@
                               </font>
                               <cursor>
                                  <Cursor fx:constant="HAND" />
-                              </cursor></Button>
+                              </cursor>
+                           </Button>
                            <VBox fx:id="subMenu1">
                               <Button styleClass="subMenuItem" stylesheets="@../css/LandingPage.css" text="Beheer Gebruikers">
                                  <VBox.margin>
@@ -54,7 +56,7 @@
                               </Button>
                            </VBox>
                         </VBox>
-      
+
                         <VBox fx:id="menuItem2">
                            <Button fx:id="btnMenu2" styleClass="menuItem" stylesheets="@../css/LandingPage.css" text="Verantwoordelijke">
                               <font>
@@ -62,7 +64,8 @@
                               </font>
                               <cursor>
                                  <Cursor fx:constant="HAND" />
-                              </cursor></Button>
+                              </cursor>
+                           </Button>
                            <VBox fx:id="subMenu2">
                               <Button styleClass="subMenuItem" stylesheets="@../css/LandingPage.css" text="Beheer Sites">
                                  <VBox.margin>
@@ -148,7 +151,7 @@
                      <children>
                         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="290.0" spacing="10.0">
                            <children>
-                              <Text fx:id="profileName" fill="#adb3cc" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profileText" text="John Doe" wrappingWidth="200.0">
+                              <Text fx:id="profileName" fill="#3b3535" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profileText" text="John Doe" wrappingWidth="200.0">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
@@ -176,7 +179,7 @@
                <bottom>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="290.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
                      <children>
-                        <Text fill="#adb3cc" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profileText" text="Notifications" wrappingWidth="200.0">
+                        <Text fill="#3b3535" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profileText" text="Notifications" wrappingWidth="200.0">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -201,55 +204,7 @@
             </BorderPane>
          </left>
          <center>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="40.0" BorderPane.alignment="CENTER">
-               <children>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1119.0">
-                     <children>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcomeText" text="Welcome">
-                           <font>
-                              <Font name="Inter Semi Bold" size="89.0" />
-                           </font>
-                        </Text>
-                        <Text fx:id="welcomeName" fill="#ef463c" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="nameText" text="John Doe">
-                           <font>
-                              <Font name="Inter Semi Bold" size="80.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-                  <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="67.0" prefWidth="268.0" spacing="50.0" styleClass="shortcutContainer">
-                     <children>
-                        <Text fill="#adb3cc" strokeType="OUTSIDE" strokeWidth="0.0" text="A">
-                           <font>
-                              <Font name="Inter Semi Bold" size="25.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Text>
-                        <Text fill="#adb3cc" strokeType="OUTSIDE" strokeWidth="0.0" text="V">
-                           <font>
-                              <Font name="Inter Semi Bold" size="25.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Text>
-                        <Text fill="#adb3cc" strokeType="OUTSIDE" strokeWidth="0.0" text="T">
-                           <font>
-                              <Font name="Inter Semi Bold" size="25.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Text>
-                     </children>
-                  </HBox>
-               </children>
-               <BorderPane.margin>
-                  <Insets />
-               </BorderPane.margin>
-            </VBox>
+            <MFXTableView fx:id="userTable" prefHeight="667.0" prefWidth="974.0" BorderPane.alignment="CENTER" />
          </center>
       </BorderPane>
    </children>
