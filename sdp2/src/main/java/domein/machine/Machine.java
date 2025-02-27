@@ -4,11 +4,14 @@ import jakarta.persistence.Tuple;
 import javafx.util.Pair;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.AccessLevel;
+
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 import java.util.Date;
+import java.util.List;
 
 public class Machine {
 
@@ -21,8 +24,6 @@ public class Machine {
     @Getter@Setter
     private String productInfo;
     @Getter@Setter
-    private String status;
-    @Getter@Setter
     private String productieStatus;
     @Getter@Setter
     private LocalDateTime uptime;
@@ -33,20 +34,24 @@ public class Machine {
     private int aantalDagenSindsLaatsteOnderhoud;
     @Getter@Setter
     private Date datumToekomstigeOnderhoud;
+    @Getter@Setter
+    private List<Machine> listMachines;
+    @Getter@Setter(AccessLevel.PROTECTED)
+    private MachineState currentState;
 
 
     public Machine(String siteNaam, String code, String locatie,
-                   String productInfo, String status, String productieStatus,
+                   String productInfo,String productieStatus,
                    LocalDateTime uptime, String techniekerNaam
                    ) {
         this.siteNaam = siteNaam;
         this.code = code;
         this.locatie = locatie;
         this.productInfo = productInfo;
-        this.status = status;
         this.productieStatus = productieStatus;
         this.uptime = uptime;
         this.techniekerNaam = techniekerNaam;
+        this.currentState = new StoppedState(this);
 
     }
 
@@ -54,7 +59,15 @@ public class Machine {
         return (int) Duration.between(laatsteOnderhoud.getKey(), LocalDateTime.now()).toDays();
     }
 
+    public void maintenanceMachine(Machine machine, Maintenance maintenance) {
 
+        if(!currentState.toString().equals("stopped")) {
+            throw new IllegalStateException("The machine needs to be stopped in order to go through a maintenance.");
+        }
+
+        currentState.startMaintenanceMachine();
+        
+    }
 
 
 }

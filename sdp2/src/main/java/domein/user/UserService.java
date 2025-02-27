@@ -5,10 +5,10 @@ import repository.UserDaoJpa;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.Rollen;
 
-public class LoginService {
+public class UserService {
     private final UserDaoJpa userDao;
 
-    public LoginService() {
+    public UserService() {
         this.userDao = new UserDaoJpa();
     }
 
