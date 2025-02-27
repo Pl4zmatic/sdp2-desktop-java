@@ -3,6 +3,7 @@ package domein.user;
 import domein.Session;
 import repository.UserDaoJpa;
 import org.mindrot.jbcrypt.BCrypt;
+import utils.Rollen;
 
 public class LoginService {
     private final UserDaoJpa userDao;
@@ -28,4 +29,31 @@ public class LoginService {
 
         return false;  // Return false als login mislukt
     }
+
+
+
+    public boolean register(String firstName, String lastName, String email, String password,
+                            String adres, String gsmNummer, Rollen rol) {
+        try {
+            // Controleer of een gebruiker met dit e-mailadres al bestaat
+            if (userDao.getUserByEmail(email) != null) {
+                return false;
+            }
+
+            // Maak een nieuwe gebruiker aan
+            User newUser = new User(firstName, lastName, email, password, adres, gsmNummer, rol);
+
+            // Voeg de gebruiker toe aan de database
+            UserDaoJpa.startTransaction();
+            userDao.insert(newUser);
+            UserDaoJpa.commitTransaction();
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            UserDaoJpa.rollbackTransaction();
+            return false;
+        }
+    }
+
 }
