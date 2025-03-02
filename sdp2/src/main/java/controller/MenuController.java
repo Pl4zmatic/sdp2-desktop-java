@@ -1,6 +1,5 @@
 package controller;
 
-import domein.Session;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,7 +10,7 @@ import javafx.util.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LandingPageController {
+public class MenuController {
 
     @FXML private Button btnMenu1;
     @FXML private Button btnMenu2;
@@ -43,9 +42,8 @@ public class LandingPageController {
             button.setOnAction(event -> toggleSubMenu(submenu, button));
         });
 
-        // Text veranderen naar username
-        setTextToUsername(welcomeName);
-        setTextToUsername(profileName);
+        // Zet de tekst naar de gebruikersnaam
+        setTextToUsername(profileName, "John Doe");
     }
 
     private void toggleSubMenu(VBox submenu, Button menuButton) {
@@ -96,7 +94,7 @@ public class LandingPageController {
         visibilityMap.put(submenu, visible);
     }
 
-    private void setTextToUsername(Text text) {
-        text.setText(Session.getCurrentUser().getFullName());
+    private void setTextToUsername(Text text, String fullName) {
+        text.setText(fullName);
     }
 }

@@ -5,12 +5,23 @@ import repository.UserDaoJpa;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.Rollen;
 
+import java.util.Collections;
+import java.util.List;
+
 public class UserService
     {
     private final UserDaoJpa userDao;
+    private static UserService instance;
 
     public UserService() {
         this.userDao = new UserDaoJpa();
+    }
+
+    public static UserService getInstance() {
+        if (instance == null) {
+            instance = new UserService();
+        }
+        return instance;
     }
 
     public boolean login(String email, String password) {
@@ -57,4 +68,62 @@ public class UserService
         }
     }
 
-}
+    public boolean deleteUser(String email) {
+        try {
+            User user = userDao.getUserByEmail(email);
+
+            if (user != null) {
+                UserDaoJpa.startTransaction();
+                userDao.delete(user);
+                UserDaoJpa.commitTransaction();
+            } else {
+                System.out.println("No user found");
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            UserDaoJpa.rollbackTransaction();
+        }
+        return false;
+    }
+
+    public List<User> getAllUsers(){
+        try{
+            return Collections.unmodifiableList(userDao.findAll());
+        } catch (Exception e){
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public boolean editUser(User updatedUser) {
+        try {
+            User existingUser = userDao.getUserByEmail(updatedUser.getEmail());
+            if (existingUser != null) {
+                UserDaoJpa.startTransaction();
+
+                existingUser.beheerGebruiker(
+                        updatedUser.getFirstName(),
+                        updatedUser.getLastName(),
+                        updatedUser.getPassword(),
+                        updatedUser.getEmail(),
+                        updatedUser.getAdres(),
+                        updatedUser.getGsmNummer(),
+                        updatedUser.getRol()
+                );
+
+                userDao.update(existingUser);
+                UserDaoJpa.commitTransaction();
+                return true;
+            } else {
+                System.out.println("User not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            UserDaoJpa.rollbackTransaction();
+        }
+        return false;
+    }
+
+
+    }

@@ -20,23 +20,20 @@ public class LoginPageController {
     @FXML
     private Button loginButton;
 
-    private final UserService loginSerivce;
+    private final UserService userSerivce;
 
     public LoginPageController() {
-        this.loginSerivce = new UserService();
+        this.userSerivce = UserService.getInstance();
     }
 
     @FXML
     private void handleLogin() {
         String email = emailField.getText();
         String password = passwordField.getText();
-        System.out.println("DIT: " + password);
 
-
-
-        if (loginSerivce.login(email, password)) {
+        if (userSerivce.login(email, password)) {
             try{
-                SceneSwitcher.switchScene("/view/LandingPage.fxml");
+                SceneSwitcher.switchScene("/view/ManageUsers.fxml");
             } catch(IOException e) {
                 e.printStackTrace();
             }
