@@ -2,6 +2,7 @@ package controller;
 
 import domein.user.UserService;
 import domein.user.User;
+import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.control.Alert;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import lombok.Setter;
 import utils.Rollen;
@@ -26,6 +28,7 @@ public class UserFormController {
     @FXML private MFXTextField phoneNumberField;
     @FXML private MFXComboBox<Rollen> roleField;
     @FXML private MFXButton saveButton;
+    @FXML private CheckBox isDeletedButton;
 
     private final UserService userService = UserService.getInstance();
     private User currentUser;
@@ -48,8 +51,11 @@ public class UserFormController {
     String adres = adressField.getText();
     String phoneNumber = phoneNumberField.getText();
     Rollen role = roleField.getSelectedItem();
+    boolean isDeleted = !isDeletedButton.isSelected();
 
     User newUser = new User(firstName, lastName, email, password, adres, phoneNumber, role);
+    newUser.setDeleted(isDeleted);
+    System.out.println(newUser);
 
     boolean success;
     if (isEditMode) {
@@ -111,6 +117,7 @@ public class UserFormController {
         adressField.setText(user.getAdres());
         phoneNumberField.setText(user.getGsmNummer());
         roleField.getSelectionModel().selectItem(user.getRol());;
+        isDeletedButton.setSelected(!user.getDeleted());
     }
 
 public void setEditMode(boolean isEditMode)

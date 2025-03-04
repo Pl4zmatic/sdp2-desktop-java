@@ -74,8 +74,9 @@ public class UserService
 
             if (user != null) {
                 UserDaoJpa.startTransaction();
-                userDao.delete(user);
+                userDao.softDelete(user);
                 UserDaoJpa.commitTransaction();
+                return true;
             } else {
                 System.out.println("No user found");
             }
@@ -87,14 +88,24 @@ public class UserService
         return false;
     }
 
-    public List<User> getAllUsers(){
+    public List<User> getAllActiveUsers(){
+        try{
+            return Collections.unmodifiableList(userDao.findAllActive());
+        } catch (Exception e){
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<User> getAllUsers()
+        {
         try{
             return Collections.unmodifiableList(userDao.findAll());
         } catch (Exception e){
             e.printStackTrace();
             return Collections.emptyList();
         }
-    }
+        }
 
     public boolean editUser(User updatedUser) {
         try {
@@ -124,6 +135,4 @@ public class UserService
         }
         return false;
     }
-
-
-    }
+}

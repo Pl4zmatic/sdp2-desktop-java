@@ -2,10 +2,7 @@ package controller;
 
 import domein.user.User;
 import domein.user.UserService;
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXTableColumn;
-import io.github.palexdev.materialfx.controls.MFXTableView;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import java.io.IOException;
 import java.util.Comparator;
@@ -26,16 +23,23 @@ public class GebruikersBeheerderController {
     @FXML private MFXTableView<User> userTable;
     @FXML private MFXTextField searchField;
     @FXML private MFXButton addUserButton;
+    @FXML private CheckBox showDeletedUsers;
 
-    private ObservableList<User> users = FXCollections.observableArrayList();
+    private ObservableList<User> users;
     private FilteredList<User> filteredUsers;
     private UserService userService = UserService.getInstance();
 
     // Deze methode haalt de gebruikers uit de database en vult de TableView
     private void loadUsersFromDatabase() {
-        users.setAll(userService.getAllUsers());
+        if(showDeletedUsers.isSelected())
+           users = FXCollections.observableArrayList(userService.getAllUsers());
+        else
+            users = FXCollections.observableArrayList(userService.getAllActiveUsers());
+
+
         filteredUsers = new FilteredList<>(users, p -> true);
-        userTable.setItems(filteredUsers);  // De TableView wordt gevuld met de lijst van gebruikers
+        userTable.setItems(filteredUsers);
+
     }
 
     @FXML
@@ -45,8 +49,13 @@ public class GebruikersBeheerderController {
         loadUsersFromDatabase();
         setupTable();
         setupSearch();
+
         addUserButton.setText("+");
         addUserButton.setOnAction(e -> addUser());
+
+        showDeletedUsers.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            loadUsersFromDatabase();
+        });
     }
 
     // Laad de Navbar FXML en voeg het toe aan de root layout
@@ -70,6 +79,7 @@ public class GebruikersBeheerderController {
     MFXTableColumn<User> emailColumn = new MFXTableColumn<>("Email", true, Comparator.comparing(User::getEmail));
     MFXTableColumn<User> addressColumn = new MFXTableColumn<>("Address", true, Comparator.comparing(User::getAdres));
     MFXTableColumn<User> roleColumn = new MFXTableColumn<>("Role", true, Comparator.comparing(User::getRol));
+    MFXTableColumn<User> statusColumn = new MFXTableColumn<>("Status", true, Comparator.comparing(user -> !user.getDeleted()));
     MFXTableColumn<User> actionsColumn = new MFXTableColumn<>("Actions", true);
 
     // Stel table cells in
@@ -78,6 +88,7 @@ public class GebruikersBeheerderController {
     emailColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getEmail));
     addressColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getAdres));
     roleColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getRol));
+    statusColumn.setRowCellFactory(user -> new MFXTableRowCell<>(u -> u.getDeleted() ? "Inactive" : "Active"));
 
     actionsColumn.setRowCellFactory(user -> {
         HBox hbox = new HBox(5); // 5 is de spacing tussen de knoppen
@@ -102,7 +113,7 @@ public class GebruikersBeheerderController {
         return cell;
     });
 
-    userTable.getTableColumns().addAll(firstNameColumn, lastNameColumn, emailColumn, addressColumn, roleColumn, actionsColumn);
+    userTable.getTableColumns().addAll(firstNameColumn, lastNameColumn, emailColumn, addressColumn, roleColumn, statusColumn, actionsColumn);
 
     userTable.setFooterVisible(false);
     searchField.setPromptText("Search name...");
