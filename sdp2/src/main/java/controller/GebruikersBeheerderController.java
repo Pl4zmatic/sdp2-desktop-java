@@ -12,7 +12,9 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import java.io.IOException;
@@ -61,29 +63,49 @@ public class GebruikersBeheerderController {
         }
     }
 
-    // Maak de kolommen van de MFXTableView
     private void setupTable() {
-        MFXTableColumn<User> firstNameColumn = new MFXTableColumn<>("First Name", true, Comparator.comparing(User::getFirstName));
-        MFXTableColumn<User> lastNameColumn = new MFXTableColumn<>("Last Name", true, Comparator.comparing(User::getLastName));
-        MFXTableColumn<User> emailColumn = new MFXTableColumn<>("Email", true, Comparator.comparing(User::getEmail));
-        MFXTableColumn<User> addressColumn = new MFXTableColumn<>("Address", true, Comparator.comparing(User::getAdres));
-        MFXTableColumn<User> roleColumn = new MFXTableColumn<>("Role", true, Comparator.comparing(User::getRol));
+    // Kolommen voor User-attributen
+    MFXTableColumn<User> firstNameColumn = new MFXTableColumn<>("First Name", true, Comparator.comparing(User::getFirstName));
+    MFXTableColumn<User> lastNameColumn = new MFXTableColumn<>("Last Name", true, Comparator.comparing(User::getLastName));
+    MFXTableColumn<User> emailColumn = new MFXTableColumn<>("Email", true, Comparator.comparing(User::getEmail));
+    MFXTableColumn<User> addressColumn = new MFXTableColumn<>("Address", true, Comparator.comparing(User::getAdres));
+    MFXTableColumn<User> roleColumn = new MFXTableColumn<>("Role", true, Comparator.comparing(User::getRol));
+    MFXTableColumn<User> actionsColumn = new MFXTableColumn<>("Actions", true);
 
-        // Stel voor elke kolom in welke gegevens de cellen moeten bevatten
-        firstNameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getFirstName));
-        lastNameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getLastName));
-        emailColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getEmail));
-        addressColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getAdres));
-        roleColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getRol));
+    // Stel table cells in
+    firstNameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getFirstName));
+    lastNameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getLastName));
+    emailColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getEmail));
+    addressColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getAdres));
+    roleColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getRol));
 
-        // Voeg de kolommen toe aan de MFXTableView
-        userTable.getTableColumns().addAll(firstNameColumn, lastNameColumn, emailColumn, addressColumn, roleColumn);
+    actionsColumn.setRowCellFactory(user -> {
+        HBox hbox = new HBox(5); // 5 is de spacing tussen de knoppen
+        hbox.setAlignment(Pos.CENTER);
 
-        //disable filter sectie
-        userTable.setFooterVisible(false);
+        MFXButton editButton = new MFXButton("Edit");
+        editButton.setOnAction(event -> {
+            // Logica voor edit user
+            editUser(user);
+        });
 
-        //set prompt text voor zoekbalk
-        searchField.setPromptText("Search name...");
+        MFXButton deleteButton = new MFXButton("Delete");
+        deleteButton.setOnAction(event -> {
+            // Logica voor delete user
+            deleteUser(user);
+        });
+
+        hbox.getChildren().addAll(editButton, deleteButton);
+
+        MFXTableRowCell<User, String> cell = new MFXTableRowCell<>(u -> "");
+        cell.setGraphic(hbox); // setGraphic is voor alles wanneer je geen tekst aan een cell wil toevoegen
+        return cell;
+    });
+
+    userTable.getTableColumns().addAll(firstNameColumn, lastNameColumn, emailColumn, addressColumn, roleColumn, actionsColumn);
+
+    userTable.setFooterVisible(false);
+    searchField.setPromptText("Search name...");
     }
 
     private void setupSearch() {
@@ -116,8 +138,22 @@ public class GebruikersBeheerderController {
         }
     }
 
-//    private void EditUser(){
-//
-//    }
+    private void editUser(User user) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UserForm.fxml"));
+            Parent root = loader.load();
+            System.out.println(user);
+
+            UserFormController controller = loader.getController();
+            controller.setEditMode(true);
+            controller.setUser(user);
+
+            // In plaats van switchScene, direct de root zetten
+            Scene scene = new Scene(root);
+            SceneSwitcher.getStage().setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

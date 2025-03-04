@@ -12,11 +12,11 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.scene.layout.HBox;
+import lombok.Setter;
 import utils.Rollen;
 import java.io.IOException;
 
 public class UserFormController {
-
     @FXML private HBox rootLayout;
     @FXML private MFXTextField firstNameField;
     @FXML private MFXTextField lastNameField;
@@ -25,11 +25,15 @@ public class UserFormController {
     @FXML private MFXTextField adressField;
     @FXML private MFXTextField phoneNumberField;
     @FXML private MFXComboBox<Rollen> roleField;
+    @FXML private MFXButton saveButton;
 
     private final UserService userService = UserService.getInstance();
+    private User currentUser;
+    private boolean isEditMode;
 
     @FXML
     public void initialize() {
+        System.out.println(isEditMode);
         loadNavbar();
         ObservableList<Rollen> roles = FXCollections.observableArrayList(Rollen.values());
         roleField.setItems(roles);
@@ -37,29 +41,40 @@ public class UserFormController {
 
     @FXML
     private void handleSaveUser() {
-        String firstName = firstNameField.getText();
-        String lastName = lastNameField.getText();
-        String email = emailField.getText();
-        String password = passwordField.getText();
-        String adres = adressField.getText();
-        String phoneNumber = phoneNumberField.getText();
-        Rollen role = roleField.getSelectedItem();
+    String firstName = firstNameField.getText();
+    String lastName = lastNameField.getText();
+    String email = emailField.getText();
+    String password = passwordField.getText();
+    String adres = adressField.getText();
+    String phoneNumber = phoneNumberField.getText();
+    Rollen role = roleField.getSelectedItem();
 
-        boolean success = userService.register(firstName, lastName, email, password, adres, phoneNumber, role);
+    User newUser = new User(firstName, lastName, email, password, adres, phoneNumber, role);
 
-        if (success) {
-            showAlert("Success", "User successfully created!", Alert.AlertType.INFORMATION);
-            try {
-                SceneSwitcher.switchScene("/view/ManageUsers.fxml");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            showAlert("Error", "Failed to create user. Email might already exist.", Alert.AlertType.ERROR);
-        }
+    boolean success;
+    if (isEditMode) {
+        // Bewerk de bestaande gebruiker
+        success = userService.editUser(newUser);
+    } else {
+        // Voeg een nieuwe gebruiker toe
+        success = userService.register(firstName, lastName, email, password, adres, phoneNumber, role);
     }
 
-    @FXML
+    if (success) {
+        String message = isEditMode ? "User successfully updated!" : "User successfully created!";
+        showAlert("Success", message, Alert.AlertType.INFORMATION);
+        try {
+            SceneSwitcher.switchScene("/view/ManageUsers.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    } else {
+        showAlert("Error", "Failed to save user. Email might already exist.", Alert.AlertType.ERROR);
+    }
+    }
+
+
+@FXML
     private void handleCancel() {
         try {
             SceneSwitcher.switchScene("/view/ManageUsers.fxml");
@@ -84,5 +99,25 @@ public class UserFormController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setUser(User user) {
+        this.currentUser = user;
+        this.isEditMode = true;
+        firstNameField.setText(user.getFirstName());
+        lastNameField.setText(user.getLastName());
+        emailField.setText(user.getEmail());
+        passwordField.setText(user.getPassword());
+        adressField.setText(user.getAdres());
+        phoneNumberField.setText(user.getGsmNummer());
+        roleField.getSelectionModel().selectItem(user.getRol());;
+    }
+
+public void setEditMode(boolean isEditMode)
+    {
+        this.isEditMode = isEditMode;
+        if (isEditMode) {
+            saveButton.setText("Update");
+        } else saveButton.setText("Add");
     }
 }

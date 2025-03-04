@@ -11,18 +11,25 @@ public class SceneSwitcher {
 
 private static Stage stage;
 
+public static Stage getStage() {
+    if (stage == null) {
+        throw new IllegalStateException("Stage is niet ingesteld. Roep eerst setStage() aan.");
+    }
+    return stage;
+}
+
 public static void setStage(Stage mainStage) {
-stage = mainStage;
+    stage = mainStage;
 }
 
 public static void switchScene(String fxmlPath) throws IOException {
-if (stage == null) {
-    throw new IllegalStateException("Stage is niet ingesteld. Roep eerst setStage() aan.");
-}
+        if (stage == null) {
+            throw new IllegalStateException("Stage is niet ingesteld. Roep eerst setStage() aan.");
+        }
 
-FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(fxmlPath));
-Parent root = loader.load();
-stage.setScene(new Scene(root));
-stage.show();
-}
+        FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(fxmlPath));
+        Parent root = loader.load();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 }
