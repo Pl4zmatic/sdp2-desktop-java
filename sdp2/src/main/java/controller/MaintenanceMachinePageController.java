@@ -3,6 +3,7 @@ package controller;
 import domein.machine.Machine;
 import domein.machine.Maintenance;
 import javafx.fxml.FXML;
+import utils.MaintenanceStatus;
 
 import java.util.Scanner;
 import java.util.List;
@@ -36,8 +37,16 @@ public class MaintenanceMachinePageController {
         System.out.print("Provide the remarks: ");
         String remarks = in.next();
         System.out.print("Provide the state: ");
-        String state = in.next();
+        String stateString = in.next();
+        MaintenanceStatus status = null;
+        switch(stateString){
+        	case "completed" -> { status = MaintenanceStatus.COMPLETED; }
+        	case "in progress" -> { status = MaintenanceStatus.INPROGRESS; }
+        	case "planned" -> { status = MaintenanceStatus.PLANNED; }
+        
+        }
+        
 
-        machine.maintenanceMachine(machine, new Maintenance(machine, startDate, startTime, endTime, nameTechnician, reason, maintenanceReport, remarks, state));
+        machine.maintenanceMachine(machine, new Maintenance(machine, startDate, startTime, endTime, nameTechnician, reason, maintenanceReport, remarks, status));
     }
 }

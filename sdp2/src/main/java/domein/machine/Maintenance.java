@@ -3,6 +3,7 @@ package domein.machine;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import utils.MaintenanceStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,6 +21,5 @@ public class Maintenance {
     private String reason;
     private String maintenanceReport;
     private String remark;
-    private String state;
-
+    private MaintenanceStatus state;
 }
