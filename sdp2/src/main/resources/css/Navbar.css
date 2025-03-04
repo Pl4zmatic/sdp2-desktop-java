@@ -1,0 +1,13 @@
+@import "globals.css";
+
+#navbarRoot {
+    -fx-background-color: -deepBlue;
+}
+
+.text {
+    -fx-fill: -white;
+}
+
+.dottedLine {
+    -fx-stroke: -gray;
+}

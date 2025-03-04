@@ -1,0 +1,7 @@
+.text {
+    -fx-font-family : "Inter";
+}
+
+.mfx-table-view .columns-container {
+    -fx-background-color: -deepBlue;
+}

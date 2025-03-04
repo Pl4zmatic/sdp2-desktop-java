@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -11,19 +13,23 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefWidth="280.0" stylesheets="@../css/LandingPage.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MenuController">
+<VBox fx:id="navbarRoot" prefWidth="280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MenuController">
    <children>
       <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
          <children>
             <HBox alignment="CENTER" spacing="90.0">
                <children>
-                  <Text fx:id="profileName" fill="#3b3535" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profileText" text="John Doe">
+                  <Text fx:id="profileName" fill="#3b3535" strokeType="OUTSIDE" strokeWidth="0.0" text="John Doe">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                      <font>
                         <Font name="Inter Medium" size="14.0" />
                      </font>
+                     <styleClass>
+                        <String fx:value="profileText" />
+                        <String fx:value="text" />
+                     </styleClass>
                   </Text>
                   <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -121,7 +127,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button styleClass="subMenuItem" stylesheets="@../css/LandingPage.css" text="Beheer Machines">
+                        <Button fx:id="manageMachines" styleClass="subMenuItem" stylesheets="@../css/LandingPage.css" text="Beheer Machines">
                            <VBox.margin>
                               <Insets left="30.0" />
                            </VBox.margin>
@@ -178,13 +184,17 @@
       </VBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="290.0" spacing="50.0">
          <children>
-            <Text fill="#3b3535" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profileText" text="Notifications">
+            <Text fill="#3b3535" strokeType="OUTSIDE" strokeWidth="0.0" text="Notifications">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
                <font>
                   <Font name="Inter Medium" size="22.0" />
                </font>
+               <styleClass>
+                  <String fx:value="profileText" />
+                  <String fx:value="text" />
+               </styleClass>
             </Text>
             <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9">
                <image>
@@ -200,4 +210,9 @@
          </cursor>
       </HBox>
    </children>
+   <stylesheets>
+      <URL value="@../css/globals.css" />
+      <URL value="@../css/Navbar.css" />
+      <URL value="@../css/LandingPage.css" />
+   </stylesheets>
 </VBox>

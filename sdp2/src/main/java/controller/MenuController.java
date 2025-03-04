@@ -12,6 +12,9 @@ import java.util.Map;
 
 public class MenuController {
 
+    @FXML
+    private VBox navbarRoot;
+
     @FXML private Button btnMenu1;
     @FXML private Button btnMenu2;
     @FXML private Button btnMenu3;
@@ -22,6 +25,8 @@ public class MenuController {
 
     @FXML private Text welcomeName;
     @FXML private Text profileName;
+
+    @FXML private Button manageMachines;
 
     private Map<Button, VBox> menuMap = new HashMap<>();
     private Map<VBox, Boolean> visibilityMap = new HashMap<>();
@@ -44,6 +49,9 @@ public class MenuController {
 
         // Zet de tekst naar de gebruikersnaam
         setTextToUsername(profileName, "John Doe");
+
+        //set button manageMachines callback
+        manageMachines.setOnAction(event -> switchToManageMachines());
     }
 
     private void toggleSubMenu(VBox submenu, Button menuButton) {
@@ -96,5 +104,13 @@ public class MenuController {
 
     private void setTextToUsername(Text text, String fullName) {
         text.setText(fullName);
+    }
+
+    private void switchToManageMachines() {
+        try {
+            SceneSwitcher.switchScene("/view/ManageMachines.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
