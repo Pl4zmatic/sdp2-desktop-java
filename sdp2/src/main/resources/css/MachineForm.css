@@ -1,0 +1,43 @@
+#machineCode {
+    -fx-font-size: 1.5em;
+    -fx-text-fill: -delawareRed;
+}
+
+.codeContainer {
+    -fx-border-width: 0 0 1;
+    -fx-border-color: -deepBlue;
+}
+
+.label {
+    -fx-font-size: 1em;
+}
+
+.formContainer {
+    -fx-background-radius: 10px;
+    -fx-background-color: -bgGray;
+}
+
+#details {
+    -fx-underline: true;
+}
+
+.required {
+    -fx-text-fill: -delawareRed;
+}
+
+.radio-button:selected .radio .dot {
+    -fx-background-color: -delawareRed;
+    -fx-background-insets: 0;
+}
+
+.button {
+    -fx-text-fill: white;
+}
+
+#save {
+    -fx-background-color: -delawareRed;
+}
+
+#cancel {
+    -fx-background-color: -gray;
+}
