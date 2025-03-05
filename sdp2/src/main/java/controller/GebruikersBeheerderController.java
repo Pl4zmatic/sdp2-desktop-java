@@ -45,7 +45,7 @@ public class GebruikersBeheerderController {
 
     @FXML
     public void initialize() {
-        loadNavbar();
+        rootLayout.getChildren().add(0, manager.NavbarManager.getNavbar());
 
         loadUsersFromDatabase();
         setupTable();

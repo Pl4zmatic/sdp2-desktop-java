@@ -1,125 +1,115 @@
 package controller;
 
+import controller.SceneSwitcher;
 import domein.Session;
 import domein.user.User;
-import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 import utils.Rollen;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
 
 public class NavbarController {
 
-    @FXML VBox administratorMenu;
-    @FXML VBox verantwoordelijkeMenu;
-    @FXML VBox techniekerMenu;
+    @FXML private VBox administratorMenu;
+    @FXML private VBox verantwoordelijkeMenu;
+    @FXML private VBox techniekerMenu;
 
-    @FXML Button beheerGebruikerItem;
+    @FXML private Button beheerGebruikerItem;
+    @FXML private Button logItem;
+    @FXML private Button beheerSiteItem;
+    @FXML private Button onderhoudItem;
+    @FXML private Button beheerMachineItem;
+    @FXML private Button beheerNotificatieItem;
+    @FXML private Button onderhoudTechniekerItem;
 
     @FXML private Text profileName;
 
     private Button activeButton;
-    private Map<Button, VBox> menuMap = new HashMap<>();
-    private Map<VBox, Boolean> visibilityMap = new HashMap<>();
 
     @FXML
     private void initialize() {
         User curUser = Session.getCurrentUser();
-
         Rollen userRole = curUser.getRol();
+        Button activeNavItem = Session.getActiveNavItem();
 
         switch (userRole) {
             case ADMINISTRATOR -> {
                 administratorMenu.setManaged(true);
-
                 verantwoordelijkeMenu.setManaged(false);
                 verantwoordelijkeMenu.setVisible(false);
-
                 techniekerMenu.setManaged(false);
                 techniekerMenu.setVisible(false);
-
             }
             case VERANTWOORDELIJKE -> {
                 administratorMenu.setManaged(false);
                 administratorMenu.setVisible(false);
-
                 verantwoordelijkeMenu.setManaged(true);
-
                 techniekerMenu.setManaged(false);
                 techniekerMenu.setVisible(false);
-
             }
             case TECHNIEKER -> {
                 administratorMenu.setManaged(false);
                 administratorMenu.setVisible(false);
-
                 verantwoordelijkeMenu.setManaged(false);
                 verantwoordelijkeMenu.setVisible(false);
-
                 techniekerMenu.setManaged(true);
-
             }
         }
 
+        // Stel de navigatieknoppen in
+        for (Button button : getAllMenuButtons()) {
+            button.setOnAction(event -> {
+                try {
+                    handleNavigation(button);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
 
-        // Knoppen koppelen aan toggle functie
-        menuMap.forEach((button, submenu) -> {
-            button.setOnAction(event -> toggleSubMenu(submenu, button));
-        });
-
-        setTextToUsername(profileName, "John Doe");
-
-        //set button manageMachines callback
-        manageMachines.setOnAction(event -> switchToManageMachines());
+        setTextToUsername(profileName, curUser.getFirstName() + " " + curUser.getLastName());
     }
 
-    private void toggleSubMenu(VBox submenu, Button menuButton) {
-        boolean isVisible = visibilityMap.getOrDefault(submenu, false);
+    private void handleNavigation(Button clickedButton) throws IOException {
+        if (Session.getActiveNavItem() != null) {
+            Session.getActiveNavItem().getStyleClass().remove("active");
+        }
 
-        if (isVisible) {
-            hideSubMenu(submenu, menuButton);
-        } else {
-            showSubMenu(submenu, menuButton);
+        clickedButton.getStyleClass().add("active");
+
+        Session.setActiveButton(clickedButton);
+
+
+        String fxmlPath = switch (clickedButton.getText()) {
+            case "Beheer Gebruikers" -> "/view/ManageUsers.fxml";
+            case "Logs" -> "/view/Logs.fxml";
+            case "Beheer Sites" -> "/view/SitesManagement.fxml";
+            case "Onderhoud" -> "/view/Maintenance.fxml";
+            case "Beheer Machines" -> "/view/MachinesManagement.fxml";
+            case "Beheer Notificaties" -> "/view/NotificationsManagement.fxml";
+            case "Logout" -> "/view/Logout.fxml";
+            default -> null;
+        };
+
+        if (fxmlPath != null) {
+            SceneSwitcher.switchScene(fxmlPath);
         }
     }
 
-    private void showSubMenu(VBox submenu, Button menuButton) {
-        submenu.setVisible(true);
-        submenu.setManaged(true);
 
-        TranslateTransition transition = new TranslateTransition(Duration.millis(300), submenu);
-        transition.setFromY(-10);
-        transition.setToY(0);
-        transition.play();
-
-        visibilityMap.put(submenu, true);
-
-        menuButton.setText(menuButton.getText().replace("▸", "▾"));
-    }
-
-    private void hideSubMenu(VBox submenu, Button menuButton) {
-        TranslateTransition transition = new TranslateTransition(Duration.millis(300), submenu);
-        transition.setToY(-10);
-        transition.setOnFinished(e -> {
-            submenu.setVisible(false);
-            submenu.setManaged(false);
-        });
-        transition.play();
-
-        visibilityMap.put(submenu, false);
-
-        menuButton.setText(menuButton.getText().replace("▾", "▸"));
-    }
-
-    private void setMenuVisibility(VBox submenu, boolean visible) {
-        submenu.setVisible(visible);
-        submenu.setManaged(visible);
-        visibilityMap.put(submenu, visible);
+    private Button[] getAllMenuButtons() {
+        return new Button[]{
+                beheerGebruikerItem,
+                logItem,
+                beheerSiteItem,
+                onderhoudItem,
+                beheerMachineItem,
+                beheerNotificatieItem,
+                onderhoudTechniekerItem,
+        };
     }
 
     private void setTextToUsername(Text text, String fullName) {

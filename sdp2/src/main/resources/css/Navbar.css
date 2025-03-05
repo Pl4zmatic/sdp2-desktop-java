@@ -47,8 +47,7 @@
 }
 
 .subMenuItem.active {
-    -fx-background-color: red;
-    -fx-text-fill: white;
+    -fx-text-fill: #EF463C;
 }
 
 .parentContainer {
