@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Table(name = "machine")
+@Table(name = "machines")
 @NoArgsConstructor
 @Getter
 @ToString
