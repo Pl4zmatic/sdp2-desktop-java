@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXTableView?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -17,20 +18,39 @@
          <children>
             <HBox alignment="CENTER" prefWidth="920.0" VBox.vgrow="NEVER">
                <children>
-                  <MFXTextField fx:id="searchBar" promptText="Zoeken" styleClass="mfx-text-field">
+                  <TextField fx:id="searchBar" promptText="Zoeken">
                      <font>
                         <Font name="Inter Medium" size="12.0" />
                      </font>
-                  </MFXTextField>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="20.0" top="5.0" />
+                     </padding>
+                  </TextField>
                   <Pane HBox.hgrow="ALWAYS" />
-                  <ImageView fx:id="addButton" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                  <ImageView fx:id="addButton" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                      <image>
                         <Image url="@../images/plus_circle.png" />
                      </image>
                   </ImageView>
                </children>
             </HBox>
-            <MFXTableView fx:id="tableView" VBox.vgrow="ALWAYS" />
+            <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+               <columns>
+                  <TableColumn fx:id="siteColumn" prefWidth="75.0" text="Site" />
+                  <TableColumn fx:id="codeColumn" prefWidth="75.0" text="Code" />
+                  <TableColumn fx:id="locationColumn" prefWidth="75.0" text="Locatie" />
+                  <TableColumn fx:id="productInfoColumn" prefWidth="75.0" text="Product Info" />
+                  <TableColumn fx:id="statusColumn" prefWidth="75.0" text="Status" />
+                  <TableColumn fx:id="productionStatusColumn" prefWidth="100.0" text="Productie Status" />
+                  <TableColumn fx:id="uptimeColumn" prefWidth="75.0" text="Uptime" />
+                  <TableColumn fx:id="technicianColumn" prefWidth="75.0" text="Technieker" />
+                  <TableColumn fx:id="lastMaintenanceColumn" prefWidth="125.0" text="Vorige  Onderhoud" />
+                  <TableColumn fx:id="nextMaintenanceColumn" prefWidth="150.0" text="Volgende Onderhoud" />
+               </columns>
+            </TableView>
          </children>
          <HBox.margin>
             <Insets />
