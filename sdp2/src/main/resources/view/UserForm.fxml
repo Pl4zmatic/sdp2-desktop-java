@@ -67,11 +67,11 @@
                      <children>
                         <VBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="170.0">
                            <children>
-                              <Label prefHeight="17.0" prefWidth="41.0" text="Adress" />
+                              <Label prefHeight="17.0" prefWidth="41.0" text="Role" />
                               <MFXComboBox fx:id="roleField" prefHeight="29.0" prefWidth="167.0" />
                            </children>
                         </VBox>
-                        <VBox alignment="CENTER_LEFT" prefHeight="49.0" prefWidth="170.0">
+                        <VBox fx:id="deletedContainer" alignment="CENTER_LEFT" prefHeight="49.0" prefWidth="170.0">
                            <children>
                               <CheckBox fx:id="isDeletedButton" mnemonicParsing="false" text="Active" />
                            </children>

@@ -144,11 +144,11 @@
             </VBox>
          </children>
       </VBox>
-      <HBox alignment="CENTER" prefWidth="280.0" spacing="30.0" styleClass="profileContainer">
+      <HBox alignment="CENTER" prefWidth="280.0" spacing="10.0" styleClass="profileContainer">
          <children>
-            <VBox prefHeight="0.0" prefWidth="101.0">
+            <VBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="101.0">
                <children>
-                  <Text fx:id="profileLastName" fill="#ef463c" strokeType="OUTSIDE" strokeWidth="0.0" text="Doe" wrappingWidth="193.421875">
+                  <Text fx:id="profileLastName" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Doe" wrappingWidth="193.421875">
                      <styleClass>
                         <String fx:value="profileTextLastName" />
                         <String fx:value="text" />
@@ -157,7 +157,7 @@
                         <Font name="Inter Medium" size="14.0" />
                      </font>
                   </Text>
-                  <Text fx:id="profileFirstName" fill="#d6dae8" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profileText" text="John" wrappingWidth="100.421875">
+                  <Text fx:id="profileFirstName" fill="#2f2f2f" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profileText" text="John" wrappingWidth="100.421875">
                      <font>
                         <Font name="Inter Medium" size="14.0" />
                      </font>

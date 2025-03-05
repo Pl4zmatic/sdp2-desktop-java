@@ -14,6 +14,7 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import lombok.Setter;
 import utils.Rollen;
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class UserFormController {
     @FXML private MFXComboBox<Rollen> roleField;
     @FXML private MFXButton saveButton;
     @FXML private CheckBox isDeletedButton;
+    @FXML private VBox deletedContainer;
 
     private final UserService userService = UserService.getInstance();
     private User currentUser;
@@ -36,10 +38,17 @@ public class UserFormController {
 
     @FXML
     public void initialize() {
-        System.out.println(isEditMode);
         loadNavbar();
         ObservableList<Rollen> roles = FXCollections.observableArrayList(Rollen.values());
         roleField.setItems(roles);
+
+        if (isEditMode) {
+            deletedContainer.setVisible(true);
+            deletedContainer.setDisable(false);
+        } else {
+            deletedContainer.setVisible(false);
+            deletedContainer.setDisable(true);
+        }
     }
 
     @FXML
@@ -130,6 +139,8 @@ public void setEditMode(boolean isEditMode)
         this.isEditMode = isEditMode;
         if (isEditMode) {
             saveButton.setText("Update");
-        } else saveButton.setText("Add");
+        } else {
+            saveButton.setText("Add");
+        }
     }
 }

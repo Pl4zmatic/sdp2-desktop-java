@@ -3,7 +3,8 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 
-public class LogsController {
+public class UserLogsController {
+    @FXML
     private BorderPane rootLayout;
 
     @FXML

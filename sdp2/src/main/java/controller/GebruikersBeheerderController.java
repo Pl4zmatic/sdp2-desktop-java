@@ -62,20 +62,6 @@ public class GebruikersBeheerderController {
         });
     }
 
-    // Laad de Navbar FXML en voeg het toe aan de root layout
-    private void loadNavbar() {
-        try {
-            FXMLLoader navbarLoader = new FXMLLoader(getClass().getResource("/view/Navbar.fxml"));
-            Parent navbar = navbarLoader.load();
-
-            // Voeg de navbar toe aan de bovenkant van de BorderPane
-            rootLayout.getChildren().add(0, navbar);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void setupTable() {
     // Kolommen voor User-attributen
     MFXTableColumn<User> firstNameColumn = new MFXTableColumn<>("First Name", true, Comparator.comparing(User::getFirstName));

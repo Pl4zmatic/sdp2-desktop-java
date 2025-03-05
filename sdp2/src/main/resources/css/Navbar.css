@@ -16,16 +16,16 @@
     -fx-font-size: 80px;
 }
 
-.profileTextFirstName {
+.profileFirstName {
     -fx-font-family: "Inter Semi Bold";
-    -fx-text-fill: #ffffff;
-    -fx-font-size: 16px;
+    -fx-text-fill: #1b1b1b;
+    -fx-font-size: 18px;
 }
 
-.profileTextLastName{
+.profileLastName{
     -fx-font-family: "Inter Semi Bold";
-    -fx-font-size: 18px;
-    -fx-text-fill: #EF463C;
+    -fx-font-size: 20px;
+    -fx-text-fill: #ffffff;
 }
 
 .dottedLine {
@@ -53,7 +53,7 @@
 }
 
 .subMenuItem.active {
-    -fx-text-fill: #2f2f2f;
+    -fx-text-fill: #1b1b1b;
 }
 
 .parentContainer {
@@ -61,7 +61,7 @@
 }
 
 .profileContainer {
-    -fx-background-color: #d13d34;
+    -fx-background-color: #ec4d44;
 }
 
 .profileIcon {
@@ -80,7 +80,7 @@
 
 .logoutLabel {
     -fx-font-family: "Inter Medium";
-    -fx-text-fill: black;
+    -fx-text-fill: #1b1b1b;
 }
 
 .logoutLabel:hover {

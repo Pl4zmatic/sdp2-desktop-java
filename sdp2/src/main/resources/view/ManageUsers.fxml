@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="rootLayout" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GebruikersBeheerderController">
+<BorderPane fx:id="rootLayout" prefHeight="720.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GebruikersBeheerderController">
    <center>
       <!-- Rechter VBox met Tabel (Flexibel) -->
       <VBox alignment="CENTER" BorderPane.alignment="CENTER">
