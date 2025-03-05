@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox fx:id="rootLayout" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UserFormController">
+   <children>
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0">
+         <children>
+            <VBox>
+               <children>
+                  <HBox alignment="CENTER" spacing="40.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="170.0">
+                           <children>
+                              <Label text="First Name" />
+                              <MFXTextField fx:id="firstNameField" alignment="CENTER" floatMode="ABOVE" prefHeight="29.0" prefWidth="167.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="170.0">
+                           <children>
+                              <Label text="Last Name" />
+                              <MFXTextField fx:id="lastNameField" alignment="CENTER" floatMode="ABOVE" prefHeight="29.0" prefWidth="167.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="40.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="170.0">
+                           <children>
+                              <Label text="Email" />
+                              <MFXTextField fx:id="emailField" alignment="CENTER" floatMode="ABOVE" prefHeight="29.0" prefWidth="167.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="170.0">
+                           <children>
+                              <Label text="Password" />
+                              <MFXTextField fx:id="passwordField" alignment="CENTER" floatMode="ABOVE" prefHeight="29.0" prefWidth="167.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="40.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="170.0">
+                           <children>
+                              <Label prefHeight="17.0" prefWidth="41.0" text="Adress" />
+                              <MFXTextField fx:id="adressField" alignment="CENTER" floatMode="ABOVE" prefHeight="29.0" prefWidth="167.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="170.0">
+                           <children>
+                              <Label text="Phone Number" />
+                              <MFXTextField fx:id="phoneNumberField" alignment="CENTER" floatMode="ABOVE" prefHeight="29.0" prefWidth="167.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="40.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="170.0">
+                           <children>
+                              <Label prefHeight="17.0" prefWidth="41.0" text="Adress" />
+                              <MFXComboBox fx:id="roleField" prefHeight="29.0" prefWidth="167.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefHeight="49.0" prefWidth="170.0">
+                           <children>
+                              <CheckBox fx:id="isDeletedButton" mnemonicParsing="false" text="Active" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                     <children>
+                        <MFXButton fx:id="saveButton" onAction="#handleSaveUser" prefHeight="37.0" prefWidth="103.0" text="Send" />
+                        <MFXButton fx:id="cancel" onAction="#handleCancel" prefHeight="37.0" prefWidth="103.0" text="Cancel" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</HBox>

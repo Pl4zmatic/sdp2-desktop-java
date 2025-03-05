@@ -4,6 +4,7 @@ import java.util.List;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import utils.SoftDeletable;
 
 public class GenericDaoJpa<T> implements GenericDao<T> {
     private static final String PU_NAME = "shopfloor";
@@ -33,8 +34,14 @@ public class GenericDaoJpa<T> implements GenericDao<T> {
     }
 
     @Override
-    public List<T> findAll() {
-        return em.createQuery("SELECT entity FROM " + type.getSimpleName() + " entity", type).getResultList();
+    public List<T> findAllActive() {
+        return em.createQuery("SELECT entity FROM " + type.getSimpleName() + " entity WHERE entity.deleted = false", type).getResultList();
+    }
+
+    @Override
+    public List<T> findAll()
+    {
+    return em.createQuery("SELECT entity FROM " + type.getSimpleName() + " entity", type).getResultList();
     }
 
     @Override
@@ -53,6 +60,25 @@ public class GenericDaoJpa<T> implements GenericDao<T> {
     }
 
     @Override
+    public void softDelete(T object) {
+        // Is het object softDeletable --> proceed anders error
+        if (object instanceof SoftDeletable) {
+            SoftDeletable softDeletable = (SoftDeletable) object;
+            softDeletable.setDeleted(true); // Zet het deleted veld op true
+
+            try {
+                em.merge(object);
+            } catch (Exception e) {
+                rollbackTransaction();
+                throw new RuntimeException("Error while trying to soft delete", e);
+            }
+        } else {
+            throw new IllegalArgumentException("Object does not have a SoftDeletable interface");
+        }
+    }
+
+
+@Override
     public void insert(T object) {
         em.persist(object);
     }

@@ -1,0 +1,49 @@
+/*  */
+/* global */
+.text {
+    -fx-font-family: "Inter";
+}
+
+/* table */
+.table-view .column-header,
+.table-view .column-header-background .filler {
+    -fx-background-color: -deepBlue;
+}
+
+.column-header {
+    -fx-border-width: 0 1 0 0;
+    -fx-border-color: white;
+}
+
+.column-header:last-visible {
+    -fx-border-width: 0 0 0 0;
+}
+
+.column-header-background .filler {
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: white;
+}
+
+.column-header .label {
+    -fx-text-fill: white;
+}
+
+.table-view {
+    -fx-border-width: 1;
+    -fx-border-color: -deepBlue;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.table-view .column-header-background {
+    -fx-background-radius: 5pt 5pt 0 0;
+    -fx-border-color: -grey;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 5px 0;
+}
+
+.text-field {
+    -fx-text-fill: -deepBlue;
+    -fx-border-color: -deepBlue;
+    -fx-border-radius: 5px;
+}

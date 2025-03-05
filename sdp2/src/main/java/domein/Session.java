@@ -1,9 +1,19 @@
 package domein;
 
 import domein.user.User;
+import javafx.scene.control.Button;
 
 public class Session {
     private static User currentUser;  // Houdt de ingelogde gebruiker bij
+    private static Button activeNavItem;
+
+    public static Button getActiveNavItem(){
+        return activeNavItem;
+    }
+
+    public static void setActiveButton(Button navItem) {
+        activeNavItem = navItem;
+    }
 
     // Private constr zodat er geen object van aangemaakt kan worden
     private Session() {}
