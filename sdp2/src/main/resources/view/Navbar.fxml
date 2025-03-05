@@ -4,6 +4,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.CustomMenuItem?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -12,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefWidth="280.0" styleClass="parentContainer" stylesheets="@../css/Navbar.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavbarController">
+<VBox fx:id="rootLayout" prefWidth="280.0" styleClass="parentContainer" stylesheets="@../css/Navbar.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavbarController">
    <children>
       <VBox alignment="TOP_CENTER">
          <children>
@@ -168,14 +171,26 @@
                   <Insets left="3.0" />
                </HBox.margin>
             </VBox>
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/User_fill@3x.png" />
-               </image>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </ImageView>
+            <Button fx:id="profileIcon" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" styleClass="profileIcon" stylesheets="@../css/Navbar.css" textAlignment="CENTER">
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/User_fill@3x.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <contextMenu>
+                  <ContextMenu id="logoutMenu" fx:id="logoutMenu" style="-fx-background-color: #ffffff; -fx-background-radius: 5px; -fx-padding: 10px, 10px, 10px, 10px;" styleClass="logoutMenu">
+                     <items>
+                        <CustomMenuItem fx:id="logoutItem" styleClass="logoutItem">
+                           <content>
+                              <Label styleClass="logoutLabel" stylesheets="@../css/Navbar.css" text="Logout" />
+                           </content>
+                        </CustomMenuItem>
+                     </items>
+                  </ContextMenu>
+               </contextMenu>
+            </Button>
          </children>
          <cursor>
             <Cursor fx:constant="HAND" />

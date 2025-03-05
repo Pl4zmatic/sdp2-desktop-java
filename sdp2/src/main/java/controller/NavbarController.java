@@ -3,7 +3,12 @@ package controller;
 import domein.Session;
 import domein.user.User;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import utils.Rollen;
@@ -26,11 +31,13 @@ public class NavbarController {
 
     @FXML private Text profileLastName;
     @FXML private Text profileFirstName;
-
+    @FXML private Button profileIcon;
+    @FXML private ContextMenu logoutMenu;
+    @FXML private MenuItem logoutItem;
     @FXML
     private void initialize() {
-        User curUser = Session.getCurrentUser();
-        Rollen userRole = curUser.getRol();
+
+        Rollen userRole = Session.getCurrentUser().getRol();
 
         switch (userRole) {
             case ADMINISTRATOR -> {
@@ -67,8 +74,8 @@ public class NavbarController {
             });
         }
 
-        setTextToUsername(profileLastName, curUser.getLastName());
-        setTextToUsername(profileFirstName, curUser.getFirstName());
+        setupProfileMenu();
+
     }
 
     private void handleNavigation(Button clickedButton) throws IOException {
@@ -108,6 +115,33 @@ public class NavbarController {
                 beheerNotificatieItem,
                 onderhoudTechniekerItem,
         };
+    }
+
+    private void setupProfileMenu() {
+        setTextToUsername(profileLastName, Session.getCurrentUser().getLastName());
+        setTextToUsername(profileFirstName, Session.getCurrentUser().getFirstName());
+
+        logoutMenu.getStyleClass().add("logoutMenu");
+        logoutItem.getStyleClass().add("logoutItem");
+
+        profileIcon.setOnMouseClicked(e -> {
+            if(e.getButton().equals(MouseButton.PRIMARY)) {
+                logoutMenu.show(profileIcon, e.getScreenX(), e.getScreenY());
+            }
+        });
+
+        logoutItem.setOnAction(e -> {
+            try {
+                handleLougout();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+
+    private void handleLougout() throws IOException {
+        Session.clear();
+        SceneSwitcher.switchScene("/view/LoginPage.fxml");
     }
 
     private void setTextToUsername(Text text, String fullName) {

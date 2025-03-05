@@ -1,15 +1,32 @@
+@font-face {
+    font-family: 'Inter';
+    src: url('fonts/Inter-Regular.otf');
+}
+
+@font-face {
+    font-family: "Inter Semi Bold";
+    src: url("fonts/Inter-SemiBold.otf");
+}
+
 .textfield {
-    -fx-background-color: rgba(29, 53, 87, 0.6); /* Witte achtergrond */
-    -fx-text-fill: white;/* Kleur van de prompt text */
-    -fx-prompt-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-background-color: rgba(255, 255, 255, 0.45);
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.7);
 }
 
 .button {
-    -fx-background-color: #EF463C;
-    -fx-text-fill: white;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #343434;
     -fx-background-radius: 4px;
+    -fx-font-family: "Inter Semi Bold";
 }
 
 .button:hover {
-    -fx-background-color: #cb3b33;
+    -fx-background-color: #343434;
+    -fx-text-fill: #ffffff;
+}
+
+.subTitle {
+    -fx-font-family: "Inter Semi Bold";
+    -fx-font-weight: bold;
 }

@@ -53,13 +53,38 @@
 }
 
 .subMenuItem.active {
-    -fx-text-fill: #EF463C;
+    -fx-text-fill: #2f2f2f;
 }
 
 .parentContainer {
-    -fx-background-color: #1F282E;
+    -fx-background-color: #EF463C;
 }
 
 .profileContainer {
-    -fx-background-color: #192025;
+    -fx-background-color: #d13d34;
 }
+
+.profileIcon {
+    -fx-background-color: transparent;
+}
+
+.logoutMenu {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+}
+
+.logoutItem {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
+}
+
+.logoutLabel {
+    -fx-font-family: "Inter Medium";
+    -fx-text-fill: black;
+}
+
+.logoutLabel:hover {
+    -fx-text-fill: #EF463C;
+}
+
+

@@ -14,9 +14,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #1A1E30;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginPageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #1A1E30;" stylesheets="@../css/LoginPage.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginPageController">
    <center>
-      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="409.0" spacing="1.0" style="-fx-background-color: #1A1E30;" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="409.0" spacing="1.0" style="-fx-background-color: EF463C;" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="CENTER" prefHeight="62.0" prefWidth="200.0">
                <children>
@@ -27,12 +27,12 @@
                   </ImageView>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Text fill="#ef463c" strokeType="OUTSIDE" strokeWidth="0.0" text="Shopfloor ">
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="subTitle" text="Shopfloor ">
                            <font>
                               <Font name="Inter Bold" size="14.0" />
                            </font>
                         </Text>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Application">
+                        <Text fill="#2f2f2f" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="subTitle" text="Application">
                            <font>
                               <Font name="Inter Bold" size="14.0" />
                            </font>
@@ -47,7 +47,7 @@
                      <children>
                         <VBox alignment="CENTER" prefHeight="67.0" prefWidth="200.0" spacing="15.0">
                            <children>
-                              <TextField fx:id="emailField" maxWidth="500.0" prefHeight="50.0" prefWidth="200.0" promptText="example@mail.com" styleClass="textfield" stylesheets="@../css/LoginPage.css">
+                              <TextField fx:id="emailField" maxWidth="500.0" prefHeight="50.0" prefWidth="200.0" promptText="example@mail.com" styleClass="textfield">
                                  <font>
                                     <Font name="Inter Regular" size="12.0" />
                                  </font>
@@ -55,7 +55,7 @@
                                     <Cursor fx:constant="TEXT" />
                                  </cursor>
                               </TextField>
-                              <PasswordField fx:id="passwordField" maxWidth="500.0" prefHeight="50.0" prefWidth="200.0" promptText="Enter your password" styleClass="textfield" stylesheets="@../css/LoginPage.css" />
+                              <PasswordField fx:id="passwordField" maxWidth="500.0" prefHeight="50.0" prefWidth="200.0" promptText="Enter your password" styleClass="textfield" />
                            </children>
                         </VBox>
                         <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="500.0" prefHeight="25.0" prefWidth="500.0" text="Forgot Password" textFill="WHITE">
@@ -68,7 +68,7 @@
                         </Label>
                      </children>
                   </VBox>
-                  <Button fx:id="loginButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="500.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="30.0" prefWidth="200.0" stylesheets="@../css/LoginPage.css" text="Login">
+                  <Button fx:id="loginButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="500.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="30.0" prefWidth="200.0" text="Login" textFill="#343434">
                      <font>
                         <Font name="Inter Regular" size="13.0" />
                      </font>
