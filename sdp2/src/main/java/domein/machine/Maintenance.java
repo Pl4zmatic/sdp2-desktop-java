@@ -15,8 +15,8 @@ import jakarta.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
-@NoArgsConstructor
+@Table(name = "maintenances")
+@AllArgsConstructor
 public class Maintenance {
     
     private Machine machine;

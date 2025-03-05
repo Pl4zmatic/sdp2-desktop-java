@@ -19,7 +19,7 @@ import java.util.Set;
 @Entity
 @Table(name = "machines")
 @NoArgsConstructor
-public class Machine implements Subject {
+public class Machine {
 
 	@Getter
 	@Setter
@@ -55,7 +55,6 @@ public class Machine implements Subject {
 	@Getter
 	@Setter(AccessLevel.PROTECTED)
 	private MachineState currentState;
-	private Set<Observer> observers;
 
 	public Machine(String siteNaam, String code, String locatie, String productInfo, String productieStatus,
 			LocalDateTime uptime, String techniekerNaam) {
@@ -84,25 +83,5 @@ public class Machine implements Subject {
 
 	}
 
-	@Override
-	public void addObserver(Observer observer) {
-		observers.add(observer);
-
-	}
-
-	@Override
-	public void removeObserver(Observer observer) {
-		observers.remove(observer);
-
-	}
-	
-	private void notifyObservers() {
-		observers.forEach(observer -> observer.update(aantalDagenSindsLaatsteOnderhoud));
-	}
-	
-	public void setMeasurements(int aantalDagenSindsLaatsteOnderhoud) {
-		this.aantalDagenSindsLaatsteOnderhoud = this.getAantalDagenSindsLaatsteOnderhoud();
-		notifyObservers();
-	}
 
 }
