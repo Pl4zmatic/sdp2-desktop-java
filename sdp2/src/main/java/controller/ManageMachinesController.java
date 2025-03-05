@@ -86,9 +86,14 @@ public class ManageMachinesController {
 
         private void setupCallbacks() {
                 addButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> addButtonCallback());
+                searchBar.setOnAction((event) -> searchBarCallback());
         }
 
         private void addButtonCallback() {
+
+        }
+
+        private void searchBarCallback() {
 
         }
 }
