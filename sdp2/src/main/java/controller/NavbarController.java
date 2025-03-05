@@ -1,53 +1,77 @@
 package controller;
 
+import domein.Session;
+import domein.user.User;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import utils.Rollen;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class MenuController {
+public class NavbarController {
 
-    @FXML
-    private VBox navbarRoot;
+    @FXML VBox administratorMenu;
+    @FXML VBox verantwoordelijkeMenu;
+    @FXML VBox techniekerMenu;
 
-    @FXML private Button btnMenu1;
-    @FXML private Button btnMenu2;
-    @FXML private Button btnMenu3;
+    @FXML Button beheerGebruikerItem;
 
-    @FXML private VBox subMenu1;
-    @FXML private VBox subMenu2;
-    @FXML private VBox subMenu3;
-
-    @FXML private Text welcomeName;
     @FXML private Text profileName;
 
-    @FXML private Button manageMachines;
-
+    private Button activeButton;
     private Map<Button, VBox> menuMap = new HashMap<>();
     private Map<VBox, Boolean> visibilityMap = new HashMap<>();
 
     @FXML
     private void initialize() {
-        // Verberg submenu's bij opstarten
-        setMenuVisibility(subMenu1, false);
-        setMenuVisibility(subMenu2, false);
-        setMenuVisibility(subMenu3, false);
+        User curUser = Session.getCurrentUser();
 
-        menuMap.put(btnMenu1, subMenu1);
-        menuMap.put(btnMenu2, subMenu2);
-        menuMap.put(btnMenu3, subMenu3);
+        Rollen userRole = curUser.getRol();
+
+        switch (userRole) {
+            case ADMINISTRATOR -> {
+                administratorMenu.setManaged(true);
+
+                verantwoordelijkeMenu.setManaged(false);
+                verantwoordelijkeMenu.setVisible(false);
+
+                techniekerMenu.setManaged(false);
+                techniekerMenu.setVisible(false);
+
+            }
+            case VERANTWOORDELIJKE -> {
+                administratorMenu.setManaged(false);
+                administratorMenu.setVisible(false);
+
+                verantwoordelijkeMenu.setManaged(true);
+
+                techniekerMenu.setManaged(false);
+                techniekerMenu.setVisible(false);
+
+            }
+            case TECHNIEKER -> {
+                administratorMenu.setManaged(false);
+                administratorMenu.setVisible(false);
+
+                verantwoordelijkeMenu.setManaged(false);
+                verantwoordelijkeMenu.setVisible(false);
+
+                techniekerMenu.setManaged(true);
+
+            }
+        }
+
 
         // Knoppen koppelen aan toggle functie
         menuMap.forEach((button, submenu) -> {
             button.setOnAction(event -> toggleSubMenu(submenu, button));
         });
 
-        // Zet de tekst naar de gebruikersnaam
         setTextToUsername(profileName, "John Doe");
 
         //set button manageMachines callback
@@ -73,10 +97,8 @@ public class MenuController {
         transition.setToY(0);
         transition.play();
 
-        // Update zichtbaarheid
         visibilityMap.put(submenu, true);
 
-        // Pas pijltje aan
         menuButton.setText(menuButton.getText().replace("▸", "▾"));
     }
 
@@ -89,10 +111,8 @@ public class MenuController {
         });
         transition.play();
 
-        // Update zichtbaarheid
         visibilityMap.put(submenu, false);
 
-        // Pas pijltje aan
         menuButton.setText(menuButton.getText().replace("▾", "▸"));
     }
 

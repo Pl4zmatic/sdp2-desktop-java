@@ -53,18 +53,23 @@ public class UserFormController {
     Rollen role = roleField.getSelectedItem();
     boolean isDeleted = !isDeletedButton.isSelected();
 
-    User newUser = new User(firstName, lastName, email, password, adres, phoneNumber, role);
-    newUser.setDeleted(isDeleted);
-    System.out.println(newUser);
-
     boolean success;
-    if (isEditMode) {
-        // Bewerk de bestaande gebruiker
-        success = userService.editUser(newUser);
-    } else {
-        // Voeg een nieuwe gebruiker toe
-        success = userService.register(firstName, lastName, email, password, adres, phoneNumber, role);
-    }
+        if (isEditMode) {
+            currentUser.setFirstName(firstName);
+            currentUser.setLastName(lastName);
+            currentUser.setEmail(email);
+            currentUser.setPassword(password);
+            currentUser.setAdres(adres);
+            currentUser.setGsmNummer(phoneNumber);
+            currentUser.setRol(role);
+            currentUser.setDeleted(isDeleted);
+
+            success = userService.editUser(currentUser);
+        } else {
+            User newUser = new User(firstName, lastName, email, password, adres, phoneNumber, role);
+            newUser.setDeleted(isDeleted);
+            success = userService.register(firstName, lastName, email, password, adres, phoneNumber, role);
+        }
 
     if (success) {
         String message = isEditMode ? "User successfully updated!" : "User successfully created!";

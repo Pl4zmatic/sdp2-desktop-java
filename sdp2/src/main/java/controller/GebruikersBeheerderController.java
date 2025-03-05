@@ -34,7 +34,8 @@ public class GebruikersBeheerderController {
         if(showDeletedUsers.isSelected())
            users = FXCollections.observableArrayList(userService.getAllUsers());
         else
-            users = FXCollections.observableArrayList(userService.getAllActiveUsers());
+           users = FXCollections.observableArrayList(userService.getAllActiveUsers());
+        System.out.println(users);
 
 
         filteredUsers = new FilteredList<>(users, p -> true);
@@ -142,8 +143,9 @@ public class GebruikersBeheerderController {
 
     private void deleteUser(User user) {
         boolean success = userService.deleteUser(user.getEmail());
+        System.out.println(user.getEmail());
         if (success) {
-            users.remove(user);
+            loadUsersFromDatabase();
         } else {
             System.out.println("Failed to delete user with email: " + user.getEmail());
         }
