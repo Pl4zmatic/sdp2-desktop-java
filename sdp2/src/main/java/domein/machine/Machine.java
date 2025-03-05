@@ -1,60 +1,98 @@
 package domein.machine;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.persistence.Tuple;
 import javafx.util.Pair;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.AccessLevel;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 import java.util.Date;
 
+@Entity
+@Table(name = "machine")
+@NoArgsConstructor
+@Getter
+@ToString
+@Setter
 public class Machine {
 
-    @Getter@Setter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Primaire sleutel voor JPA
+
+    @Column(nullable = false)
     private String siteNaam;
-    @Getter@Setter
+
+    @Column(unique = true, nullable = false)
     private String code;
-    @Getter@Setter
+
+    @Column(nullable = false)
     private String locatie;
-    @Getter@Setter
+
+    @Column(nullable = false)
     private String productInfo;
-    @Getter@Setter
-    private String status;
-    @Getter@Setter
+
+    @Column(nullable = false)
     private String productieStatus;
-    @Getter@Setter
+    @Column(nullable = false)
     private LocalDateTime uptime;
-    @Getter@Setter
+
+    @Column(name = "technieker_naam")
     private String techniekerNaam;
-    @Getter@Setter
-    private Pair<LocalDateTime, String> laatsteOnderhoud;
+
+    @Column(name = "laatste_onderhoud_datum")
+    private LocalDateTime laatsteOnderhoudDatum;
+
+    @Column(name = "laatste_onderhoud_beschrijving")
+    private String laatsteOnderhoudBeschrijving;
+
+    @Transient // Dit veld wordt niet opgeslagen in de database
     private int aantalDagenSindsLaatsteOnderhoud;
-    @Getter@Setter
+
+    @Column(name = "datum_toekomstige_onderhoud")
     private Date datumToekomstigeOnderhoud;
 
 
+
+    @Column(nullable = false)
+    private String currentStateString;
+
+    @Transient
+    private MachineState currentState;
+
     public Machine(String siteNaam, String code, String locatie,
-                   String productInfo, String status, String productieStatus,
-                   LocalDateTime uptime, String techniekerNaam
+                   String productInfo,String productieStatus,
+                    String techniekerNaam
                    ) {
         this.siteNaam = siteNaam;
         this.code = code;
         this.locatie = locatie;
         this.productInfo = productInfo;
-        this.status = status;
         this.productieStatus = productieStatus;
-        this.uptime = uptime;
+        this.uptime = null;
         this.techniekerNaam = techniekerNaam;
+        this.currentState = new StoppedState(this);
+        this.currentStateString = currentState.toString();
+    }
 
+
+    public String getCurrentState(){
+        return currentState.toString();
     }
 
     public int getAantalDagenSindsLaatsteOnderhoud() {
-        return (int) Duration.between(laatsteOnderhoud.getKey(), LocalDateTime.now()).toDays();
+        return (int) Duration.between(laatsteOnderhoudDatum, LocalDateTime.now()).toDays();
     }
 
-
+	
 
 
 }

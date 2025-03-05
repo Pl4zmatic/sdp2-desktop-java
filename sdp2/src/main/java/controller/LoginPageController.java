@@ -1,6 +1,6 @@
 package controller;
 
-import domein.user.LoginService;
+import domein.user.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
@@ -20,10 +20,10 @@ public class LoginPageController {
     @FXML
     private Button loginButton;
 
-    private final LoginService loginSerivce;
+    private final UserService loginSerivce;
 
     public LoginPageController() {
-        this.loginSerivce = new LoginService();
+        this.loginSerivce = new UserService();
     }
 
     @FXML

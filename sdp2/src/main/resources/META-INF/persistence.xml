@@ -9,6 +9,8 @@
 
         <!-- Verwijzing naar je Entity-klassen -->
         <class>domein.user.User</class>
+        <class>domein.machine.Machine</class>
+        <class>domein.machine.Maintenance</class>
 
         <properties>
             <!-- Database configuratie -->
