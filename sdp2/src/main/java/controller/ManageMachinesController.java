@@ -90,7 +90,11 @@ public class ManageMachinesController {
         }
 
         private void addButtonCallback() {
-
+                try {
+                        SceneSwitcher.switchScene("/view/MachineForm.fxml");
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
         }
 
         private void searchBarCallback() {
