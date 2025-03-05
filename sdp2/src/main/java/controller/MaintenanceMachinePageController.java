@@ -1,6 +1,7 @@
 package controller;
 
 import domein.machine.Machine;
+import domein.machine.MachineService;
 import domein.machine.Maintenance;
 import javafx.fxml.FXML;
 import utils.MaintenanceStatus;
@@ -12,12 +13,12 @@ import java.time.LocalTime;
 
 public class MaintenanceMachinePageController {
     
-    private Machine machine;
+    private MachineService ms;
 
     @FXML
     private void initialize() {
         Scanner in = new Scanner(System.in);
-        List<Machine> machines = machine.getListMachines();
+        List<Machine> machines = ms.getAllMachines();
 
         machines.forEach(machine -> System.out.println(machine.getCode()));
         int indexMachine = in.nextInt();
@@ -47,6 +48,6 @@ public class MaintenanceMachinePageController {
         }
         
 
-        machine.maintenanceMachine(machine, new Maintenance(machine, startDate, startTime, endTime, nameTechnician, reason, maintenanceReport, remarks, status));
+       // machine.maintenanceMachine(machine, new Maintenance(machine, startDate, startTime, endTime, nameTechnician, reason, maintenanceReport, remarks, status));
     }
 }

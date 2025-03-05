@@ -17,7 +17,7 @@ import java.time.LocalTime;
 @Table(name = "maintenances")
 @NoArgsConstructor
 public class Maintenance {
-    
+
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
