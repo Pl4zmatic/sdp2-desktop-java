@@ -26,6 +26,7 @@ public class Machine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(unique = true, nullable = false)
     private Long id; // Primaire sleutel voor JPA
 
     @Column(nullable = false)
@@ -92,7 +93,9 @@ public class Machine {
         return (int) Duration.between(laatsteOnderhoudDatum, LocalDateTime.now()).toDays();
     }
 
-	
+
+
+
 
 
 }
