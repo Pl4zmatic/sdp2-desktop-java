@@ -14,6 +14,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
+import manager.NavbarManager;
+
 import java.io.IOException;
 import java.util.Comparator;
 

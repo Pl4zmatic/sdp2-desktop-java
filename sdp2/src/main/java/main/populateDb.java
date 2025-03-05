@@ -9,6 +9,7 @@ public class populateDb {
         UserDaoJpa userDaoJpa = new UserDaoJpa();
         UserDaoJpa.startTransaction();
         userDaoJpa.insert(new User("Admin", "de Admin", "admin@mail.com", "admin","Adminstraat 59", "1234561", Rollen.ADMINISTRATOR));
+        userDaoJpa.insert(new User("Verantwoordelijke", "de Verantwoordelijke", "Verantwoordelijke@mail.com", "Verantwoordelijke","Verantwoordelijkestraat 59", "1234562", Rollen.VERANTWOORDELIJKE));
         UserDaoJpa.commitTransaction();
     }
 }

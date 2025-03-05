@@ -8,8 +8,6 @@ import com.mysql.cj.conf.ConnectionUrlParser.Pair;
 
 import domein.machine.Machine;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -18,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import manager.NavbarManager;
 
 public class ManageMachinesController {
         @FXML
@@ -67,8 +66,7 @@ public class ManageMachinesController {
         }
 
         private void setupNavbar() throws IOException {
-                Node sideBar = new FXMLLoader(getClass().getResource("/view/Navbar.fxml")).load();
-                rootLayout.getChildren().add(0, sideBar);
+                rootLayout.getChildren().add(0, NavbarManager.getNavbar());
         }
 
         private void setupTable() {

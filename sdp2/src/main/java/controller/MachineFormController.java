@@ -12,6 +12,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import manager.NavbarManager;
 
 public class MachineFormController {
     @FXML
@@ -88,7 +89,6 @@ public class MachineFormController {
     }
 
     private void setupNavbar() throws IOException {
-        Node sideBar = new FXMLLoader(getClass().getResource("/view/Navbar.fxml")).load();
-        rootLayout.getChildren().add(0, sideBar);
+        rootLayout.getChildren().add(0, NavbarManager.getNavbar());
     }
 }

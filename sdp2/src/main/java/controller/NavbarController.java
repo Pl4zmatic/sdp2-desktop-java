@@ -88,7 +88,7 @@ public class NavbarController {
             case "Logs" -> "/view/Logs.fxml";
             case "Beheer Sites" -> "/view/SitesManagement.fxml";
             case "Onderhoud" -> "/view/Maintenance.fxml";
-            case "Beheer Machines" -> "/view/MachinesManagement.fxml";
+            case "Beheer Machines" -> "/view/ManageMachines.fxml";
             case "Beheer Notificaties" -> "/view/NotificationsManagement.fxml";
             case "Logout" -> "/view/Logout.fxml";
             default -> null;
@@ -114,13 +114,5 @@ public class NavbarController {
 
     private void setTextToUsername(Text text, String fullName) {
         text.setText(fullName);
-    }
-
-    private void switchToManageMachines() {
-        try {
-            SceneSwitcher.switchScene("/view/ManageMachines.fxml");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
