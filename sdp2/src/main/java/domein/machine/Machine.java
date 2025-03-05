@@ -17,10 +17,6 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Table(name = "machines")
-@NoArgsConstructor
-
-@Entity
 @Table(name = "machine")
 @NoArgsConstructor
 @Getter
@@ -96,15 +92,7 @@ public class Machine {
         return (int) Duration.between(laatsteOnderhoudDatum, LocalDateTime.now()).toDays();
     }
 
-		if (!currentState.toString().equals("stopped")) {
-			throw new IllegalStateException("The machine needs to be stopped in order to go through a maintenance.");
-		}
-
-		currentState.startMaintenanceMachine();
-
-        currentState.startMaintenanceMachine();
-
-    }
+	
 
 
 }
