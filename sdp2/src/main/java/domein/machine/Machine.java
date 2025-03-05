@@ -44,7 +44,7 @@ public class Machine {
     @Column(nullable = false)
     private String productieStatus;
     @Column(nullable = false)
-    private LocalDateTime uptime;
+    private int uptimeInHours;
 
     @Column(name = "technieker_naam")
     private String techniekerNaam;
@@ -62,6 +62,13 @@ public class Machine {
     private Date datumToekomstigeOnderhoud;
 
 
+	// Dit is zodat de uptime kan berekent worden, elke keer wanneer de machine aangaat
+	// startDate = LocalDateTime.now
+	// en als machine stopgezet wordt
+	// startDate == null
+
+	@Transient
+	private LocalDateTime startDate;
 
     @Column(nullable = false)
     private String currentStateString;
@@ -78,13 +85,20 @@ public class Machine {
         this.locatie = locatie;
         this.productInfo = productInfo;
         this.productieStatus = productieStatus;
-        this.uptime = null;
+        this.uptimeInHours = 0;
         this.techniekerNaam = techniekerNaam;
         this.currentState = new StoppedState(this);
         this.currentStateString = currentState.toString();
+		this.laatsteOnderhoudDatum = LocalDateTime.now();
+		this.datumToekomstigeOnderhoud = null;
     }
 
-
+	public int getUptime() {
+		if (startDate == null) {
+			return 0;
+		}
+		return (int) Duration.between(startDate, LocalDateTime.now()).toHours();
+	}
     public String getCurrentState(){
         return currentState.toString();
     }

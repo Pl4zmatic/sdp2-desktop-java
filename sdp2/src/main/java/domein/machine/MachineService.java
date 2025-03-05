@@ -19,4 +19,8 @@ public class MachineService {
     public List<Machine> getAllMachines() {
         return machineDao.getAllMachines();
     }
+
+    public void stopMachine(Machine m){
+
+    }
 }
