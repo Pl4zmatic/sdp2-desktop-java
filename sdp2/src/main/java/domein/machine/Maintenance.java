@@ -2,15 +2,21 @@ package domein.machine;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import utils.MaintenanceStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
 @Getter
 @Setter
-@AllArgsConstructor
+@Entity
+@Table(name = "users")
+@NoArgsConstructor
 public class Maintenance {
     
     private Machine machine;

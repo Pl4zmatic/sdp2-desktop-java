@@ -1,8 +1,11 @@
 package domein.machine;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.persistence.Tuple;
 import javafx.util.Pair;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.AccessLevel;
 
@@ -13,6 +16,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+@Entity
+@Table(name = "machines")
+@NoArgsConstructor
 public class Machine implements Subject {
 
 	@Getter
