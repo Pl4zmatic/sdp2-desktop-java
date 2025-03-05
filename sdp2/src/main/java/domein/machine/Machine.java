@@ -8,72 +8,93 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.AccessLevel;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "machines")
 @NoArgsConstructor
+
+@Entity
+@Table(name = "machine")
+@NoArgsConstructor
+@Getter
+@ToString
+@Setter
 public class Machine {
 
-	@Getter
-	@Setter
-	private String siteNaam;
-	@Getter
-	@Setter
-	private String code;
-	@Getter
-	@Setter
-	private String locatie;
-	@Getter
-	@Setter
-	private String productInfo;
-	@Getter
-	@Setter
-	private String productieStatus;
-	@Getter
-	@Setter
-	private LocalDateTime uptime;
-	@Getter
-	@Setter
-	private String techniekerNaam;
-	@Getter
-	@Setter
-	private Pair<LocalDateTime, String> laatsteOnderhoud;
-	private int aantalDagenSindsLaatsteOnderhoud;
-	@Getter
-	@Setter
-	private Date datumToekomstigeOnderhoud;
-	@Getter
-	@Setter
-	private List<Machine> listMachines;
-	@Getter
-	@Setter(AccessLevel.PROTECTED)
-	private MachineState currentState;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Primaire sleutel voor JPA
 
-	public Machine(String siteNaam, String code, String locatie, String productInfo, String productieStatus,
-			LocalDateTime uptime, String techniekerNaam) {
-		this.siteNaam = siteNaam;
-		this.code = code;
-		this.locatie = locatie;
-		this.productInfo = productInfo;
-		this.productieStatus = productieStatus;
-		this.uptime = uptime;
-		this.techniekerNaam = techniekerNaam;
-		this.currentState = new StoppedState(this);
+    @Column(nullable = false)
+    private String siteNaam;
 
-	}
+    @Column(unique = true, nullable = false)
+    private String code;
 
-	public int getAantalDagenSindsLaatsteOnderhoud() {
-		return (int) Duration.between(laatsteOnderhoud.getKey(), LocalDateTime.now()).toDays();
-	}
+    @Column(nullable = false)
+    private String locatie;
 
-	public void maintenanceMachine(Machine machine, Maintenance maintenance) {
+    @Column(nullable = false)
+    private String productInfo;
+
+    @Column(nullable = false)
+    private String productieStatus;
+    @Column(nullable = false)
+    private LocalDateTime uptime;
+
+    @Column(name = "technieker_naam")
+    private String techniekerNaam;
+
+    @Column(name = "laatste_onderhoud_datum")
+    private LocalDateTime laatsteOnderhoudDatum;
+
+    @Column(name = "laatste_onderhoud_beschrijving")
+    private String laatsteOnderhoudBeschrijving;
+
+    @Transient // Dit veld wordt niet opgeslagen in de database
+    private int aantalDagenSindsLaatsteOnderhoud;
+
+    @Column(name = "datum_toekomstige_onderhoud")
+    private Date datumToekomstigeOnderhoud;
+
+
+
+    @Column(nullable = false)
+    private String currentStateString;
+
+    @Transient
+    private MachineState currentState;
+
+    public Machine(String siteNaam, String code, String locatie,
+                   String productInfo,String productieStatus,
+                    String techniekerNaam
+                   ) {
+        this.siteNaam = siteNaam;
+        this.code = code;
+        this.locatie = locatie;
+        this.productInfo = productInfo;
+        this.productieStatus = productieStatus;
+        this.uptime = null;
+        this.techniekerNaam = techniekerNaam;
+        this.currentState = new StoppedState(this);
+        this.currentStateString = currentState.toString();
+    }
+
+
+    public String getCurrentState(){
+        return currentState.toString();
+    }
+
+    public int getAantalDagenSindsLaatsteOnderhoud() {
+        return (int) Duration.between(laatsteOnderhoudDatum, LocalDateTime.now()).toDays();
+    }
 
 		if (!currentState.toString().equals("stopped")) {
 			throw new IllegalStateException("The machine needs to be stopped in order to go through a maintenance.");
@@ -81,7 +102,9 @@ public class Machine {
 
 		currentState.startMaintenanceMachine();
 
-	}
+        currentState.startMaintenanceMachine();
+
+    }
 
 
 }
