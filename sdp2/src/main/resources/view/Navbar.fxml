@@ -179,6 +179,5 @@
    <stylesheets>
       <URL value="@../css/globals.css" />
       <URL value="@../css/Navbar.css" />
-      <URL value="@../css/LandingPage.css" />
    </stylesheets>
 </VBox>
