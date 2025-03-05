@@ -1,6 +1,6 @@
 .menuItem {
     -fx-background-color: transparent;
-    -fx-text-fill: #d6dae8;
+    -fx-text-fill: #ffffff;
     -fx-font-size: 20px;
     -fx-cursor: hand;
     -fx-font-family: "Inter Medium";
@@ -16,28 +16,34 @@
     -fx-font-size: 80px;
 }
 
-.profileText {
+.profileTextFirstName {
     -fx-font-family: "Inter Semi Bold";
-    -fx-text-fill: #d6dae8;
-    -fx-font-size: 22px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+}
+
+.profileTextLastName{
+    -fx-font-family: "Inter Semi Bold";
+    -fx-font-size: 18px;
+    -fx-text-fill: #EF463C;
 }
 
 .dottedLine {
     -fx-stroke-width: 1;
     -fx-stroke-dash-array: 5, 10;
-    -fx-stroke: #d6dae8;
+    -fx-stroke: #ffffff;
 }
 
 .notifText{
     -fx-font-family: "Inter Medium";
-    -fx-text-fill: #d6dae8;
+    -fx-text-fill: #ffffff;
     -fx-font-size: 22px;
 }
 
 .subMenuItem {
     -fx-background-color: transparent;
-    -fx-text-fill: #d6dae8;
-    -fx-font-size: 20px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
     -fx-cursor: hand;
     -fx-font-family: "Inter";
 }

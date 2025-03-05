@@ -1,6 +1,5 @@
 package controller;
 
-import controller.SceneSwitcher;
 import domein.Session;
 import domein.user.User;
 import javafx.fxml.FXML;
@@ -25,15 +24,13 @@ public class NavbarController {
     @FXML private Button beheerNotificatieItem;
     @FXML private Button onderhoudTechniekerItem;
 
-    @FXML private Text profileName;
-
-    private Button activeButton;
+    @FXML private Text profileLastName;
+    @FXML private Text profileFirstName;
 
     @FXML
     private void initialize() {
         User curUser = Session.getCurrentUser();
         Rollen userRole = curUser.getRol();
-        Button activeNavItem = Session.getActiveNavItem();
 
         switch (userRole) {
             case ADMINISTRATOR -> {
@@ -70,7 +67,8 @@ public class NavbarController {
             });
         }
 
-        setTextToUsername(profileName, curUser.getFirstName() + " " + curUser.getLastName());
+        setTextToUsername(profileLastName, curUser.getLastName());
+        setTextToUsername(profileFirstName, curUser.getFirstName());
     }
 
     private void handleNavigation(Button clickedButton) throws IOException {
@@ -85,7 +83,7 @@ public class NavbarController {
 
         String fxmlPath = switch (clickedButton.getText()) {
             case "Beheer Gebruikers" -> "/view/ManageUsers.fxml";
-            case "Logs" -> "/view/Logs.fxml";
+            case "Logs" -> "/view/UserLogs.fxml";
             case "Beheer Sites" -> "/view/SitesManagement.fxml";
             case "Onderhoud" -> "/view/Maintenance.fxml";
             case "Beheer Machines" -> "/view/ManageMachines.fxml";
