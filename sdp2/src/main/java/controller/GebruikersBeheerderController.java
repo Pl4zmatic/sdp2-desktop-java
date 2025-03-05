@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import manager.NavbarManager;
 
@@ -21,7 +22,7 @@ import java.util.Comparator;
 
 public class GebruikersBeheerderController {
 
-    @FXML private HBox rootLayout;
+    @FXML private BorderPane rootLayout;
     @FXML private MFXTableView<User> userTable;
     @FXML private MFXTextField searchField;
     @FXML private MFXButton addUserButton;
@@ -47,7 +48,7 @@ public class GebruikersBeheerderController {
 
     @FXML
     public void initialize() {
-        rootLayout.getChildren().add(0, manager.NavbarManager.getNavbar());
+        rootLayout.setLeft(manager.NavbarManager.getNavbar());
 
         loadUsersFromDatabase();
         setupTable();
