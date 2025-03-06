@@ -15,6 +15,8 @@ import utils.Rollen;
 
 import java.io.IOException;
 
+import static utils.Rollen.ADMINISTRATOR;
+
 public class NavbarController {
 
     @FXML private VBox administratorMenu;
@@ -34,14 +36,20 @@ public class NavbarController {
     @FXML private Button profileIcon;
     @FXML private ContextMenu logoutMenu;
     @FXML private MenuItem logoutItem;
+
     @FXML
-    private void initialize() {
+    public void initialize() {
+        updateNavbar();
+    }
 
-        Rollen userRole = Session.getCurrentUser().getRol();
+    public void updateNavbar() {
+        User currentUser = Session.getCurrentUser();
 
+        Rollen userRole = currentUser.getRol();
         switch (userRole) {
             case ADMINISTRATOR -> {
                 administratorMenu.setManaged(true);
+                administratorMenu.setVisible(true);
                 verantwoordelijkeMenu.setManaged(false);
                 verantwoordelijkeMenu.setVisible(false);
                 techniekerMenu.setManaged(false);
@@ -51,6 +59,7 @@ public class NavbarController {
                 administratorMenu.setManaged(false);
                 administratorMenu.setVisible(false);
                 verantwoordelijkeMenu.setManaged(true);
+                verantwoordelijkeMenu.setVisible(true);
                 techniekerMenu.setManaged(false);
                 techniekerMenu.setVisible(false);
             }
@@ -60,30 +69,27 @@ public class NavbarController {
                 verantwoordelijkeMenu.setManaged(false);
                 verantwoordelijkeMenu.setVisible(false);
                 techniekerMenu.setManaged(true);
+                techniekerMenu.setVisible(true);
             }
         }
 
-        // Stel de navigatieknoppen in
+        setTextToUsername(profileLastName, currentUser.getLastName());
+        setTextToUsername(profileFirstName, currentUser.getFirstName());
+
+        // Reset actieve knoppen (optioneel)
         for (Button button : getAllMenuButtons()) {
-            button.setOnAction(event -> {
-                try {
-                    handleNavigation(button);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+            button.setText(button.getText().replace("➡ ", ""));
         }
 
         setupProfileMenu();
-
     }
 
     private void handleNavigation(Button clickedButton) throws IOException {
-        if (Session.getActiveNavItem() != null) {
-            Session.getActiveNavItem().getStyleClass().remove("active");
+        for (Button button : getAllMenuButtons()) {
+            button.setText(button.getText().replace("➡ ", ""));
         }
 
-        clickedButton.getStyleClass().add("active");
+        clickedButton.setText("➡ " + clickedButton.getText());
 
         Session.setActiveButton(clickedButton);
 

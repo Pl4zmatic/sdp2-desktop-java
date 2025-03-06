@@ -9,6 +9,6 @@ public class UserLogsController {
 
     @FXML
     public void initialize() {
-        rootLayout.setLeft(manager.NavbarManager.getNavbar());
+        rootLayout.setLeft(NavbarManager.getNavbar());
     }
 }

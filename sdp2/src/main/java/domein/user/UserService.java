@@ -24,6 +24,10 @@ public class UserService
         return instance;
     }
 
+    public void logout() {
+        Session.clear();
+    }
+
     public boolean login(String email, String password) {
         try {
             // Haal het gehashte wachtwoord op uit de database
@@ -39,10 +43,9 @@ public class UserService
             e.printStackTrace();
         }
 
+        Session.clear();
         return false;  // Return false als login mislukt
     }
-
-
 
     public boolean register(String firstName, String lastName, String email, String password,
                             String adres, String gsmNummer, Rollen rol) {

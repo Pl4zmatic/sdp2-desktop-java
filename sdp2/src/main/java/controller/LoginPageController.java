@@ -1,5 +1,6 @@
 package controller;
 
+import domein.Session;
 import domein.user.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -27,11 +28,21 @@ public class LoginPageController {
     }
 
     @FXML
+    private void initialize() {
+        System.out.println(Session.getCurrentUser());
+    }
+
+    @FXML
     private void handleLogin() {
         String email = emailField.getText();
         String password = passwordField.getText();
 
         if (userSerivce.login(email, password)) {
+            NavbarController navbarController = (NavbarController) NavbarManager.getNavbar().getUserData();
+            if (navbarController != null) {
+                navbarController.updateNavbar();
+            }
+
             try{
                 SceneSwitcher.switchScene("/view/ManageUsers.fxml");
             } catch(IOException e) {

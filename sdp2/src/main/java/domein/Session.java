@@ -31,5 +31,6 @@ public class Session {
     // Current User op null zetten bij bv. uitloggen
     public static void clear() {
         currentUser = null;
+        activeNavItem = null;
     }
 }

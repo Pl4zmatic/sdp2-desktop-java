@@ -15,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import manager.NavbarManager;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -48,7 +47,7 @@ public class GebruikersBeheerderController {
 
     @FXML
     public void initialize() {
-        rootLayout.setLeft(manager.NavbarManager.getNavbar());
+        rootLayout.setLeft(NavbarManager.getNavbar());
 
         loadUsersFromDatabase();
         setupTable();

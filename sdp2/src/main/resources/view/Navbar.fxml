@@ -157,7 +157,7 @@
                         <Font name="Inter Medium" size="14.0" />
                      </font>
                   </Text>
-                  <Text fx:id="profileFirstName" fill="#2f2f2f" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profileText" text="John" wrappingWidth="100.421875">
+                  <Text fx:id="profileFirstName" fill="#2f2f2f" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profileText" text="John" wrappingWidth="190.421875">
                      <font>
                         <Font name="Inter Medium" size="14.0" />
                      </font>
