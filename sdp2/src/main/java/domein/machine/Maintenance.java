@@ -31,5 +31,10 @@ public class Maintenance {
     private String reason;
     private String maintenanceReport;
     private String remark;
-    private MaintenanceStatus state;
+    @Transient
+    private MaintenanceState currentState;
+    
+    public String getCurrentState(){
+        return currentState.toString();
+    }
 }

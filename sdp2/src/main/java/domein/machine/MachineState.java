@@ -18,4 +18,8 @@ public abstract class MachineState {
     public String stopMachine() {
         return "The machine has been stopped";
     }
+    
+	public String setStartable() {
+		return "The machine has been put into startable";
+	}
 }

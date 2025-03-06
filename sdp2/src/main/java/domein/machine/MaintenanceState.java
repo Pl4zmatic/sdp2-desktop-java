@@ -1,20 +1,18 @@
 package domein.machine;
 
-public class MaintenanceState extends MachineState{
-    
-    public MaintenanceState(Machine machine) {
-        super(machine);
-    }
+import lombok.AllArgsConstructor;
 
-    public String startMachine() {
-        machine.setCurrentState(new RunningState(machine));
-        return "The machine has been started";
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "maintenance";
-    }
+@AllArgsConstructor
+public abstract class MaintenanceState {
+	
+	protected final Maintenance maintenance;
+	
+	public String executeMaintenance() {
+		return "Het onderhoud wordt uitgevoerd";
+	}
+	
+	public String finishMaintenance() {
+		return "Het onderhoud wordt uitgevoerd";
+	}
+	
 }
