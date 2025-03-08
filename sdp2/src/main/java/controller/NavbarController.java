@@ -40,6 +40,16 @@ public class NavbarController {
     @FXML
     public void initialize() {
         updateNavbar();
+
+        for (Button button : getAllMenuButtons()) {
+            button.setOnAction(event -> {
+                try {
+                    handleNavigation(button);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
     public void updateNavbar() {
@@ -76,7 +86,6 @@ public class NavbarController {
         setTextToUsername(profileLastName, currentUser.getLastName());
         setTextToUsername(profileFirstName, currentUser.getFirstName());
 
-        // Reset actieve knoppen (optioneel)
         for (Button button : getAllMenuButtons()) {
             button.setText(button.getText().replace("➡ ", ""));
         }
@@ -94,7 +103,7 @@ public class NavbarController {
         Session.setActiveButton(clickedButton);
 
 
-        String fxmlPath = switch (clickedButton.getText()) {
+        String fxmlPath = switch (clickedButton.getText().replace("➡ ", "")) {
             case "Beheer Gebruikers" -> "/view/ManageUsers.fxml";
             case "Logs" -> "/view/UserLogs.fxml";
             case "Beheer Sites" -> "/view/SitesManagement.fxml";
@@ -108,6 +117,8 @@ public class NavbarController {
         if (fxmlPath != null) {
             SceneSwitcher.switchScene(fxmlPath);
         }
+        System.out.println(fxmlPath);
+    System.out.println(clickedButton.getText());
     }
 
 

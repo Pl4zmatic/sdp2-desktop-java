@@ -9,27 +9,36 @@ import java.io.IOException;
 
 public class SceneSwitcher {
 
-private static Stage stage;
+    private static Stage stage;
 
-public static Stage getStage() {
-    if (stage == null) {
-        throw new IllegalStateException("Stage is niet ingesteld. Roep eerst setStage() aan.");
+    public static Stage getStage() {
+        if (stage == null) {
+            throw new IllegalStateException("Stage is niet ingesteld. Roep eerst setStage() aan.");
+        }
+        return stage;
     }
-    return stage;
-}
 
-public static void setStage(Stage mainStage) {
-    stage = mainStage;
-}
+    public static void setStage(Stage mainStage) {
+        stage = mainStage;
+    }
 
-public static void switchScene(String fxmlPath) throws IOException {
+    public static void switchScene(String fxmlPath) throws IOException {
         if (stage == null) {
             throw new IllegalStateException("Stage is niet ingesteld. Roep eerst setStage() aan.");
         }
 
-        FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(fxmlPath));
-        Parent root = loader.load();
-        stage.setScene(new Scene(root));
-        stage.show();
+        try {
+            FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(fxmlPath));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
+            System.out.println("Scène succesvol geladen: " + fxmlPath);
+        } catch (IOException e) {
+            System.err.println("Kan FXML-bestand niet laden: " + fxmlPath);
+            e.printStackTrace();
+        }
     }
 }
