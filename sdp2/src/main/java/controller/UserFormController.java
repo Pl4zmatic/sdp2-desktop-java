@@ -16,6 +16,7 @@ public class UserFormController {
     @FXML private TextField lastNameField;
     @FXML private TextField emailField;
     @FXML private TextField adressField;
+    @FXML private PasswordField passwordField;
     @FXML private TextField phoneNumberField;
     @FXML private ComboBox<Rollen> roleField;
     @FXML private RadioButton activeButton;
@@ -42,7 +43,7 @@ public class UserFormController {
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
         String email = emailField.getText();
-        String password = "12345678";
+        String password = passwordField.getText();
         String adres = adressField.getText();
         String phoneNumber = phoneNumberField.getText();
         Rollen role = roleField.getValue();
@@ -116,8 +117,10 @@ public class UserFormController {
         this.isEditMode = isEditMode;
         if (isEditMode) {
             save.setText("Update");
+            passwordField.setVisible(false);
         } else {
             save.setText("Add");
+            passwordField.setVisible(true);
         }
     }
 }

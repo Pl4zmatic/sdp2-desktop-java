@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
@@ -57,6 +58,17 @@
                      </children>
                   </HBox>
                   <TextField fx:id="emailField" />
+               </children>
+            </VBox>
+            <VBox spacing="1.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="5.0">
+                     <children>
+                        <Label text="Password" />
+                        <Label styleClass="required" text="*" />
+                     </children>
+                  </HBox>
+                  <PasswordField fx:id="passwordField" />
                </children>
             </VBox>
             <VBox spacing="1.0">

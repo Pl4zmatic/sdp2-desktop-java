@@ -49,16 +49,16 @@ public class User implements Serializable, SoftDeletable {
             beheerGebruiker(firstName, lastName,password, email, adres, gsmNummer, rol);
         }
 
-    public void setPassword(String password)
-        {
+    public void setPassword(String password) {
         checkString(password);
-        // Alleen hashen als het wachtwoord nog niet gehashed is.
+        // Als het wachtwoord nog niet gehasht is, dan doen we dat hier
         if (!password.startsWith("$2a$")) {
-            this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+            this.password = BCrypt.hashpw(password, BCrypt.gensalt());  // Hashen van het wachtwoord
+            System.out.println(this.password);
         } else {
-            this.password = password;
+            this.password = password; // Als het al gehasht is, slaan we het gewoon op
         }
-        }
+    }
 
     public void setLastName(String naam)
         {

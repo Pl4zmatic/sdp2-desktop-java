@@ -22,7 +22,9 @@ public class Maintenance {
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int maintenanceId;
-    @Transient
+
+    @ManyToOne
+    @JoinColumn(name = "machine_id", nullable = false)  // Deze kolom linkt Maintenance naar Machine
     private Machine machine;
     private LocalDate dateStart;
     private LocalTime timeStart;
@@ -31,6 +33,7 @@ public class Maintenance {
     private String reason;
     private String maintenanceReport;
     private String remark;
+
     @Transient
     private MaintenanceState currentState;
     
