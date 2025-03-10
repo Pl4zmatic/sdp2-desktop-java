@@ -80,19 +80,15 @@ public class Machine {
 
 	@OneToMany(mappedBy = "machine")
 	private Set<Maintenance> onderhouden;
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/main
     public Machine(String siteNaam, String code, String locatie,
                    String productInfo,String productieStatus,
                     String techniekerNaam
                    ) {
         this.siteNaam = siteNaam;
-<<<<<<< HEAD
+
 		this.startDate = null;
-=======
->>>>>>> origin/main
+
         this.code = code;
         this.locatie = locatie;
         this.productInfo = productInfo;
@@ -116,7 +112,7 @@ public class Machine {
 	public String getCurrentState() {
 		return currentState.toString();
 	}
-<<<<<<< HEAD
+
 	public void stopMachine() {
 		this.currentState.stopMachine();
 		updateCurrentState();
@@ -134,17 +130,9 @@ public class Machine {
 
 	}
 
+	
 
 
-	@Override
-	public String toString(){
-
-		return "Machine [codenaam=" + this.code + ", siteNaam=" + siteNaam + ", locatie=" + locatie
-				+ ", productInfo=" + productInfo + ", productieStatus=" + productieStatus + ", uptimeInHours=" + this.getUptime()
-				+ ", techniekerNaam=" + techniekerNaam + ", laatsteOnderhoudDatum=" + laatsteOnderhoudDatum ;
-	}
-
-=======
 
 	@Override
 	public String toString(){
@@ -154,7 +142,6 @@ public class Machine {
 				+ ", techniekerNaam=" + techniekerNaam + ", laatsteOnderhoudDatum=" + laatsteOnderhoudDatum ;
 	}
 
->>>>>>> origin/main
 
 
 
