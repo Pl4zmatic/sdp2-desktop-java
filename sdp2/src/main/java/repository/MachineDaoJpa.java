@@ -2,6 +2,7 @@ package repository;
 
 import domein.machine.Machine;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.NoResultException;
 
 import java.util.List;
@@ -23,11 +24,12 @@ public class MachineDaoJpa extends GenericDaoJpa<Machine> implements MachineDao 
         }
     }
 
+
+
+
     public List<Machine> getAllMachines() {
         return em.createQuery("SELECT m FROM Machine m", Machine.class).getResultList();
     }
 
-    public void stopMachine(Machine m) {
 
-    }
 }

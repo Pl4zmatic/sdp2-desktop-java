@@ -80,18 +80,19 @@ public class Machine {
 
 	@OneToMany(mappedBy = "machine")
 	private Set<Maintenance> onderhouden;
-
-	public Machine(String siteNaam, String code, String locatie, String productInfo, String productieStatus,
-			String techniekerNaam) {
-		this.siteNaam = siteNaam;
-		this.code = code;
-		this.locatie = locatie;
-		this.productInfo = productInfo;
-		this.productieStatus = productieStatus;
-		this.uptimeInHours = 0;
-		this.techniekerNaam = techniekerNaam;
-		this.currentState = new StoppedState(this);
-		this.currentStateString = currentState.toString();
+    public Machine(String siteNaam, String code, String locatie,
+                   String productInfo,String productieStatus,
+                    String techniekerNaam
+                   ) {
+        this.siteNaam = siteNaam;
+        this.code = code;
+        this.locatie = locatie;
+        this.productInfo = productInfo;
+        this.productieStatus = productieStatus;
+        this.uptimeInHours = 0;
+        this.techniekerNaam = techniekerNaam;
+        this.currentState = new StoppedState(this);
+        this.currentStateString = getCurrentState();
 		this.laatsteOnderhoudDatum = LocalDateTime.now();
 		this.datumToekomstigeOnderhoud = null;
 		this.onderhouden = new HashSet<Maintenance>();
@@ -108,8 +109,15 @@ public class Machine {
 		return currentState.toString();
 	}
 
-	public int getAantalDagenSindsLaatsteOnderhoud() {
-		return (int) Duration.between(laatsteOnderhoudDatum, LocalDateTime.now()).toDays();
+	@Override
+	public String toString(){
+
+		return "Machine [codenaam=" + this.code + ", siteNaam=" + siteNaam + ", locatie=" + locatie
+				+ ", productInfo=" + productInfo + ", productieStatus=" + productieStatus + ", uptimeInHours=" + this.getUptime()
+				+ ", techniekerNaam=" + techniekerNaam + ", laatsteOnderhoudDatum=" + laatsteOnderhoudDatum ;
 	}
+
+
+
 
 }
