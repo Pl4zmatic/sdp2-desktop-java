@@ -36,8 +36,15 @@
 
 #save {
     -fx-background-color: -delawareRed;
+    -fx-cursor: hand;
 }
 
 #cancel {
     -fx-background-color: -gray;
+    -fx-cursor: hand;
+}
+
+.red-button {
+    -fx-background-color: -delawareRed;
+    -fx-cursor: hand;
 }

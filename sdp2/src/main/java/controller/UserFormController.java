@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import utils.Rollen;
 import java.io.IOException;
 
@@ -16,12 +17,14 @@ public class UserFormController {
     @FXML private TextField lastNameField;
     @FXML private TextField emailField;
     @FXML private TextField adressField;
+    @FXML private VBox passwordContainer;
     @FXML private PasswordField passwordField;
     @FXML private TextField phoneNumberField;
     @FXML private ComboBox<Rollen> roleField;
     @FXML private RadioButton activeButton;
     @FXML private RadioButton inactiveButton;
     @FXML private Button save;
+    @FXML private Button resetPasswordButton;
 
     private final UserService userService = UserService.getInstance();
     private User currentUser;
@@ -35,7 +38,15 @@ public class UserFormController {
         ToggleGroup statusGroup = new ToggleGroup();
         activeButton.setToggleGroup(statusGroup);
         inactiveButton.setToggleGroup(statusGroup);
-        activeButton.setSelected(true); // Standaard actief bij toevoegen
+        activeButton.setSelected(true);
+        resetPasswordButton.setOnAction(e -> {
+            try {
+                resetPassword(currentUser, currentUser.getFirstName().toLowerCase());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        resetPasswordButton.getStyleClass().add("red-button");
     }
 
     @FXML
@@ -54,7 +65,6 @@ public class UserFormController {
             currentUser.setFirstName(firstName);
             currentUser.setLastName(lastName);
             currentUser.setEmail(email);
-            currentUser.setPassword(password);
             currentUser.setAdres(adres);
             currentUser.setGsmNummer(phoneNumber);
             currentUser.setRol(role);
@@ -108,8 +118,10 @@ public class UserFormController {
         roleField.setValue(user.getRol());
         if (user.getDeleted()) {
             inactiveButton.setSelected(true);
+            activeButton.setSelected(false);
         } else {
             activeButton.setSelected(true);
+            inactiveButton.setSelected(false);
         }
     }
 
@@ -117,10 +129,17 @@ public class UserFormController {
         this.isEditMode = isEditMode;
         if (isEditMode) {
             save.setText("Update");
-            passwordField.setVisible(false);
+            passwordContainer.setManaged(false);
+            passwordField.setManaged(false);
         } else {
             save.setText("Add");
-            passwordField.setVisible(true);
+            passwordContainer.setManaged(true);
         }
+    }
+
+    private void resetPassword(User user, String newPw) throws IOException {
+        userService.resetPassword(user, newPw);
+        showAlert("Succes!", "The password has been succesfully reset.", Alert.AlertType.INFORMATION);
+        SceneSwitcher.switchScene("/view/ManageUsers.fxml");
     }
 }

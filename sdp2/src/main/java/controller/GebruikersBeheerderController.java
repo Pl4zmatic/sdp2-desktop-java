@@ -12,7 +12,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
@@ -23,8 +25,8 @@ public class GebruikersBeheerderController {
 
     @FXML private BorderPane rootLayout;
     @FXML private MFXTableView<User> userTable;
-    @FXML private MFXTextField searchField;
-    @FXML private MFXButton addUserButton;
+    @FXML private TextField searchField;
+    @FXML private Button addUserButton;
     @FXML private CheckBox showDeletedUsers;
 
     private ObservableList<User> users;
@@ -79,28 +81,42 @@ public class GebruikersBeheerderController {
     roleColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getRol));
     statusColumn.setRowCellFactory(user -> new MFXTableRowCell<>(u -> u.getDeleted() ? "Inactive" : "Active"));
 
-    actionsColumn.setRowCellFactory(user -> {
-        HBox hbox = new HBox(5); // 5 is de spacing tussen de knoppen
-        hbox.setAlignment(Pos.CENTER);
+        actionsColumn.setRowCellFactory(user -> {
+            HBox hbox = new HBox(10);
+            hbox.setAlignment(Pos.CENTER); // Change from CENTER_LEFT to CENTER for better vertical alignment
+            hbox.getStyleClass().add("actions-container");
 
-        MFXButton editButton = new MFXButton("Edit");
-        editButton.setOnAction(event -> {
-            // Logica voor edit user
-            editUser(user);
+            // Increase the minimum height to give more space
+            hbox.setMinHeight(40);
+            hbox.setPrefHeight(40);
+
+            Button editButton = new Button("Edit");
+            editButton.getStyleClass().add("edit-button");
+            editButton.setMaxWidth(Double.MAX_VALUE);
+            editButton.setOnAction(event -> {
+                editUser(user);
+            });
+
+            Button deleteButton = new Button("Delete");
+            deleteButton.getStyleClass().add("delete-button");
+            deleteButton.setMaxWidth(Double.MAX_VALUE);
+            deleteButton.setOnAction(event -> {
+                deleteUser(user);
+            });
+
+            hbox.getChildren().addAll(editButton, deleteButton);
+
+            MFXTableRowCell<User, String> cell = new MFXTableRowCell<>(u -> "");
+            cell.setGraphic(hbox);
+
+            // Center the content vertically
+            cell.setAlignment(Pos.CENTER);
+
+            return cell;
         });
 
-        MFXButton deleteButton = new MFXButton("Delete");
-        deleteButton.setOnAction(event -> {
-            // Logica voor delete user
-            deleteUser(user);
-        });
-
-        hbox.getChildren().addAll(editButton, deleteButton);
-
-        MFXTableRowCell<User, String> cell = new MFXTableRowCell<>(u -> "");
-        cell.setGraphic(hbox); // setGraphic is voor alles wanneer je geen tekst aan een cell wil toevoegen
-        return cell;
-    });
+    actionsColumn.setPrefWidth(160);
+    actionsColumn.setMinWidth(160);
 
     userTable.getTableColumns().addAll(firstNameColumn, lastNameColumn, emailColumn, addressColumn, roleColumn, statusColumn, actionsColumn);
 
