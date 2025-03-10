@@ -1,6 +1,7 @@
 package domein.machine;
 
 import domein.machine.stateMachines.machine.*;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -119,6 +120,16 @@ public class Machine {
 
 	public void startMachine() {
 		this.currentState.startMachine();
+		updateCurrentState();
+	}
+
+	public void setMachineInStartable(){
+		this.currentState.setStartable();
+		updateCurrentState();
+	}
+
+	public void setMachineInMaintenance(){
+		this.currentState.startMaintenanceMachine();
 		updateCurrentState();
 	}
 

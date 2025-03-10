@@ -21,7 +21,6 @@ public class MachineService {
         try {
             Machine existingMachine = machineDao.getMachineByCode(m.getCode());
             if (existingMachine != null) {
-
                 MachineDaoJpa.startTransaction();
                 machineDao.update(m);
                 MachineDaoJpa.commitTransaction();
@@ -40,6 +39,16 @@ public class MachineService {
 
     public void stopMachine(Machine m) {
         m.stopMachine();
+        update(m);
+    }
+
+    public void setMachineInStartable(Machine m) {
+        m.setMachineInStartable();
+        update(m);
+    }
+
+    public void setMachineInMaintenance(Machine m) {
+        m.setMachineInMaintenance();
         update(m);
     }
 
