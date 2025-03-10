@@ -13,9 +13,7 @@
     -fx-border-color: white;
 }
 
-.column-header:last-visible {
-    -fx-border-width: 0 0 0 0;
-}
+
 
 .column-header-background .filler {
     -fx-border-width: 0 0 0 1;
@@ -35,7 +33,7 @@
 
 .table-view .column-header-background {
     -fx-background-radius: 5pt 5pt 0 0;
-    -fx-border-color: -grey;
+    -fx-border-color: -gray;
     -fx-border-width: 0 0 1 0;
     -fx-padding: 5px 0;
 }

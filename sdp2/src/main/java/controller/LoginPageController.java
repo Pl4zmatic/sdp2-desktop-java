@@ -1,12 +1,14 @@
 package controller;
 
 import domein.Session;
+import domein.user.User;
 import domein.user.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
+import utils.Rollen;
 
 import java.io.IOException;
 
@@ -33,26 +35,34 @@ public class LoginPageController {
     }
 
     @FXML
-    private void handleLogin() {
+    private void handleLogin() throws IOException {
         String email = emailField.getText();
         String password = passwordField.getText();
 
         if (userSerivce.login(email, password)) {
+            User currentUser = Session.getCurrentUser();
+
+            String nextScene = "";
+            if (currentUser.getRol() == Rollen.ADMINISTRATOR) {
+                nextScene = "/view/ManageUsers.fxml";
+            } else if (currentUser.getRol() == Rollen.VERANTWOORDELIJKE) {
+                nextScene = "/view/ManageMachines.fxml";
+            } else if (currentUser.getRol() == Rollen.TECHNIEKER) {
+                nextScene = "/view/Maintenance.fxml";
+            }
+
+            SceneSwitcher.switchScene(nextScene);
+
             NavbarController navbarController = (NavbarController) NavbarManager.getNavbar().getUserData();
             if (navbarController != null) {
                 navbarController.updateNavbar();
-            }
-
-            try{
-                SceneSwitcher.switchScene("/view/ManageUsers.fxml");
-            } catch(IOException e) {
-                e.printStackTrace();
             }
 
         } else {
             showAlert("Login Mislukt", "Ongeldige gebruikersnaam of wachtwoord.", Alert.AlertType.ERROR);
         }
     }
+
 
     private void showAlert(String title, String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);

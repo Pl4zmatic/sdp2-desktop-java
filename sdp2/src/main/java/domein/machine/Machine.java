@@ -142,7 +142,7 @@ public class Machine {
 					this.currentState = new StartableState(this);
 					break;
 				case "maintenance":
-					this.currentState = new MMaintenanceState(this);
+					this.currentState = new MaintenanceState(this);
 					break;
 		}
 	}
