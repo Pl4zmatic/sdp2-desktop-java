@@ -62,7 +62,7 @@
             </VBox>
             <VBox fx:id="passwordContainer" spacing="1.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" spacing="5.0">
+                  <HBox fx:id="passwordLabelContainer" alignment="CENTER_LEFT" spacing="5.0">
                      <children>
                         <Label fx:id="passwordLabel" text="Password" />
                         <Label styleClass="required" text="*" />

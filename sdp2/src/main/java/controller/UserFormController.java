@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import utils.Rollen;
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class UserFormController {
     @FXML private RadioButton inactiveButton;
     @FXML private Button save;
     @FXML private Button resetPasswordButton;
+    @FXML private HBox passwordLabelContainer;
 
     private final UserService userService = UserService.getInstance();
     private User currentUser;
@@ -130,10 +132,12 @@ public class UserFormController {
         if (isEditMode) {
             save.setText("Update");
             passwordContainer.setManaged(false);
-            passwordField.setManaged(false);
+            passwordContainer.setVisible(false);
         } else {
             save.setText("Add");
             passwordContainer.setManaged(true);
+            passwordField.setManaged(true);
+            passwordLabelContainer.setManaged(true);
         }
     }
 

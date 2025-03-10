@@ -17,9 +17,11 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import utils.Rollen;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.function.Function;
 
 public class GebruikersBeheerderController {
 
@@ -33,26 +35,29 @@ public class GebruikersBeheerderController {
     private FilteredList<User> filteredUsers;
     private UserService userService = UserService.getInstance();
 
-    // Deze methode haalt de gebruikers uit de database en vult de TableView
     private void loadUsersFromDatabase() {
-        if(showDeletedUsers.isSelected())
-           users = FXCollections.observableArrayList(userService.getAllUsers());
-        else
-           users = FXCollections.observableArrayList(userService.getAllActiveUsers());
-        System.out.println(users);
+        if (users != null) {
+            users.clear();
+        }
 
+        if(showDeletedUsers.isSelected())
+            users = FXCollections.observableArrayList(userService.getAllUsers());
+        else
+            users = FXCollections.observableArrayList(userService.getAllActiveUsers());
 
         filteredUsers = new FilteredList<>(users, p -> true);
-        userTable.setItems(filteredUsers);
 
+        // Clear and reset the table
+        userTable.getItems().clear();
+        userTable.setItems(filteredUsers);
     }
 
     @FXML
     public void initialize() {
         rootLayout.setLeft(NavbarManager.getNavbar());
 
-        loadUsersFromDatabase();
         setupTable();
+        loadUsersFromDatabase();
         setupSearch();
 
         addUserButton.setText("+");
@@ -64,29 +69,35 @@ public class GebruikersBeheerderController {
     }
 
     private void setupTable() {
-    // Kolommen voor User-attributen
-    MFXTableColumn<User> firstNameColumn = new MFXTableColumn<>("First Name", true, Comparator.comparing(User::getFirstName));
-    MFXTableColumn<User> lastNameColumn = new MFXTableColumn<>("Last Name", true, Comparator.comparing(User::getLastName));
-    MFXTableColumn<User> emailColumn = new MFXTableColumn<>("Email", true, Comparator.comparing(User::getEmail));
-    MFXTableColumn<User> addressColumn = new MFXTableColumn<>("Address", true, Comparator.comparing(User::getAdres));
-    MFXTableColumn<User> roleColumn = new MFXTableColumn<>("Role", true, Comparator.comparing(User::getRol));
-    MFXTableColumn<User> statusColumn = new MFXTableColumn<>("Status", true, Comparator.comparing(user -> !user.getDeleted()));
-    MFXTableColumn<User> actionsColumn = new MFXTableColumn<>("Actions", true);
+        userTable.getTableColumns().clear();
 
-    // Stel table cells in
-    firstNameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getFirstName));
-    lastNameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getLastName));
-    emailColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getEmail));
-    addressColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getAdres));
-    roleColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getRol));
-    statusColumn.setRowCellFactory(user -> new MFXTableRowCell<>(u -> u.getDeleted() ? "Inactive" : "Active"));
+        // Kolommen voor User-attributen
+        MFXTableColumn<User> firstNameColumn = new MFXTableColumn<>("First Name", true, Comparator.comparing(User::getFirstName));
+        MFXTableColumn<User> lastNameColumn = new MFXTableColumn<>("Last Name", true, Comparator.comparing(User::getLastName));
+        MFXTableColumn<User> emailColumn = new MFXTableColumn<>("Email", true, Comparator.comparing(User::getEmail));
+        MFXTableColumn<User> addressColumn = new MFXTableColumn<>("Address", true, Comparator.comparing(User::getAdres));
+        MFXTableColumn<User> roleColumn = new MFXTableColumn<>("Role", true, Comparator.comparing(User::getRol));
+        MFXTableColumn<User> statusColumn = new MFXTableColumn<>("Status", true, Comparator.comparing(user -> !user.getDeleted()));
+        MFXTableColumn<User> actionsColumn = new MFXTableColumn<>("Actions", true);
+
+        // Stel table cells in
+        firstNameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getFirstName));
+        lastNameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getLastName));
+        emailColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getEmail));
+        addressColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getAdres));
+        roleColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getRol));
+        statusColumn.setRowCellFactory(user -> new MFXTableRowCell<>(u -> u.getDeleted() ? "Inactive" : "Active"));
 
         actionsColumn.setRowCellFactory(user -> {
-            HBox hbox = new HBox(10);
-            hbox.setAlignment(Pos.CENTER); // Change from CENTER_LEFT to CENTER for better vertical alignment
-            hbox.getStyleClass().add("actions-container");
+            MFXTableRowCell<User, String> cell = new MFXTableRowCell<>(u -> "");
 
-            // Increase the minimum height to give more space
+            final String userEmail = user.getEmail();
+            final Rollen userRole = user.getRol();
+            final boolean isDeleted = user.getDeleted();
+
+            HBox hbox = new HBox(10);
+            hbox.setAlignment(Pos.CENTER);
+            hbox.getStyleClass().add("actions-container");
             hbox.setMinHeight(40);
             hbox.setPrefHeight(40);
 
@@ -94,34 +105,49 @@ public class GebruikersBeheerderController {
             editButton.getStyleClass().add("edit-button");
             editButton.setMaxWidth(Double.MAX_VALUE);
             editButton.setOnAction(event -> {
-                editUser(user);
+                User selectedUser = findUserByEmail(userEmail);
+                if (selectedUser != null) {
+                    editUser(selectedUser);
+                } else {
+                    System.out.println("ERROR: Could not find user with email: " + userEmail);
+                }
             });
 
             Button deleteButton = new Button("Delete");
             deleteButton.getStyleClass().add("delete-button");
             deleteButton.setMaxWidth(Double.MAX_VALUE);
             deleteButton.setOnAction(event -> {
-                deleteUser(user);
+                User selectedUser = findUserByEmail(userEmail);
+                if (selectedUser != null) {
+                    deleteUser(selectedUser);
+                } else {
+                    System.out.println("ERROR: Could not find user with email: " + userEmail);
+                }
             });
 
             hbox.getChildren().addAll(editButton, deleteButton);
-
-            MFXTableRowCell<User, String> cell = new MFXTableRowCell<>(u -> "");
             cell.setGraphic(hbox);
-
-            // Center the content vertically
             cell.setAlignment(Pos.CENTER);
 
             return cell;
         });
 
-    actionsColumn.setPrefWidth(160);
-    actionsColumn.setMinWidth(160);
+        actionsColumn.setPrefWidth(160);
+        actionsColumn.setMinWidth(160);
 
-    userTable.getTableColumns().addAll(firstNameColumn, lastNameColumn, emailColumn, addressColumn, roleColumn, statusColumn, actionsColumn);
+        userTable.getTableColumns().addAll(firstNameColumn, lastNameColumn, emailColumn, addressColumn, roleColumn, statusColumn, actionsColumn);
 
-    userTable.setFooterVisible(false);
-    searchField.setPromptText("Search name...");
+        userTable.setFooterVisible(false);
+        searchField.setPromptText("Search name...");
+    }
+
+    private User findUserByEmail(String email) {
+        for (User user : users) {
+            if (user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     private void setupSearch() {
@@ -147,7 +173,6 @@ public class GebruikersBeheerderController {
 
     private void deleteUser(User user) {
         boolean success = userService.deleteUser(user.getEmail());
-        System.out.println(user.getEmail());
         if (success) {
             loadUsersFromDatabase();
         } else {
@@ -159,7 +184,6 @@ public class GebruikersBeheerderController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UserForm.fxml"));
             Parent root = loader.load();
-            System.out.println(user);
 
             UserFormController controller = loader.getController();
             controller.setEditMode(true);
@@ -172,5 +196,5 @@ public class GebruikersBeheerderController {
             e.printStackTrace();
         }
     }
-
 }
+
