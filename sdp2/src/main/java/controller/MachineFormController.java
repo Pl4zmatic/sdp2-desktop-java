@@ -1,12 +1,16 @@
 package controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import domein.machine.Machine;
+import domein.machine.MachineService;
 import domein.machine.RunningState;
 import domein.machine.StoppedState;
 import javafx.fxml.FXML;
@@ -32,6 +36,8 @@ public class MachineFormController {
     @Getter
     @Setter
     private Machine machine;
+
+    private MachineService machineService;
 
     @Setter
     private HBox parent;
@@ -91,22 +97,17 @@ public class MachineFormController {
     @FXML
     private Button cancel;
 
-    //error checking
+    // error checking
     private List<String> errors = new ArrayList<>();
 
     @FXML
     private void initialize() {
+        machineService = new MachineService();
         setupCallbacks();
     }
 
     private void setupCallbacks() {
-        cancel.setOnAction((event) -> {
-            try {
-                cancelCallback();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        cancel.setOnAction((event) -> cancelCallback());
 
         machineCode.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> editMachineCodeCallback());
         machineCode.focusedProperty().addListener((event) -> checkTextField(machineCode, "Code is vereist."));
@@ -117,12 +118,12 @@ public class MachineFormController {
 
         technician.textProperty().addListener((event) -> checkTechnician());
 
-        lastMaintenance.setOnAction((event) -> checkDate("Datum is vereist."));
+        lastMaintenance.setOnAction((event) -> errorInDateFieldLastMaintenance("Datum is vereist."));
 
         save.setOnAction((event) -> saveMachine());
     }
 
-    private void cancelCallback() throws IOException {
+    private void cancelCallback() {
         this.parent.getChildren().remove(this.rootLayout);
     }
 
@@ -151,24 +152,26 @@ public class MachineFormController {
         }
     }
 
-    private void checkDate(String error) {
+    private boolean errorInDateFieldLastMaintenance(String error) {
         errors.remove(error);
         if (lastMaintenance.getValue() == null && !lastMaintenanceContainer.isDisabled()) {
             lastMaintenance.setPromptText(error);
             lastMaintenance.setStyle("-fx-prompt-text-fill: -bgRed;");
             errors.add(error);
+            return true;
         }
+        return false;
     }
 
     private void checkToggleGroup(ToggleGroup t, String error) {
         errors.remove(error);
-        if(t.getSelectedToggle() == null) {
+        if (t.getSelectedToggle() == null) {
             errors.add(error);
         }
     }
 
-    private void checkDateTimeField(TextField field, String error) {
-        if(field.getText().isEmpty() || field.getText().isBlank()) {
+    private void checkTimeField(TextField field, String error) {
+        if (field.getText().isEmpty() || field.getText().isBlank()) {
             field.setText("00");
         }
 
@@ -179,55 +182,93 @@ public class MachineFormController {
         }
     }
 
+    private void checkMachineCode(String error) {
+        errors.remove(error);
+        Set<String> codesInDatabase = machineService.getAllMachines().stream()
+                .map((machine) -> machine.getCode())
+                .collect(Collectors.toSet());
+        if(codesInDatabase.contains(machineCode.getText().trim())) {
+            errors.add(error);
+        }
+    }
+
+    private void validateLastMaintenanceField(String error) {
+        errors.remove(error);
+        if(lastMaintenance.getValue().isAfter(LocalDate.now())) {
+            errors.add(error);
+        }
+    }
+
+    private void validateNextMaintenanceField(String error) {
+        errors.remove(error);
+        if(nextMaintenance.getValue() != null) {
+            if(nextMaintenance.getValue().isBefore(LocalDate.now())) {
+                errors.add(error);
+            }
+        }
+    }
+
     private void checkAll() {
+        checkMachineCode("Code moet uniek zijn.");
         checkTextField(machineCode, "Code is vereist.");
         checkTextField(site, "Site is vereist.");
         checkTextField(machineLoc, "Locatie is vereist.");
         checkTextField(productInfo, "Product info is vereist.");
-        checkDate("Datum is vereist.");
         checkToggleGroup(productionStatus, "Productie status is vereist");
         checkToggleGroup(status, "Status is vereist");
-        checkDateTimeField(hours, "Uren");
+        checkTimeField(hours, "Uren");
+
+        validateNextMaintenanceField("Datum volgende onderhoud is niet mogelijk.");
+        if(!errorInDateFieldLastMaintenance("Datum is vereist.")) {
+            validateLastMaintenanceField("Datum laatste onderhoud is niet mogelijk.");
+        }
     }
 
     private void saveMachine() {
         checkAll();
         if (!errors.isEmpty()) {
-            //errors tonen
+            // errors tonen
             String errorNotification = "";
             for (String err : errors) {
                 errorNotification += err + "\n";
             }
             new Alert(AlertType.ERROR, errorNotification, ButtonType.OK).showAndWait();
-        }
-        else {
+        } else {
+            if (machine == null)
+                machine = new Machine();
+
             machine.setCode(machineCode.getText());
+            machine.setSiteNaam(site.getText());
             machine.setLocatie(machineLoc.getText());
             machine.setProductInfo(productInfo.getText());
             machine.setUptimeInHours(Integer.parseInt(hours.getText()));
 
-            //set vorige onderhoud
-            if(!lastMaintenanceContainer.isDisable()) {
+            // set vorige onderhoud
+            if (!lastMaintenanceContainer.isDisable()) {
                 machine.setTechniekerNaam(technician.getText());
                 machine.setLaatsteOnderhoudDatum(lastMaintenance.getValue().atStartOfDay());
             }
-            
-            //set volgende onderhoud
-            if(!(nextMaintenance.getValue() == null)) {
-                machine.setDatumToekomstigeOnderhoud(Date.from(nextMaintenance.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+            // set volgende onderhoud
+            if (!(nextMaintenance.getValue() == null)) {
+                machine.setDatumToekomstigeOnderhoud(
+                        Date.from(nextMaintenance.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
             }
-            
-            //set status (actief/inactief)
-            if(((RadioButton) status.getSelectedToggle()).equals(active)) {
+
+            // set status (actief/inactief)
+            machine.setCurrentStateString(((RadioButton) status.getSelectedToggle()).getText());
+            if (((RadioButton) status.getSelectedToggle()).equals(active)) {
                 machine.setCurrentState(new RunningState(machine));
-            }
-            else {
+            } else {
                 machine.setCurrentState(new StoppedState(machine));
             }
-            
-            //set productie status (gezond / (nood aan) onderhoud / falend)
-            machine.setProductieStatus(((RadioButton) status.getSelectedToggle()).getText());
+
+            // set productie status (gezond / (nood aan) onderhoud / falend)
+            machine.setProductieStatus(((RadioButton) productionStatus.getSelectedToggle()).getText());
+
+            machineService.addMachine(machine);
+            cancelCallback();
         }
     }
-    
+
 }

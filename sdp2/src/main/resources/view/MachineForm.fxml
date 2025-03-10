@@ -84,7 +84,7 @@
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
                               <Label text="Datum:" />
-                              <DatePicker fx:id="lastMaintenance" />
+                              <DatePicker fx:id="lastMaintenance" editable="false" />
                            </children>
                            <padding>
                               <Insets left="10.0" />
@@ -102,7 +102,7 @@
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
                               <Label text="Datum:" />
-                              <DatePicker fx:id="nextMaintenance" />
+                              <DatePicker fx:id="nextMaintenance" editable="false" />
                            </children>
                            <padding>
                               <Insets left="10.0" />

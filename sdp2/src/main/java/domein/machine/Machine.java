@@ -45,22 +45,22 @@ public class Machine {
 
 	@Column(nullable = false)
 	private String productieStatus;
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private int uptimeInHours;
 
-	@Column(name = "technieker_naam")
+	@Column(name = "technieker_naam", nullable = true)
 	private String techniekerNaam;
 
-	@Column(name = "laatste_onderhoud_datum")
+	@Column(name = "laatste_onderhoud_datum", nullable = true)
 	private LocalDateTime laatsteOnderhoudDatum;
 
-	@Column(name = "laatste_onderhoud_beschrijving")
+	@Column(name = "laatste_onderhoud_beschrijving", nullable = true)
 	private String laatsteOnderhoudBeschrijving;
 
 	@Transient // Dit veld wordt niet opgeslagen in de database
 	private int aantalDagenSindsLaatsteOnderhoud;
 
-	@Column(name = "datum_toekomstige_onderhoud")
+	@Column(name = "datum_toekomstige_onderhoud", nullable = true)
 	private Date datumToekomstigeOnderhoud;
 
 	// Dit is zodat de uptime kan berekent worden, elke keer wanneer de machine
