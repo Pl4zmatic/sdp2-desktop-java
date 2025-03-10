@@ -1,7 +1,6 @@
 package domein.machine;
 
-import domein.machine.stateMachines.machine.MachineState;
-import domein.machine.stateMachines.machine.StoppedState;
+import domein.machine.stateMachines.machine.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -45,7 +44,7 @@ public class Machine {
 	@Column(nullable = false)
 	private String productieStatus;
 
-	@Transient
+	@Column(nullable = false)
 	private int uptimeInHours;
 
 	@Column(name = "technieker_naam")
@@ -95,7 +94,7 @@ public class Machine {
         this.productieStatus = productieStatus;
         this.uptimeInHours = 0;
         this.techniekerNaam = techniekerNaam;
-        this.currentState = new StoppedState(this);
+        this.currentState = new StartableState(this);
         this.currentStateString = getCurrentState();
 		this.laatsteOnderhoudDatum = LocalDateTime.now();
 		this.datumToekomstigeOnderhoud = null;
@@ -117,6 +116,7 @@ public class Machine {
 		this.currentState.stopMachine();
 		updateCurrentState();
 	}
+
 	public void startMachine() {
 		this.currentState.startMachine();
 		updateCurrentState();
@@ -129,15 +129,28 @@ public class Machine {
 		this.currentStateString = getCurrentState();
 
 	}
-
-
-
-
+	@PostLoad
+	public void postLoad(){
+		switch(currentStateString){
+				case "stopped":
+					this.currentState = new StoppedState(this);
+					break;
+				case "running":
+					this.currentState = new RunningState(this);
+					break;
+				case "startable":
+					this.currentState = new StartableState(this);
+					break;
+				case "maintenance":
+					this.currentState = new MMaintenanceState(this);
+					break;
+		}
+	}
 
 	@Override
 	public String toString(){
 
-		return "Machine [codenaam=" + this.code + ", siteNaam=" + siteNaam + ", locatie=" + locatie
+		return this.currentStateString + "Machine [codenaam=" + this.code + ", siteNaam=" + siteNaam + ", locatie=" + locatie
 				+ ", productInfo=" + productInfo + ", productieStatus=" + productieStatus + ", uptimeInHours=" + this.getUptime()
 				+ ", techniekerNaam=" + techniekerNaam + ", laatsteOnderhoudDatum=" + laatsteOnderhoudDatum ;
 	}

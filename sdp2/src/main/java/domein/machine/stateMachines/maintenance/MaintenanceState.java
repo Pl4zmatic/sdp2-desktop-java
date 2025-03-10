@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 public abstract class MaintenanceState {
 	
 	@OneToOne
-	
+
 	protected final Maintenance maintenance;
 	
 	public String executeMaintenance() {
