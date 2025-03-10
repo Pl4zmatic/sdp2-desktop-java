@@ -2,6 +2,7 @@ package domein.machine.stateMachines.maintenance;
 
 import domein.machine.Maintenance;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 public abstract class MaintenanceState {
 	
 	@OneToOne
+	
 	protected final Maintenance maintenance;
 	
 	public String executeMaintenance() {

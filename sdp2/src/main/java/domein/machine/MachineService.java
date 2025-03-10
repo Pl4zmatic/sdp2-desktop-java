@@ -20,15 +20,12 @@ public class MachineService {
         return machineDao.getAllMachines();
     }
 
-<<<<<<< HEAD
+
     public void stopMachine(Machine m) {
 
         machineDao.update(m);
-=======
 
 
-    public void stopMachine(Machine m) {
-        // machineDao.stopMachine(m);
->>>>>>> origin/main
-    }
-}
+
+    }}
+
