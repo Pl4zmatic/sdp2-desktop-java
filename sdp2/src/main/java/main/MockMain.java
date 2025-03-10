@@ -5,26 +5,18 @@ import domein.machine.MachineService;
 import repository.MachineDao;
 import repository.MachineDaoJpa;
 
+import java.util.List;
+
 public class MockMain {
 
 
     public static void main(String[] args) {
         MachineDaoJpa machineDaoJpa = new MachineDaoJpa();
 
-        MachineDaoJpa.startTransaction();
-        try {
+        List<Machine> listMachines = machineDaoJpa.getAllMachines();
+        listMachines.forEach(System.out::println);
 
-            machineDaoJpa.insert(new Machine("AntwerpenA", "a-02", "Antwerpen"
-                    , "Info over het product"
-                    , "groen", "L.DeVlieger"));
-        }
-        catch (Exception e) {
-            MachineDaoJpa.rollbackTransaction();
-        }
-        // String siteNaam, String code, String locatie,
-        //                   String productInfo,String productieStatus,
-        //                    String techniekerNaam
-        MachineDaoJpa.commitTransaction();
+
     }
 }
 

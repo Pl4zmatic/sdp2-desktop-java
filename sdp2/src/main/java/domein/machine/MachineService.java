@@ -20,7 +20,9 @@ public class MachineService {
         return machineDao.getAllMachines();
     }
 
-    public void stopMachine(Machine m){
 
+
+    public void stopMachine(Machine m) {
+        // machineDao.stopMachine(m);
     }
 }
