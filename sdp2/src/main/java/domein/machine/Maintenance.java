@@ -1,16 +1,13 @@
 package domein.machine;
 
+import domein.machine.stateMachines.maintenance.MaintenanceState;
+import domein.machine.stateMachines.maintenance.PlannedState;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.eclipse.persistence.annotations.PrimaryKey;
-import utils.MaintenanceStatus;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter
 @Setter

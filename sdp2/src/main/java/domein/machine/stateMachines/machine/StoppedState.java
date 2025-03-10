@@ -1,4 +1,7 @@
-package domein.machine;
+package domein.machine.stateMachines.machine;
+
+import domein.machine.Machine;
+import domein.machine.stateMachines.maintenance.MaintenanceState;
 
 public class StoppedState extends MachineState {
 
@@ -6,10 +9,12 @@ public class StoppedState extends MachineState {
 		super(machine);
 	}
 
-	/*
-	 * public String startMachine() { machine.setCurrentState(new
-	 * RunningState(machine)); return "The machine has been started"; }
-	 */
+
+	public String startMachine() {
+		machine.setCurrentState(new RunningState(machine));
+		return "The machine has been started";
+	}
+
 
 	public String startMaintenanceMachine() {
 		machine.setCurrentState(new MMaintenanceState(machine));

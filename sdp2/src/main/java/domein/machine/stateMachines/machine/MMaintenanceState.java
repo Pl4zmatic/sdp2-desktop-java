@@ -1,4 +1,6 @@
-package domein.machine;
+package domein.machine.stateMachines.machine;
+
+import domein.machine.Machine;
 
 public class MMaintenanceState extends MachineState {
 

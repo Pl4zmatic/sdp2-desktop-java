@@ -1,6 +1,8 @@
-package domein.machine;
+package domein.machine.stateMachines.maintenance;
 
-public class PlannedState extends MaintenanceState{
+import domein.machine.Maintenance;
+
+public class PlannedState extends MaintenanceState {
 
 	public PlannedState(Maintenance maintenance) {
 		super(maintenance);

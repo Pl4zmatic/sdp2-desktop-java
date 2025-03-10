@@ -1,5 +1,6 @@
-package domein.machine;
+package domein.machine.stateMachines.maintenance;
 
+import domein.machine.Maintenance;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;

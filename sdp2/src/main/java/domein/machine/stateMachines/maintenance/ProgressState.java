@@ -1,4 +1,6 @@
-package domein.machine;
+package domein.machine.stateMachines.maintenance;
+
+import domein.machine.Maintenance;
 
 public class ProgressState extends MaintenanceState {
 

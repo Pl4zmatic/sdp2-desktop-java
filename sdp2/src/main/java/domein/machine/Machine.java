@@ -1,13 +1,12 @@
 package domein.machine;
 
+import domein.machine.stateMachines.machine.MachineState;
+import domein.machine.stateMachines.machine.StoppedState;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.Tuple;
-import javafx.util.Pair;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.AccessLevel;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -45,7 +44,8 @@ public class Machine {
 
 	@Column(nullable = false)
 	private String productieStatus;
-	@Column(nullable = false)
+
+	@Transient
 	private int uptimeInHours;
 
 	@Column(name = "technieker_naam")
@@ -80,11 +80,13 @@ public class Machine {
 
 	@OneToMany(mappedBy = "machine")
 	private Set<Maintenance> onderhouden;
+
     public Machine(String siteNaam, String code, String locatie,
                    String productInfo,String productieStatus,
                     String techniekerNaam
                    ) {
         this.siteNaam = siteNaam;
+		this.startDate = null;
         this.code = code;
         this.locatie = locatie;
         this.productInfo = productInfo;
@@ -108,6 +110,24 @@ public class Machine {
 	public String getCurrentState() {
 		return currentState.toString();
 	}
+	public void stopMachine() {
+		this.currentState.stopMachine();
+		updateCurrentState();
+	}
+	public void startMachine() {
+		this.currentState.startMachine();
+		updateCurrentState();
+	}
+
+	public void updateUptime(){
+		this.uptimeInHours = getUptime();
+	}
+	public void updateCurrentState(){
+		this.currentStateString = getCurrentState();
+
+	}
+
+
 
 	@Override
 	public String toString(){

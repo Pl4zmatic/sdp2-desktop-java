@@ -1,5 +1,6 @@
-package domein.machine;
+package domein.machine.stateMachines.machine;
 
+import domein.machine.Machine;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
