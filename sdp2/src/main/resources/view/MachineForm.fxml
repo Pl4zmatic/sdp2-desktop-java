@@ -8,6 +8,7 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
@@ -20,7 +21,7 @@
                <children>
                   <HBox styleClass="codeContainer">
                      <children>
-                        <TextField fx:id="machineCode" text="Code *" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="machineCode" promptText="Code *" HBox.hgrow="ALWAYS">
                            <HBox.margin>
                               <Insets bottom="2.0" />
                            </HBox.margin>
@@ -70,7 +71,7 @@
                         <TextField fx:id="technician" />
                      </children>
                   </VBox>
-                  <VBox disable="true" layoutX="20.0" layoutY="124.0" spacing="1.0">
+                  <VBox fx:id="lastMaintenanceContainer" disable="true" layoutX="20.0" layoutY="124.0" spacing="1.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
@@ -148,8 +149,11 @@
                         <Pane HBox.hgrow="ALWAYS" />
                         <HBox spacing="15.0">
                            <children>
-                              <RadioButton fx:id="active" mnemonicParsing="false" text="Actief" />
-                              <RadioButton fx:id="inactive" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Inactief" />
+                              <RadioButton fx:id="active" mnemonicParsing="false" text="Actief">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="status" />
+                                 </toggleGroup></RadioButton>
+                              <RadioButton fx:id="inactive" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Inactief" toggleGroup="$status" />
                            </children>
                         </HBox>
                      </children>
@@ -165,9 +169,12 @@
                         <Pane HBox.hgrow="ALWAYS" />
                         <HBox spacing="15.0">
                            <children>
-                              <RadioButton fx:id="healthy" mnemonicParsing="false" text="Gezond" />
-                              <RadioButton fx:id="maintenance" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Nood Aan Onderhoud" />
-                              <RadioButton fx:id="failing" layoutX="101.0" layoutY="10.0" mnemonicParsing="false" text="Falend" />
+                              <RadioButton fx:id="healthy" mnemonicParsing="false" text="Gezond">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="productionStatus" />
+                                 </toggleGroup></RadioButton>
+                              <RadioButton fx:id="maintenance" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Nood Aan Onderhoud" toggleGroup="$productionStatus" />
+                              <RadioButton fx:id="failing" layoutX="101.0" layoutY="10.0" mnemonicParsing="false" text="Falend" toggleGroup="$productionStatus" />
                            </children>
                         </HBox>
                      </children>
