@@ -9,6 +9,7 @@ import org.eclipse.persistence.annotations.PrimaryKey;
 import utils.MaintenanceStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
@@ -26,16 +27,28 @@ public class Maintenance {
     @ManyToOne
     @JoinColumn(name = "machine_id", nullable = false)  // Deze kolom linkt Maintenance naar Machine
     private Machine machine;
-    private LocalDate dateStart;
-    private LocalTime timeStart;
-    private LocalTime timeEnd;
+    private LocalDateTime startDate;
+    private LocalDateTime timeEnd;
     private String nameTechnician;
     private String reason;
     private String maintenanceReport;
     private String remark;
-
+    private String currentStateString;
     @Transient
     private MaintenanceState currentState;
+    
+    public Maintenance(Machine machine,LocalDateTime startDate, String nameTechnician, 
+    		String reason, String maintenanceReport, String remark) {
+    	this.machine = machine;
+    	this.startDate = startDate;
+    	this.nameTechnician = nameTechnician;
+    	this.reason = reason;
+    	this.maintenanceReport = maintenanceReport;
+    	this.remark = remark;
+    	this.timeEnd = null;
+    	this.currentState = new PlannedState(this);
+    	this.currentStateString = currentState.toString();
+    }
     
     public String getCurrentState(){
         return currentState.toString();
