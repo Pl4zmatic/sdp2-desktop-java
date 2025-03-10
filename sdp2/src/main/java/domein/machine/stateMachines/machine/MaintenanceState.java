@@ -2,9 +2,9 @@ package domein.machine.stateMachines.machine;
 
 import domein.machine.Machine;
 
-public class MMaintenanceState extends MachineState {
+public class MaintenanceState extends MachineState {
 
-	public MMaintenanceState(Machine machine) {
+	public MaintenanceState(Machine machine) {
 		super(machine);
 	}
 
