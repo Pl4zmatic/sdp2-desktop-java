@@ -60,17 +60,24 @@
                   <TextField fx:id="emailField" />
                </children>
             </VBox>
-            <VBox spacing="1.0">
+            <VBox fx:id="passwordContainer" spacing="1.0">
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <Label text="Password" />
+                        <Label fx:id="passwordLabel" text="Password" />
                         <Label styleClass="required" text="*" />
                      </children>
                   </HBox>
                   <PasswordField fx:id="passwordField" />
                </children>
             </VBox>
+            <!-- New Password Reset Container -->
+            <HBox fx:id="passwordResetContainer" alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Reset Password:" />
+                  <Button fx:id="resetPasswordButton" styleClass="reset-button" text="Reset to First Name" />
+               </children>
+            </HBox>
             <VBox spacing="1.0">
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="5.0">

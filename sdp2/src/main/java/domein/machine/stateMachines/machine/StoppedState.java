@@ -1,7 +1,6 @@
 package domein.machine.stateMachines.machine;
 
 import domein.machine.Machine;
-import domein.machine.stateMachines.maintenance.MaintenanceState;
 
 public class StoppedState extends MachineState {
 
@@ -17,7 +16,7 @@ public class StoppedState extends MachineState {
 
 
 	public String startMaintenanceMachine() {
-		machine.setCurrentState(new MMaintenanceState(machine));
+		machine.setCurrentState(new MaintenanceState(machine));
 		return "The machine is under maintenance";
 	}
 

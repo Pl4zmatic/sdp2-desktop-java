@@ -138,4 +138,25 @@ public class UserService
         }
         return false;
     }
+
+        public boolean resetPassword(User updatedUser, String newPw) {
+            try {
+                User existingUser = userDao.getUserByEmail(updatedUser.getEmail());
+                if (existingUser != null) {
+                    UserDaoJpa.startTransaction();
+
+                    existingUser.setPassword(newPw);
+
+                    userDao.update(existingUser);
+                    UserDaoJpa.commitTransaction();
+                    return true;
+                } else {
+                    System.out.println("User not found");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                UserDaoJpa.rollbackTransaction();
+            }
+            return false;
+        }
 }
