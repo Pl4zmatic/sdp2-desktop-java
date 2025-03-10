@@ -8,6 +8,9 @@ import com.mysql.cj.conf.ConnectionUrlParser.Pair;
 
 import domein.machine.Machine;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -20,6 +23,9 @@ import javafx.scene.layout.VBox;
 public class ManageMachinesController {
         @FXML
         private HBox rootLayout;
+        
+        @FXML
+        private HBox manageMachinesContainer;
 
         @FXML
         private VBox VboxManageMachines;
@@ -65,7 +71,7 @@ public class ManageMachinesController {
         }
 
         private void setupNavbar() throws IOException {
-                rootLayout.getChildren().add(0, NavbarManager.getNavbar());
+                this.rootLayout.getChildren().add(0, NavbarManager.getNavbar());
         }
 
         private void setupTable() {
@@ -88,7 +94,10 @@ public class ManageMachinesController {
 
         private void addButtonCallback() {
                 try {
-                        SceneSwitcher.switchScene("/view/MachineForm.fxml");
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MachineForm.fxml"));
+                        Node form = loader.load();
+                        ((MachineFormController)loader.getController()).setParent(rootLayout);
+                        this.rootLayout.getChildren().add(form);         
                 } catch (IOException e) {
                         e.printStackTrace();
                 }

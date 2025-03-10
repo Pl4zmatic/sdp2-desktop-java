@@ -3,21 +3,28 @@ package controller;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import lombok.Setter;
 
 public class MachineFormController {
+
+    @Setter
+    private HBox parent;
+
     @FXML
     private HBox rootLayout;
 
     // text fields
     @FXML
-    private Label machineCode;
+    private TextField machineCode;
     @FXML
     private TextField site;
     @FXML
@@ -63,12 +70,7 @@ public class MachineFormController {
 
     @FXML
     private void initialize() {
-        try {
-            setupNavbar();
-            setupCallbacks();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        setupCallbacks();
     }
 
     private void setupCallbacks() {
@@ -79,13 +81,16 @@ public class MachineFormController {
                 e.printStackTrace();
             }
         });
+
+        machineCode.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> editMachineCode());
     }
 
     private void cancelCallback() throws IOException {
-        SceneSwitcher.switchScene("/view/ManageMachines.fxml");
+        this.parent.getChildren().remove(this.rootLayout);
     }
 
-    private void setupNavbar() throws IOException {
-        rootLayout.getChildren().add(0, NavbarManager.getNavbar());
+    private void editMachineCode() {
+        machineCode.setStyle("-fx-background-color: white;");
+        machineCode.clear();
     }
 }
