@@ -7,10 +7,13 @@ import java.util.Date;
 import com.mysql.cj.conf.ConnectionUrlParser.Pair;
 
 import domein.machine.Machine;
+import domein.machine.MachineService;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -23,7 +26,7 @@ import javafx.scene.layout.VBox;
 public class ManageMachinesController {
         @FXML
         private HBox rootLayout;
-        
+
         @FXML
         private HBox manageMachinesContainer;
 
@@ -59,8 +62,11 @@ public class ManageMachinesController {
         @FXML
         private TableColumn<Machine, Date> nextMaintenanceColumn;
 
+        private MachineService machineService;
+
         @FXML
         private void initialize() {
+                machineService = new MachineService();
                 try {
                         setupNavbar();
                         setupTable();
@@ -85,19 +91,30 @@ public class ManageMachinesController {
                 technicianColumn.setCellValueFactory(new PropertyValueFactory<>("techniekerNaam"));
                 lastMaintenanceColumn.setCellValueFactory(new PropertyValueFactory<>("laatsteOnderhoud"));
                 lastMaintenanceColumn.setCellValueFactory(new PropertyValueFactory<>("datumToekomstigeOnderhoud"));
+                loadTableContent();
         }
 
         private void setupCallbacks() {
                 addButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> addButtonCallback());
                 searchBar.setOnAction((event) -> searchBarCallback());
+                rootLayout.getChildren().addListener(new ListChangeListener<Node>() {
+                        @Override
+                        public void onChanged(Change<? extends Node> c) {
+                                loadTableContent();
+                        }
+                });
+        }
+
+        private void loadTableContent() {
+                this.tableView.setItems(FXCollections.observableList(machineService.getAllMachines()));
         }
 
         private void addButtonCallback() {
                 try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MachineForm.fxml"));
                         Node form = loader.load();
-                        ((MachineFormController)loader.getController()).setParent(rootLayout);
-                        this.rootLayout.getChildren().add(form);         
+                        ((MachineFormController) loader.getController()).setParent(rootLayout);
+                        this.rootLayout.getChildren().add(form);
                 } catch (IOException e) {
                         e.printStackTrace();
                 }
