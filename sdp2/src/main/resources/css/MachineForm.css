@@ -1,6 +1,15 @@
 #machineCode {
     -fx-font-size: 1.5em;
     -fx-text-fill: -delawareRed;
+    -fx-background-color: none;
+    -fx-padding: 0;
+    -fx-margin: 0.5em;
+    -fx-border-color: none;
+    -fx-prompt-text-fill: -delawareRed;
+}
+
+#machineCode:hover {
+    -fx-background-color: -bgGray;
 }
 
 .codeContainer {

@@ -36,6 +36,16 @@ public class MachineService {
         return machineDao.getAllMachines();
     }
 
+    public void addMachine(Machine m) {
+        try {
+            MachineDaoJpa.startTransaction();
+            machineDao.insert(m);
+            MachineDaoJpa.commitTransaction();
+        } catch (Exception e) {
+            e.printStackTrace();
+            MachineDaoJpa.rollbackTransaction();
+        }
+    }
 
     public void stopMachine(Machine m) {
         m.stopMachine();

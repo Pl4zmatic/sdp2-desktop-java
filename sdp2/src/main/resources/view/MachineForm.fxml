@@ -8,12 +8,12 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<HBox fx:id="rootLayout" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MachineFormController">
+<HBox fx:id="rootLayout" alignment="CENTER_LEFT" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MachineFormController">
    <children>
       <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
          <children>
@@ -21,11 +21,11 @@
                <children>
                   <HBox styleClass="codeContainer">
                      <children>
-                        <Label fx:id="machineCode" text="Code">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
+                        <TextField fx:id="machineCode" promptText="Code *" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets bottom="2.0" />
+                           </HBox.margin>
+                        </TextField>
                      </children>
                   </HBox>
                   <VBox spacing="1.0">
@@ -71,7 +71,7 @@
                         <TextField fx:id="technician" />
                      </children>
                   </VBox>
-                  <VBox disable="true" layoutX="20.0" layoutY="124.0" spacing="1.0">
+                  <VBox fx:id="lastMaintenanceContainer" disable="true" layoutX="20.0" layoutY="124.0" spacing="1.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
@@ -84,7 +84,7 @@
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
                               <Label text="Datum:" />
-                              <DatePicker fx:id="lastMaintenance" />
+                              <DatePicker fx:id="lastMaintenance" editable="false" />
                            </children>
                            <padding>
                               <Insets left="10.0" />
@@ -102,7 +102,7 @@
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
                               <Label text="Datum:" />
-                              <DatePicker fx:id="nextMaintenance" />
+                              <DatePicker fx:id="nextMaintenance" editable="false" />
                            </children>
                            <padding>
                               <Insets left="10.0" />
@@ -149,8 +149,11 @@
                         <Pane HBox.hgrow="ALWAYS" />
                         <HBox spacing="15.0">
                            <children>
-                              <RadioButton fx:id="active" mnemonicParsing="false" text="Actief" />
-                              <RadioButton fx:id="inactive" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Inactief" />
+                              <RadioButton fx:id="active" mnemonicParsing="false" text="Actief">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="status" />
+                                 </toggleGroup></RadioButton>
+                              <RadioButton fx:id="inactive" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Inactief" toggleGroup="$status" />
                            </children>
                         </HBox>
                      </children>
@@ -166,9 +169,12 @@
                         <Pane HBox.hgrow="ALWAYS" />
                         <HBox spacing="15.0">
                            <children>
-                              <RadioButton fx:id="healthy" mnemonicParsing="false" text="Gezond" />
-                              <RadioButton fx:id="maintenance" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Nood Aan Onderhoud" />
-                              <RadioButton fx:id="failing" layoutX="101.0" layoutY="10.0" mnemonicParsing="false" text="Falend" />
+                              <RadioButton fx:id="healthy" mnemonicParsing="false" text="Gezond">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="productionStatus" />
+                                 </toggleGroup></RadioButton>
+                              <RadioButton fx:id="maintenance" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Nood Aan Onderhoud" toggleGroup="$productionStatus" />
+                              <RadioButton fx:id="failing" layoutX="101.0" layoutY="10.0" mnemonicParsing="false" text="Falend" toggleGroup="$productionStatus" />
                            </children>
                         </HBox>
                      </children>

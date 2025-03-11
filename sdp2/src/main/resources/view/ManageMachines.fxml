@@ -14,7 +14,7 @@
 
 <HBox fx:id="rootLayout" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ManageMachinesController">
    <children>
-      <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
+      <HBox fx:id="manageMachinesContainer" alignment="CENTER" HBox.hgrow="ALWAYS">
          <children>
             <VBox fx:id="VboxManageMachines" prefHeight="400.0" prefWidth="600.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
