@@ -1,0 +1,182 @@
+/* LogView.css */
+.root-layout {
+    -fx-background-color: white;
+}
+
+.content-container {
+    -fx-background-color: white;
+}
+
+.filter-bar {
+    -fx-background-color: white;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: -lightGray;
+    -fx-alignment: center-left;
+}
+
+.logs-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -deepBlue;
+}
+
+/* Standaard JavaFX ComboBox styling */
+.filter-combo {
+    -fx-background-color: white;
+    -fx-border-color: -lightGray;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.filter-combo:focused {
+    -fx-border-color: -delawareRed;
+    -fx-border-width: 2px;
+}
+
+.filter-combo .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.filter-combo .arrow {
+    -fx-background-color: -deepBlue;
+}
+
+/* Standaard JavaFX DatePicker styling */
+.filter-date {
+    -fx-background-color: white;
+    -fx-border-color: -lightGray;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.filter-date:focused {
+    -fx-border-color: -delawareRed;
+    -fx-border-width: 2px;
+}
+
+.filter-date .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.filter-date .arrow-button .arrow {
+    -fx-background-color: -deepBlue;
+}
+
+.filter-date .date-picker-popup .month-year-pane {
+    -fx-background-color: -delawareRed;
+}
+
+.filter-date .date-picker-popup .month-year-pane .label {
+    -fx-text-fill: white;
+}
+
+.filter-date .date-picker-popup .calendar-grid {
+    -fx-background-color: white;
+}
+
+.filter-date .date-picker-popup .today {
+    -fx-background-color: -bgGray;
+}
+
+.filter-date .date-picker-popup .selected {
+    -fx-background-color: -delawareRed;
+    -fx-text-fill: white;
+}
+
+.search-field {
+    -fx-background-color: white;
+    -fx-border-color: -lightGray;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 5px 10px;
+}
+
+.search-field:focused {
+    -fx-border-color: -delawareRed;
+    -fx-border-width: 2px;
+}
+
+.log-table {
+    -fx-background-color: white;
+    -fx-border-color: -lightGray;
+    -fx-border-radius: 4px;
+}
+
+/* MFXTableView specifieke styling */
+.log-table .column-header {
+    -fx-background-color: -bgGray;
+    -fx-padding: 10px;
+}
+
+.log-table .column-header .label {
+    -fx-text-fill: -deepBlue;
+    -fx-font-weight: bold;
+}
+
+.log-table .virtual-flow .mfx-table-row {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent -lightGray transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.log-table .virtual-flow .mfx-table-row:odd {
+    -fx-background-color: derive(-bgGray, 80%);
+}
+
+.log-table .virtual-flow .mfx-table-row:selected {
+    -fx-background-color: derive(-delawareRed, 90%);
+}
+
+.log-table .virtual-flow .mfx-table-row:selected .mfx-table-row-cell .text {
+    -fx-fill: -deepBlue;
+}
+
+/* Scrollbar styling */
+.log-table .virtual-flow .scroll-bar:vertical,
+.log-table .virtual-flow .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.log-table .virtual-flow .scroll-bar:vertical .thumb,
+.log-table .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color: -gray;
+    -fx-background-radius: 4px;
+}
+
+.log-table .virtual-flow .scroll-bar:vertical .track,
+.log-table .virtual-flow .scroll-bar:horizontal .track {
+    -fx-background-color: -lightGray;
+    -fx-background-radius: 4px;
+}
+
+/* Timestamp kolom */
+.log-table .timestamp-column {
+    -fx-alignment: CENTER-LEFT;
+}
+
+/* Action kolom */
+.log-table .action-column {
+    -fx-alignment: CENTER-LEFT;
+}
+
+/* Details kolom */
+.log-table .details-column {
+    -fx-alignment: CENTER-LEFT;
+}
+
+/* Actie type kleuren */
+.log-table .user-created {
+    -fx-text-fill: -bgGreen;
+}
+
+.log-table .user-edited {
+    -fx-text-fill: -okOrange;
+}
+
+.log-table .user-deleted {
+    -fx-text-fill: -delawareRed;
+}
+
+.log-table .password-reset {
+    -fx-text-fill: -deepBlue;
+}
