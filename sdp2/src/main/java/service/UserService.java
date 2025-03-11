@@ -40,7 +40,6 @@ public class UserService {
                 User user = userDao.getUserByEmail(email);
                 if (!user.getDeleted()) {
                     Session.setCurrentUser(user);
-                    logService.logUserAction("LOGIN", "Gebruiker ingelogd: " + user.getFullName());
                     return true;
                 }
             }
