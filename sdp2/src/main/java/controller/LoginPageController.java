@@ -2,7 +2,7 @@ package controller;
 
 import domein.Session;
 import domein.user.User;
-import domein.user.UserService;
+import service.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;

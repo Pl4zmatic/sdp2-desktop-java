@@ -1,4 +1,4 @@
-package domein.machine;
+package service;
 
 import domein.Session;
 import domein.machine.Machine;

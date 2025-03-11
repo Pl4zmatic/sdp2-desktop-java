@@ -1,8 +1,7 @@
 package controller;
 
 import domein.machine.Machine;
-import domein.machine.MachineService;
-import domein.machine.Maintenance;
+import service.MachineService;
 import javafx.fxml.FXML;
 import utils.MaintenanceStatus;
 

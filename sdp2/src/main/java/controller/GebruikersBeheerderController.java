@@ -1,7 +1,7 @@
 package controller;
 
 import domein.user.User;
-import domein.user.UserService;
+import service.UserService;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
@@ -21,7 +21,6 @@ import utils.Rollen;
 
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.function.Function;
 
 public class GebruikersBeheerderController {
 

@@ -1,6 +1,7 @@
-package domein.user;
+package service;
 
 import domein.Session;
+import domein.user.User;
 import repository.UserDaoJpa;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.Rollen;
@@ -36,8 +37,11 @@ public class UserService
             if (hashedPassword != null && BCrypt.checkpw(password, hashedPassword)) {
                 // Zet de ingelogde gebruiker in de sessie als het wachtwoord klopt
                 User user = userDao.getUserByEmail(email);
-                Session.setCurrentUser(user);
-                return true;
+                if (!user.getDeleted())
+                {
+                    Session.setCurrentUser(user);
+                    return true;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,12 +106,12 @@ public class UserService
 
     public List<User> getAllUsers()
         {
-        try{
-            return Collections.unmodifiableList(userDao.findAll());
-        } catch (Exception e){
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
+            try{
+                return Collections.unmodifiableList(userDao.findAll());
+            } catch (Exception e){
+                e.printStackTrace();
+                return Collections.emptyList();
+            }
         }
 
     public boolean editUser(User updatedUser) {

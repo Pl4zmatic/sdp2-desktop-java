@@ -1,6 +1,6 @@
 package controller;
 
-import domein.user.UserService;
+import service.UserService;
 import domein.user.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
