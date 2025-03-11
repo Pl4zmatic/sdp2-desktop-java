@@ -164,7 +164,15 @@ public class GebruikersBeheerderController {
 
     private void addUser(){
         try {
-            SceneSwitcher.switchScene("/view/UserForm.fxml");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UserForm.fxml"));
+            Parent root = loader.load();
+
+            UserFormController controller = loader.getController();
+            controller.setEditMode(false);
+
+            // In plaats van switchScene, direct de root zetten
+            Scene scene = new Scene(root);
+            SceneSwitcher.getStage().setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -110,3 +110,14 @@
 .secondaryButton:hover {
     -fx-background-color: rgba(239, 70, 60, 0.1);
 }
+
+.error-field {
+    -fx-border-color: red;
+    -fx-border-width: 2px;
+}
+
+.required-field {
+    -fx-border-color: blue;
+    -fx-border-width: 1px;
+}
+
