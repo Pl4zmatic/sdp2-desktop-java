@@ -11,6 +11,7 @@
         <class>domein.user.User</class>
         <class>domein.machine.Machine</class>
         <class>domein.machine.Maintenance</class>
+        <class>domein.logging.LogEntry</class>
 
         <properties>
             <!-- Database configuratie -->

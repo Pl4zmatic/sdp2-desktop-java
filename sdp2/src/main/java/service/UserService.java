@@ -1,20 +1,23 @@
-package domein.user;
+package service;
 
 import domein.Session;
+import domein.user.User;
 import repository.UserDaoJpa;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.Rollen;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
-public class UserService
-    {
+public class UserService {
     private final UserDaoJpa userDao;
+    private final LogService logService;
     private static UserService instance;
 
     public UserService() {
         this.userDao = new UserDaoJpa();
+        this.logService = LogService.getInstance();
     }
 
     public static UserService getInstance() {
@@ -36,8 +39,10 @@ public class UserService
             if (hashedPassword != null && BCrypt.checkpw(password, hashedPassword)) {
                 // Zet de ingelogde gebruiker in de sessie als het wachtwoord klopt
                 User user = userDao.getUserByEmail(email);
-                Session.setCurrentUser(user);
-                return true;
+                if (!user.getDeleted()) {
+                    Session.setCurrentUser(user);
+                    return true;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,7 +52,7 @@ public class UserService
         return false;  // Return false als login mislukt
     }
 
-    public boolean register(String firstName, String lastName, String email, String password,
+    public boolean register(String firstName, String lastName, LocalDate birthDate, String email, String password,
                             String adres, String gsmNummer, Rollen rol) {
         try {
             // Controleer of een gebruiker met dit e-mailadres al bestaat
@@ -56,12 +61,15 @@ public class UserService
             }
 
             // Maak een nieuwe gebruiker aan
-            User newUser = new User(firstName, lastName, email, password, adres, gsmNummer, rol);
+            User newUser = new User(firstName, lastName, birthDate,email, password, adres, gsmNummer, rol);
 
             // Voeg de gebruiker toe aan de database
             UserDaoJpa.startTransaction();
             userDao.insert(newUser);
             UserDaoJpa.commitTransaction();
+
+            // Log de actie
+            logService.logUserCreation(newUser);
 
             return true;
         } catch (Exception e) {
@@ -79,46 +87,61 @@ public class UserService
                 UserDaoJpa.startTransaction();
                 userDao.softDelete(user);
                 UserDaoJpa.commitTransaction();
+
+                // Log de actie
+                logService.logUserDeletion(user);
+
                 return true;
             } else {
                 System.out.println("No user found");
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             UserDaoJpa.rollbackTransaction();
         }
         return false;
     }
 
-    public List<User> getAllActiveUsers(){
-        try{
+    public List<User> getAllActiveUsers() {
+        try {
             return Collections.unmodifiableList(userDao.findAllActive());
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
         }
     }
 
-    public List<User> getAllUsers()
-        {
-        try{
+    public List<User> getAllUsers() {
+        try {
             return Collections.unmodifiableList(userDao.findAll());
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
         }
-        }
+    }
 
     public boolean editUser(User updatedUser) {
         try {
             User existingUser = userDao.getUserByEmail(updatedUser.getEmail());
             if (existingUser != null) {
+                // Maak een kopie van de bestaande gebruiker voor logging
+                User oldUser = new User(
+                        existingUser.getFirstName(),
+                        existingUser.getLastName(),
+                        existingUser.getBirthDate(),
+                        existingUser.getEmail(),
+                        existingUser.getPassword(),
+                        existingUser.getAdres(),
+                        existingUser.getGsmNummer(),
+                        existingUser.getRol()
+                );
+
                 UserDaoJpa.startTransaction();
 
                 existingUser.beheerGebruiker(
                         updatedUser.getFirstName(),
                         updatedUser.getLastName(),
+                        updatedUser.getBirthDate(),
                         updatedUser.getPassword(),
                         updatedUser.getEmail(),
                         updatedUser.getAdres(),
@@ -128,6 +151,10 @@ public class UserService
 
                 userDao.update(existingUser);
                 UserDaoJpa.commitTransaction();
+
+                // Log de actie
+                logService.logUserEdit(oldUser, existingUser);
+
                 return true;
             } else {
                 System.out.println("User not found");
@@ -139,24 +166,28 @@ public class UserService
         return false;
     }
 
-        public boolean resetPassword(User updatedUser, String newPw) {
-            try {
-                User existingUser = userDao.getUserByEmail(updatedUser.getEmail());
-                if (existingUser != null) {
-                    UserDaoJpa.startTransaction();
+    public boolean resetPassword(User updatedUser, String newPw) {
+        try {
+            User existingUser = userDao.getUserByEmail(updatedUser.getEmail());
+            if (existingUser != null) {
+                UserDaoJpa.startTransaction();
 
-                    existingUser.setPassword(newPw);
+                existingUser.setPassword(newPw);
 
-                    userDao.update(existingUser);
-                    UserDaoJpa.commitTransaction();
-                    return true;
-                } else {
-                    System.out.println("User not found");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                UserDaoJpa.rollbackTransaction();
+                userDao.update(existingUser);
+                UserDaoJpa.commitTransaction();
+
+                // Log de actie
+                logService.logPasswordReset(existingUser);
+
+                return true;
+            } else {
+                System.out.println("User not found");
             }
-            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            UserDaoJpa.rollbackTransaction();
         }
+        return false;
+    }
 }

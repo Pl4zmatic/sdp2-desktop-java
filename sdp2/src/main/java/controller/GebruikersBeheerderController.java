@@ -1,7 +1,7 @@
 package controller;
 
 import domein.user.User;
-import domein.user.UserService;
+import service.UserService;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
@@ -21,7 +21,6 @@ import utils.Rollen;
 
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.function.Function;
 
 public class GebruikersBeheerderController {
 
@@ -165,7 +164,15 @@ public class GebruikersBeheerderController {
 
     private void addUser(){
         try {
-            SceneSwitcher.switchScene("/view/UserForm.fxml");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UserForm.fxml"));
+            Parent root = loader.load();
+
+            UserFormController controller = loader.getController();
+            controller.setEditMode(false);
+
+            // In plaats van switchScene, direct de root zetten
+            Scene scene = new Scene(root);
+            SceneSwitcher.getStage().setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }

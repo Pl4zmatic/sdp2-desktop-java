@@ -30,7 +30,7 @@
 
 .dottedLine {
     -fx-stroke-width: 1;
-    -fx-stroke-dash-array: 5, 10;
+    
     -fx-stroke: #ffffff;
 }
 
@@ -83,8 +83,5 @@
     -fx-text-fill: #1b1b1b;
 }
 
-.logoutLabel:hover {
-    -fx-text-fill: #EF463C;
-}
 
 

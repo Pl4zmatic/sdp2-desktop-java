@@ -1,9 +1,7 @@
 package main;
 
 import domein.machine.Machine;
-import domein.machine.MachineService;
-import repository.MachineDao;
-import repository.MachineDaoJpa;
+import service.MachineService;
 
 import java.util.List;
 
