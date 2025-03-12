@@ -32,11 +32,14 @@ public class MachineService {
     public void update(Machine m){
 
             Machine existingMachine = machineDao.getMachineByCode(m.getCode());
+
             if (existingMachine != null) {
+
                 MachineDaoJpa.startTransaction();
                 machineDao.update(m);
                 MachineDaoJpa.commitTransaction();
                 logService.logMachineEdit(existingMachine, m);
+
             } else {
                 throw new EntityNotFoundException("Machine with code " + m.getCode() + " not found");
             }
@@ -48,7 +51,7 @@ public class MachineService {
 
         if (existingMachine != null) {
             MachineDaoJpa.startTransaction();
-            machineDao.delete(existingMachine);
+            machineDao.softDelete(existingMachine);
             MachineDaoJpa.commitTransaction();
             logService.logMachineDelete(existingMachine);
         } else {
