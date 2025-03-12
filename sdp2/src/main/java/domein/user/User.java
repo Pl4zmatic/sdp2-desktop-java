@@ -48,10 +48,21 @@ public class User implements Serializable, SoftDeletable {
     @Column(nullable = false)
     private boolean deleted = false;
 
-    public User(String firstName, String lastName, LocalDate birthDate,String email, String password, String adres, String gsmNummer, Rollen rol)
-        {
-            beheerGebruiker(firstName, lastName, birthDate,password, email, adres, gsmNummer, rol);
-        }
+    public User(String firstName, String lastName, LocalDate birthDate,String email, String password, String adres, String gsmNummer, Rollen rol) {
+        beheerGebruiker(firstName, lastName, birthDate, password, email, adres, gsmNummer, rol);
+    }
+
+    public User(User u){
+        this.firstName = u.firstName;
+        this.lastName = u.lastName;
+        this.birthDate = u.birthDate;
+        this.password = u.password;
+        this.email = u.email;
+        this.adres = u.adres;
+        this.gsmNummer = u.gsmNummer;
+        this.rol = u.rol;
+
+    }
 
     public void setPassword(String password) {
         checkString(password);
