@@ -3,6 +3,7 @@ package service;
 import domein.Session;
 import domein.machine.Machine;
 import domein.user.User;
+import jakarta.persistence.EntityNotFoundException;
 import repository.MachineDaoJpa;
 import repository.UserDaoJpa;
 import org.mindrot.jbcrypt.BCrypt;
@@ -18,18 +19,16 @@ public class MachineService {
     }
 
     public void update(Machine m){
-        try {
+
             Machine existingMachine = machineDao.getMachineByCode(m.getCode());
             if (existingMachine != null) {
                 MachineDaoJpa.startTransaction();
                 machineDao.update(m);
                 MachineDaoJpa.commitTransaction();
             } else {
-                System.out.printf("no machine to update");
+                throw new EntityNotFoundException("Machine with code " + m.getCode() + " not found");
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+
     }
 
     public List<Machine> getAllMachines() {
@@ -66,6 +65,8 @@ public class MachineService {
         m.startMachine();
         update(m);
     }
+
+
 
 
 }

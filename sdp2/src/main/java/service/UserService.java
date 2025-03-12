@@ -125,31 +125,9 @@ public class UserService {
             User existingUser = userDao.getUserByEmail(updatedUser.getEmail());
             if (existingUser != null) {
                 // Maak een kopie van de bestaande gebruiker voor logging
-                User oldUser = new User(
-                        existingUser.getFirstName(),
-                        existingUser.getLastName(),
-                        existingUser.getBirthDate(),
-                        existingUser.getEmail(),
-                        existingUser.getPassword(),
-                        existingUser.getAdres(),
-                        existingUser.getGsmNummer(),
-                        existingUser.getRol()
-                );
-
+                User oldUser = new User(existingUser);
                 UserDaoJpa.startTransaction();
-
-                existingUser.beheerGebruiker(
-                        updatedUser.getFirstName(),
-                        updatedUser.getLastName(),
-                        updatedUser.getBirthDate(),
-                        updatedUser.getPassword(),
-                        updatedUser.getEmail(),
-                        updatedUser.getAdres(),
-                        updatedUser.getGsmNummer(),
-                        updatedUser.getRol()
-                );
-
-                userDao.update(existingUser);
+                userDao.update(updatedUser);
                 UserDaoJpa.commitTransaction();
 
                 // Log de actie
