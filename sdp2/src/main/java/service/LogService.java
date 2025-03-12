@@ -2,6 +2,7 @@ package service;
 
 import domein.Session;
 import domein.logging.LogEntry;
+import domein.machine.Machine;
 import domein.user.User;
 import repository.LogDaoJpa;
 
@@ -31,6 +32,10 @@ public class LogService {
             return Collections.emptyList();
         }
     }
+
+
+
+
     public void logUserAction(String action, String details) {
         try {
             User currentUser = Session.getCurrentUser();
@@ -90,5 +95,30 @@ public class LogService {
         String details = "Password Reset: " + user.getFullName() + " (" + user.getEmail() + ")";
         logUserAction("PASSWORD_RESET", details);
     }
+
+
+    // Machine Logging
+
+    public void logMachineCreation(Machine machine) {
+        String details = "Machine Added: " + machine.getCode() + "in Site : " + machine.getSiteNaam();
+        logUserAction("MACHINE_ADD", details);
+    }
+
+    public void logMachineDelete(Machine machine) {
+        String details = "Machine Deleted: " + machine.getCode();
+        logUserAction("MACHINE_DELETE", details);
+    }
+
+
+    public void logMachineEdit(Machine machineOld, Machine machineNew) {
+        StringBuilder changes = new StringBuilder("Machine Changed : " + machineOld.getCode());
+        if(!machineOld.getProductInfo().equals(machineNew.getProductInfo())) {
+            changes.append(", Product Info: ").append(machineOld.getProductInfo()).append(" → ").append(machineNew.getProductInfo());
+        }
+        if(!machineOld.getCurrentState().equals(machineNew.getCurrentState())) {
+            changes.append(", Current State: ").append(machineOld.getCurrentState()).append(" → ").append(machineNew.getCurrentState());
+        }
+    }
+
 
 }
