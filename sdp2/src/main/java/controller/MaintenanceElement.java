@@ -28,4 +28,9 @@ public class MaintenanceElement {
     		throw new RuntimeException(e);
     	}
     }
+    
+    public void setText(String textMachine, String textDate){
+    	machineLabel.setText(textMachine);
+    	dateLabel.setText(textDate);
+    }
 }

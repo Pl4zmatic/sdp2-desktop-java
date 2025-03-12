@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import domein.machine.stateMachines.maintenance.PlannedState;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.virtualizedfx.enums.ScrollPaneEnums.ScrollBarPolicy;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -56,16 +58,30 @@ public class OnderhoudSchermController {
 
 	@FXML
 	public void initialize() {
-		rootLayout.setLeft(NavbarManager.getNavbar());
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass()
-    			.getResource("/view/MaintenanceItem.fxml"));
 		
-		plannedScrollable.setVbarPolicy(javafx.scene.control.ScrollPane.ScrollBarPolicy.AS_NEEDED);	
-		try {
-			plannedVBox.getChildren().add(fxmlLoader.load());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		String[][] mockMaintenance =  {{"M01", "1/03/2025"}, {"M02", "1/03/2025"}};
+		rootLayout.setLeft(NavbarManager.getNavbar());
+		
+		for(String[] textArray : mockMaintenance) {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass()
+					.getResource("/view/MaintenanceItem.fxml"));
+			Parent element = null;
+			try {
+				element = fxmlLoader.load();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			MaintenanceElement controller = fxmlLoader.getController();
+			controller.setText(textArray[0], textArray[1]);
+			plannedVBox.getChildren().add(element);
 		}
+		
+		plannedScrollable.setContent(plannedVBox);
+		
+		plannedScrollable.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);	
+		progressScrollable.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+		
 	}
 }
