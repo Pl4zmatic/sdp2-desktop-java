@@ -1,58 +1,117 @@
-#machineCode {
-    -fx-font-size: 1.5em;
-    -fx-text-fill: -delawareRed;
-    -fx-background-color: none;
+.root {
+    -fx-background-color: white;
+}
+
+.edge-to-edge {
+    -fx-background-color: transparent;
     -fx-padding: 0;
-    -fx-margin: 0.5em;
-    -fx-border-color: none;
-    -fx-prompt-text-fill: -delawareRed;
 }
 
-#machineCode:hover {
-    -fx-background-color: -bgGray;
+.edge-to-edge > .viewport {
+    -fx-background-color: transparent;
 }
 
-.codeContainer {
-    -fx-border-width: 0 0 1;
-    -fx-border-color: -deepBlue;
+.headerText {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -deepBlue;
 }
 
-.label {
-    -fx-font-size: 1em;
+.headerContainer {
+    -fx-border-width: 0 0 2;
+    -fx-border-color: -delawareRed;
 }
 
 .formContainer {
-    -fx-background-color: -bgGray;
+    -fx-background-radius: 8px;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 3);
 }
 
-#details {
-    -fx-underline: true;
+.fieldLabel {
+    -fx-font-size: 14px;
+    -fx-text-fill: -deepBlue;
 }
 
 .required {
     -fx-text-fill: -delawareRed;
+    -fx-font-weight: bold;
 }
 
-.radio-button:selected .radio .dot {
+.radioButton .radio {
+    -fx-border-width: 1px;
+    -fx-border-color: #E0E0E0;
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-border-radius: 100%;
+}
+
+.radioButton:selected .radio .dot {
     -fx-background-color: -delawareRed;
     -fx-background-insets: 0;
 }
 
-.button {
+.primaryButton {
+    -fx-background-color: -delawareRed;
     -fx-text-fill: white;
-}
-
-#save {
-    -fx-background-color: -delawareRed;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 16px;
     -fx-cursor: hand;
+    -fx-min-width: 100px;
 }
 
-#cancel {
+.cancelButton {
     -fx-background-color: -gray;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+    -fx-min-width: 100px;
+}
+
+.secondaryButton {
+    -fx-background-color: transparent;
+    -fx-text-fill: -delawareRed;
+    -fx-border-color: -delawareRed;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
     -fx-cursor: hand;
 }
 
-.red-button {
-    -fx-background-color: -delawareRed;
+#details {
+    -fx-underline: true;
+    -fx-text-fill: -delawareRed;
     -fx-cursor: hand;
+}
+
+.primaryButton:hover {
+    -fx-background-color: derive(-delawareRed, -10%);
+}
+
+.cancelButton:hover {
+    -fx-background-color: derive(-gray, -10%);
+}
+
+.secondaryButton:hover {
+    -fx-background-color: rgba(239, 70, 60, 0.1);
+}
+
+/* Specific styling for TextArea */
+.text-area {
+    -fx-background-radius: 4px;
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 4px;
+    -fx-font-size: 14px;
+}
+
+.text-area:focused {
+    -fx-border-color: -delawareRed;
+    -fx-border-width: 2px;
+}
+
+.text-area .content {
+    -fx-background-color: white;
 }

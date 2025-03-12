@@ -38,21 +38,6 @@
     -fx-font-weight: bold;
 }
 
-.inputField, .comboBox {
-    -fx-background-radius: 4px;
-    -fx-background-color: white;
-    -fx-border-color: #E0E0E0;
-    -fx-border-radius: 4px;
-    -fx-padding: 8px;
-    -fx-font-size: 14px;
-    -fx-pref-height: 32px;
-}
-
-.inputField:focused, .comboBox:focused {
-    -fx-border-color: -delawareRed;
-    -fx-border-width: 2px;
-}
-
 .radioButton .radio {
     -fx-border-width: 1px;
     -fx-border-color: #E0E0E0;
@@ -119,45 +104,4 @@
 .required-field {
     -fx-border-color: blue;
     -fx-border-width: 1px;
-}
-
-.datePicker {
-    -fx-background-color: white;
-    -fx-border-color: -lightGray;
-    -fx-border-radius: 4px;
-    -fx-background-radius: 4px;
-}
-
-.datePicker:focused {
-    -fx-border-color: -delawareRed;
-    -fx-border-width: 2px;
-}
-
-.datePicker .arrow-button {
-    -fx-background-color: transparent;
-}
-
-.datePicker .arrow-button .arrow {
-    -fx-background-color: -deepBlue;
-}
-
-.datePicker .date-picker-popup .month-year-pane {
-    -fx-background-color: -delawareRed;
-}
-
-.datePicker .date-picker-popup .month-year-pane .label {
-    -fx-text-fill: white;
-}
-
-.datePicker .date-picker-popup .calendar-grid {
-    -fx-background-color: white;
-}
-
-.datePicker .date-picker-popup .today {
-    -fx-background-color: -bgGray;
-}
-
-.datePicker .date-picker-popup .selected {
-    -fx-background-color: -delawareRed;
-    -fx-text-fill: white;
 }

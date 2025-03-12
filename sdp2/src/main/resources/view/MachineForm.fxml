@@ -6,199 +6,218 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<HBox fx:id="rootLayout" alignment="CENTER_LEFT" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MachineFormController">
-   <children>
-      <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
+<ScrollPane fx:id="rootLayout" fitToWidth="true" styleClass="edge-to-edge" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MachineFormController">
+   <content>
+      <VBox alignment="CENTER" prefHeight="800.0">
          <children>
-            <VBox spacing="20.0" styleClass="formContainer">
+            <VBox fx:id="contentVBox" maxWidth="500.0" prefWidth="500.0" spacing="15.0" styleClass="formContainer">
                <children>
-                  <HBox styleClass="codeContainer">
+                  <HBox styleClass="headerContainer">
                      <children>
-                        <TextField fx:id="machineCode" promptText="Code *" HBox.hgrow="ALWAYS">
-                           <HBox.margin>
-                              <Insets bottom="2.0" />
-                           </HBox.margin>
-                        </TextField>
+                        <Label fx:id="formTitle" styleClass="headerText" text="Machine Form">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
                      </children>
+                     <padding>
+                        <Insets bottom="15.0" top="5.0" />
+                     </padding>
                   </HBox>
-                  <VBox spacing="1.0">
+                  <VBox spacing="6.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
-                              <Label text="Site" />
+                              <Label styleClass="fieldLabel" text="Code" />
                               <Label styleClass="required" text="*" />
                            </children>
                         </HBox>
-                        <TextField fx:id="site" promptText="*_***" />
+                        <TextField fx:id="machineCode" styleClass="inputField" />
                      </children>
                   </VBox>
-                  <VBox spacing="1.0">
+                  <VBox spacing="6.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
-                              <Label text="Locatie" />
+                              <Label styleClass="fieldLabel" text="Site" />
                               <Label styleClass="required" text="*" />
                            </children>
                         </HBox>
-                        <TextField fx:id="machineLoc" />
+                        <TextField fx:id="site" promptText="*_***" styleClass="inputField" />
                      </children>
                   </VBox>
-                  <VBox layoutX="20.0" layoutY="370.0" spacing="1.0">
+                  <VBox spacing="6.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
-                              <Label text="Product Info" />
+                              <Label styleClass="fieldLabel" text="Locatie" />
                               <Label styleClass="required" text="*" />
                            </children>
                         </HBox>
-                        <TextArea fx:id="productInfo" VBox.vgrow="ALWAYS" />
+                        <TextField fx:id="machineLoc" styleClass="inputField" />
                      </children>
                   </VBox>
-                  <VBox layoutX="20.0" layoutY="426.0" spacing="1.0">
+                  <VBox spacing="6.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
-                              <Label text="Technieker" />
+                              <Label styleClass="fieldLabel" text="Product Info" />
+                              <Label styleClass="required" text="*" />
                            </children>
                         </HBox>
-                        <TextField fx:id="technician" />
+                        <TextArea fx:id="productInfo" prefHeight="100.0" styleClass="inputField" />
                      </children>
                   </VBox>
-                  <VBox fx:id="lastMaintenanceContainer" disable="true" layoutX="20.0" layoutY="124.0" spacing="1.0">
+                  <VBox spacing="6.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
-                              <Label text="Laatste Onderhoud" />
+                              <Label styleClass="fieldLabel" text="Technieker" />
+                           </children>
+                        </HBox>
+                        <TextField fx:id="technician" styleClass="inputField" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="lastMaintenanceContainer" disable="true" spacing="6.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <Label styleClass="fieldLabel" text="Laatste Onderhoud" />
                               <Label styleClass="required" text="*" />
                               <Pane HBox.hgrow="ALWAYS" />
-                              <Label fx:id="details" layoutX="10.0" layoutY="10.0" text="Details" />
+                              <Label fx:id="details" styleClass="fieldLabel" text="Details" />
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
                            <children>
-                              <Label text="Datum:" />
-                              <DatePicker fx:id="lastMaintenance" editable="false" />
+                              <Label styleClass="fieldLabel" text="Datum:" />
+                              <DatePicker fx:id="lastMaintenance" editable="false" prefHeight="35.0" styleClass="datePicker" />
                            </children>
-                           <padding>
-                              <Insets left="10.0" />
-                           </padding>
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox layoutX="20.0" layoutY="354.0" spacing="1.0">
+                  <VBox spacing="6.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
-                              <Label text="Volgende Onderhoud" />
+                              <Label styleClass="fieldLabel" text="Volgende Onderhoud" />
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
                            <children>
-                              <Label text="Datum:" />
-                              <DatePicker fx:id="nextMaintenance" editable="false" />
+                              <Label styleClass="fieldLabel" text="Datum:" />
+                              <DatePicker fx:id="nextMaintenance" editable="false" prefHeight="35.0" styleClass="datePicker" />
                            </children>
-                           <padding>
-                              <Insets left="10.0" />
-                           </padding>
                         </HBox>
                      </children>
                   </VBox>
-                  <HBox alignment="CENTER">
+                  <VBox spacing="6.0">
                      <children>
-                        <Label text="Uptime:" />
-                        <Pane HBox.hgrow="ALWAYS" />
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <Label styleClass="fieldLabel" text="Uptime" />
+                           </children>
+                        </HBox>
                         <HBox spacing="15.0">
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="5.0">
                                  <children>
-                                    <Label text="Dagen:" />
-                                    <TextField fx:id="days" alignment="CENTER" maxWidth="30.0" promptText="00" />
+                                    <Label styleClass="fieldLabel" text="Dagen:" />
+                                    <TextField fx:id="days" alignment="CENTER" maxWidth="50.0" promptText="00" styleClass="inputField" />
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="5.0">
+                              <HBox alignment="CENTER_LEFT" spacing="5.0">
                                  <children>
-                                    <Label text="Uren:" />
-                                    <TextField fx:id="hours" alignment="CENTER" maxWidth="30.0" promptText="00" />
+                                    <Label styleClass="fieldLabel" text="Uren:" />
+                                    <TextField fx:id="hours" alignment="CENTER" maxWidth="50.0" promptText="00" styleClass="inputField" />
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" layoutX="101.0" layoutY="10.0" spacing="5.0">
+                              <HBox alignment="CENTER_LEFT" spacing="5.0">
                                  <children>
-                                    <Label text="Minuten:" />
-                                    <TextField fx:id="minutes" alignment="CENTER" maxWidth="30.0" promptText="00" />
+                                    <Label styleClass="fieldLabel" text="Minuten:" />
+                                    <TextField fx:id="minutes" alignment="CENTER" maxWidth="50.0" promptText="00" styleClass="inputField" />
                                  </children>
                               </HBox>
                            </children>
                         </HBox>
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" layoutX="20.0" layoutY="480.0">
+                  </VBox>
+                  <HBox alignment="CENTER" spacing="10.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
-                              <Label text="Status:" />
+                              <Label styleClass="fieldLabel" text="Status:" />
                               <Label styleClass="required" text="*" />
                            </children>
                         </HBox>
                         <Pane HBox.hgrow="ALWAYS" />
-                        <HBox spacing="15.0">
+                        <HBox spacing="20.0">
                            <children>
-                              <RadioButton fx:id="active" mnemonicParsing="false" text="Actief">
+                              <RadioButton fx:id="active" mnemonicParsing="false" styleClass="radioButton" text="Actief">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="status" />
-                                 </toggleGroup></RadioButton>
-                              <RadioButton fx:id="inactive" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Inactief" toggleGroup="$status" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="inactive" mnemonicParsing="false" styleClass="radioButton" text="Inactief" toggleGroup="$status" />
                            </children>
                         </HBox>
                      </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER" layoutX="20.0" layoutY="505.0">
+                  <VBox spacing="6.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
-                              <Label text="Productie Status:" />
+                              <Label styleClass="fieldLabel" text="Productie Status:" />
                               <Label styleClass="required" text="*" />
                            </children>
                         </HBox>
-                        <Pane HBox.hgrow="ALWAYS" />
-                        <HBox spacing="15.0">
+                        <VBox spacing="10.0">
                            <children>
-                              <RadioButton fx:id="healthy" mnemonicParsing="false" text="Gezond">
+                              <RadioButton fx:id="healthy" mnemonicParsing="false" styleClass="radioButton" text="Gezond">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="productionStatus" />
-                                 </toggleGroup></RadioButton>
-                              <RadioButton fx:id="maintenance" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Nood Aan Onderhoud" toggleGroup="$productionStatus" />
-                              <RadioButton fx:id="failing" layoutX="101.0" layoutY="10.0" mnemonicParsing="false" text="Falend" toggleGroup="$productionStatus" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="maintenance" mnemonicParsing="false" styleClass="radioButton" text="Nood Aan Onderhoud" toggleGroup="$productionStatus" />
+                              <RadioButton fx:id="failing" mnemonicParsing="false" styleClass="radioButton" text="Falend" toggleGroup="$productionStatus" />
                            </children>
-                        </HBox>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </VBox>
                      </children>
-                  </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                  </VBox>
+                  <HBox alignment="CENTER_RIGHT" spacing="15.0">
                      <children>
-                        <Pane HBox.hgrow="ALWAYS" />
-                        <Button fx:id="cancel" mnemonicParsing="false" text="Annuleer" />
-                        <Button fx:id="save" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Voeg Toe" />
+                        <Button fx:id="cancel" mnemonicParsing="false" styleClass="cancelButton" text="Annuleer" />
+                        <Button fx:id="save" mnemonicParsing="false" styleClass="primaryButton" text="Voeg Toe" />
                      </children>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
                   </HBox>
                </children>
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="20.0" left="25.0" right="25.0" top="20.0" />
                </padding>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
             </VBox>
          </children>
-      </HBox>
-   </children>
+      </VBox>
+   </content>
    <stylesheets>
       <URL value="@../css/globals.css" />
       <URL value="@../css/MachineForm.css" />
    </stylesheets>
-</HBox>
+</ScrollPane>

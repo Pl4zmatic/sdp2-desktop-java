@@ -19,6 +19,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
@@ -45,7 +46,14 @@ public class MachineFormController {
     ManageMachinesController parentController;
 
     @FXML
-    private HBox rootLayout;
+    private ScrollPane rootLayout; // Changed to ScrollPane
+
+    @FXML
+    private VBox contentVBox; // Added reference to the content VBox
+
+    // Added for the form title
+    @FXML
+    private Label formTitle;
 
     // text fields
     @FXML
@@ -106,6 +114,18 @@ public class MachineFormController {
     private void initialize() {
         machineService = new MachineService();
         setupCallbacks();
+        setupScrollPane();
+
+        // Set default form title
+        if (formTitle != null) {
+            formTitle.setText("Machine Form");
+        }
+    }
+
+    private void setupScrollPane() {
+        // Configure ScrollPane to be transparent and fit content width
+        rootLayout.setFitToWidth(true);
+        rootLayout.getStyleClass().add("edge-to-edge");
     }
 
     private void setupCallbacks() {
@@ -274,6 +294,11 @@ public class MachineFormController {
     }
 
     protected void fillFieldData() {
+        if (formTitle != null) {
+            formTitle.setText(machine != null && machine.getCode() != null && !machine.getCode().isEmpty() ?
+                    "Machine Bewerken" : "Machine Toevoegen");
+        }
+
         machineCode.setText(machine.getCode());
         site.setText(machine.getSiteNaam());
         machineLoc.setText(machine.getLocatie());
@@ -282,6 +307,10 @@ public class MachineFormController {
         lastMaintenance.setValue(machine.getLaatsteOnderhoudDatum());
         nextMaintenance.setValue(machine.getDatumToekomstigeOnderhoud());
         hours.setText(String.format("%d", machine.getUptimeInHours()));
+
+        if (days.getText().isEmpty()) days.setText("00");
+        if (minutes.getText().isEmpty()) minutes.setText("00");
+
         status.selectToggle(machine.getCurrentState().equals("running") ? active : inactive);
 
         switch (machine.getProductieStatus().toLowerCase()) {
