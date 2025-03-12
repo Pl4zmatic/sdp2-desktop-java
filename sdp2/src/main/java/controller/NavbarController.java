@@ -107,7 +107,7 @@ public class NavbarController {
             case "Beheer Gebruikers" -> "/view/ManageUsers.fxml";
             case "Logs" -> "/view/UserLogs.fxml";
             case "Beheer Sites" -> "/view/SitesManagement.fxml";
-            case "Onderhoud" -> "/view/Maintenance.fxml";
+            case "Onderhoud" -> "/view/onderhoudscherm.fxml";
             case "Beheer Machines" -> "/view/ManageMachines.fxml";
             case "Beheer Notificaties" -> "/view/NotificationsManagement.fxml";
             case "Logout" -> "/view/Logout.fxml";
