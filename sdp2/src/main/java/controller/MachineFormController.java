@@ -232,8 +232,10 @@ public class MachineFormController {
 
     private void validateLastMaintenanceField(String error) {
         errors.remove(error);
-        if (lastMaintenance.getValue().isAfter(LocalDate.now())) {
-            errors.add(error);
+        if(lastMaintenance.getValue() != null) {
+            if (lastMaintenance.getValue().isAfter(LocalDate.now())) {
+                errors.add(error);
+            }
         }
     }
 
@@ -255,8 +257,8 @@ public class MachineFormController {
         checkTextField(site, "Site is vereist.");
         checkTextField(machineLoc, "Locatie is vereist.");
         checkTextField(productInfo, "Product info is vereist.");
-        checkToggleGroup(productionStatus, "Productie status is vereist");
-        checkToggleGroup(status, "Status is vereist");
+        checkToggleGroup(productionStatus, "Productie status is vereist.");
+        checkToggleGroup(status, "Status is vereist.");
         checkTimeField(hours, "Uren");
 
         validateNextMaintenanceField("Datum volgende onderhoud is niet mogelijk.");
