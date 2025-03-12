@@ -11,9 +11,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -51,7 +51,7 @@ public class Machine {
 	private String techniekerNaam;
 
 	@Column(name = "laatste_onderhoud_datum", nullable = true)
-	private LocalDateTime laatsteOnderhoudDatum;
+	private LocalDate laatsteOnderhoudDatum;
 
 	@Column(name = "laatste_onderhoud_beschrijving", nullable = true)
 	private String laatsteOnderhoudBeschrijving;
@@ -60,7 +60,7 @@ public class Machine {
 	private int aantalDagenSindsLaatsteOnderhoud;
 
 	@Column(name = "datum_toekomstige_onderhoud", nullable = true)
-	private Date datumToekomstigeOnderhoud;
+	private LocalDate datumToekomstigeOnderhoud;
 
 	// Dit is zodat de uptime kan berekent worden, elke keer wanneer de machine
 	// aangaat
@@ -96,7 +96,7 @@ public class Machine {
         this.techniekerNaam = techniekerNaam;
         this.currentState = new StartableState(this);
         this.currentStateString = getCurrentState();
-		this.laatsteOnderhoudDatum = LocalDateTime.now();
+		this.laatsteOnderhoudDatum = LocalDate.now();
 		this.datumToekomstigeOnderhoud = null;
 		this.onderhouden = new HashSet<Maintenance>();
 	}

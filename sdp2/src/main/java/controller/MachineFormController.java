@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 import domein.machine.Machine;
 import domein.machine.MachineService;
-import domein.machine.RunningState;
-import domein.machine.StoppedState;
+import domein.machine.stateMachines.machine.RunningState;
+import domein.machine.stateMachines.machine.StoppedState;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -41,6 +41,8 @@ public class MachineFormController {
 
     @Setter
     private HBox parent;
+    @Setter
+    ManageMachinesController parentController;
 
     @FXML
     private HBox rootLayout;
@@ -187,22 +189,22 @@ public class MachineFormController {
         Set<String> codesInDatabase = machineService.getAllMachines().stream()
                 .map((machine) -> machine.getCode())
                 .collect(Collectors.toSet());
-        if(codesInDatabase.contains(machineCode.getText().trim())) {
+        if (codesInDatabase.contains(machineCode.getText().trim())) {
             errors.add(error);
         }
     }
 
     private void validateLastMaintenanceField(String error) {
         errors.remove(error);
-        if(lastMaintenance.getValue().isAfter(LocalDate.now())) {
+        if (lastMaintenance.getValue().isAfter(LocalDate.now())) {
             errors.add(error);
         }
     }
 
     private void validateNextMaintenanceField(String error) {
         errors.remove(error);
-        if(nextMaintenance.getValue() != null) {
-            if(nextMaintenance.getValue().isBefore(LocalDate.now())) {
+        if (nextMaintenance.getValue() != null) {
+            if (nextMaintenance.getValue().isBefore(LocalDate.now())) {
                 errors.add(error);
             }
         }
@@ -219,7 +221,7 @@ public class MachineFormController {
         checkTimeField(hours, "Uren");
 
         validateNextMaintenanceField("Datum volgende onderhoud is niet mogelijk.");
-        if(!errorInDateFieldLastMaintenance("Datum is vereist.")) {
+        if (!errorInDateFieldLastMaintenance("Datum is vereist.")) {
             validateLastMaintenanceField("Datum laatste onderhoud is niet mogelijk.");
         }
     }
@@ -246,29 +248,52 @@ public class MachineFormController {
             // set vorige onderhoud
             if (!lastMaintenanceContainer.isDisable()) {
                 machine.setTechniekerNaam(technician.getText());
-                machine.setLaatsteOnderhoudDatum(lastMaintenance.getValue().atStartOfDay());
+                machine.setLaatsteOnderhoudDatum(lastMaintenance.getValue());
             }
 
             // set volgende onderhoud
             if (!(nextMaintenance.getValue() == null)) {
-                machine.setDatumToekomstigeOnderhoud(
-                        Date.from(nextMaintenance.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                machine.setDatumToekomstigeOnderhoud(nextMaintenance.getValue());
             }
 
             // set status (actief/inactief)
-            machine.setCurrentStateString(((RadioButton) status.getSelectedToggle()).getText());
             if (((RadioButton) status.getSelectedToggle()).equals(active)) {
                 machine.setCurrentState(new RunningState(machine));
             } else {
                 machine.setCurrentState(new StoppedState(machine));
             }
+            machine.updateCurrentState();
 
             // set productie status (gezond / (nood aan) onderhoud / falend)
             machine.setProductieStatus(((RadioButton) productionStatus.getSelectedToggle()).getText());
 
             machineService.addMachine(machine);
             cancelCallback();
+            this.parentController.selectMachine(machine);
         }
     }
 
+    protected void fillFieldData() {
+        machineCode.setText(machine.getCode());
+        site.setText(machine.getSiteNaam());
+        machineLoc.setText(machine.getLocatie());
+        productInfo.setText(machine.getProductInfo());
+        technician.setText(machine.getTechniekerNaam());
+        lastMaintenance.setValue(machine.getLaatsteOnderhoudDatum());
+        nextMaintenance.setValue(machine.getDatumToekomstigeOnderhoud());
+        hours.setText(String.format("%d", machine.getUptimeInHours()));
+        status.selectToggle(machine.getCurrentState().equals("running") ? active : inactive);
+
+        switch (machine.getProductieStatus().toLowerCase()) {
+            case "gezond":
+                productionStatus.selectToggle(healthy);
+                break;
+            case "nood aan onderhoud":
+                productionStatus.selectToggle(maintenance);
+                break;
+            case "falend":
+                productionStatus.selectToggle(failing);
+                break;
+        }
+    }
 }

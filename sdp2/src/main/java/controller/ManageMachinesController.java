@@ -1,20 +1,19 @@
 package controller;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Date;
-
-import com.mysql.cj.conf.ConnectionUrlParser.Pair;
+import java.time.LocalDate;
 
 import domein.machine.Machine;
 import domein.machine.MachineService;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -56,11 +55,11 @@ public class ManageMachinesController {
         @FXML
         private TableColumn<Machine, String> technicianColumn;
         @FXML
-        private TableColumn<Machine, LocalDateTime> uptimeColumn;
+        private TableColumn<Machine, Integer> uptimeColumn;
         @FXML
-        private TableColumn<Machine, Pair<LocalDateTime, String>> lastMaintenanceColumn;
+        private TableColumn<Machine, LocalDate> lastMaintenanceColumn;
         @FXML
-        private TableColumn<Machine, Date> nextMaintenanceColumn;
+        private TableColumn<Machine, LocalDate> nextMaintenanceColumn;
 
         private MachineService machineService;
 
@@ -68,9 +67,9 @@ public class ManageMachinesController {
         private void initialize() {
                 machineService = new MachineService();
                 try {
-                        setupNavbar();
                         setupTable();
                         setupCallbacks();
+                        setupNavbar();
                 } catch (Exception e) {
                         e.printStackTrace();
                 }
@@ -85,17 +84,16 @@ public class ManageMachinesController {
                 codeColumn.setCellValueFactory(new PropertyValueFactory<>("code"));
                 locationColumn.setCellValueFactory(new PropertyValueFactory<>("locatie"));
                 productInfoColumn.setCellValueFactory(new PropertyValueFactory<>("productInfo"));
-                statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+                statusColumn.setCellValueFactory(new PropertyValueFactory<>("currentStateString"));
                 productionStatusColumn.setCellValueFactory(new PropertyValueFactory<>("productieStatus"));
-                uptimeColumn.setCellValueFactory(new PropertyValueFactory<>("uptime"));
+                uptimeColumn.setCellValueFactory(new PropertyValueFactory<>("uptimeInHours"));
                 technicianColumn.setCellValueFactory(new PropertyValueFactory<>("techniekerNaam"));
-                lastMaintenanceColumn.setCellValueFactory(new PropertyValueFactory<>("laatsteOnderhoud"));
-                lastMaintenanceColumn.setCellValueFactory(new PropertyValueFactory<>("datumToekomstigeOnderhoud"));
-                loadTableContent();
+                lastMaintenanceColumn.setCellValueFactory(new PropertyValueFactory<>("laatsteOnderhoudDatum"));
+                nextMaintenanceColumn.setCellValueFactory(new PropertyValueFactory<>("datumToekomstigeOnderhoud"));
         }
 
         private void setupCallbacks() {
-                addButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> addButtonCallback());
+                addButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> addButtonCallback(null));
                 searchBar.setOnAction((event) -> searchBarCallback());
                 rootLayout.getChildren().addListener(new ListChangeListener<Node>() {
                         @Override
@@ -103,17 +101,37 @@ public class ManageMachinesController {
                                 loadTableContent();
                         }
                 });
+                tableView.setRowFactory(table -> {
+                        TableRow<Machine> row = new TableRow<>();
+                        row.setOnMouseClicked(event -> {
+                                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                                        Machine rowData = row.getItem();
+                                        addButtonCallback(rowData);
+                                }
+                        });
+                        return row;
+                });
         }
 
         private void loadTableContent() {
                 this.tableView.setItems(FXCollections.observableList(machineService.getAllMachines()));
         }
 
-        private void addButtonCallback() {
+        private void addButtonCallback(Machine m) {
                 try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MachineForm.fxml"));
                         Node form = loader.load();
-                        ((MachineFormController) loader.getController()).setParent(rootLayout);
+                        MachineFormController controller = ((MachineFormController) loader.getController());
+                        controller.setParent(rootLayout);
+                        controller.setParentController(this);
+
+                        if (m != null) {
+                                controller.setMachine(m);
+                                controller.fillFieldData();
+                        }
+
+                        if (this.rootLayout.getChildren().size() > 2)
+                                this.rootLayout.getChildren().removeLast();
                         this.rootLayout.getChildren().add(form);
                 } catch (IOException e) {
                         e.printStackTrace();
@@ -122,5 +140,9 @@ public class ManageMachinesController {
 
         private void searchBarCallback() {
 
+        }
+
+        protected void selectMachine(Machine m) {
+                this.tableView.getSelectionModel().select(m);
         }
 }
