@@ -7,6 +7,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import utils.SoftDeletable;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
@@ -26,6 +27,9 @@ public class User implements Serializable, SoftDeletable {
     @Column(nullable = false, unique = true) // lastName moet uniek en niet leeg zijn
     private String lastName;
 
+    @Column(nullable = false)
+    private LocalDate birthDate;
+
     @Column(nullable = false) //Dit zorgt dat wachtwoord niet leeg kan zijn
     private String password;
 
@@ -44,9 +48,9 @@ public class User implements Serializable, SoftDeletable {
     @Column(nullable = false)
     private boolean deleted = false;
 
-    public User(String firstName, String lastName, String email, String password, String adres, String gsmNummer, Rollen rol)
+    public User(String firstName, String lastName, LocalDate birthDate,String email, String password, String adres, String gsmNummer, Rollen rol)
         {
-            beheerGebruiker(firstName, lastName,password, email, adres, gsmNummer, rol);
+            beheerGebruiker(firstName, lastName, birthDate,password, email, adres, gsmNummer, rol);
         }
 
     public void setPassword(String password) {
@@ -106,11 +110,12 @@ public class User implements Serializable, SoftDeletable {
         this.rol = rol;
         }
 
-    public void beheerGebruiker(String firstName, String lastName, String password,
+    public void beheerGebruiker(String firstName, String lastName, LocalDate birthDate,String password,
                                 String email, String adres, String gsmNummer, Rollen rol)
         {
         setFirstName(firstName);
         setLastName(lastName);
+        setBirthDate(birthDate);
         setPassword(password);
         setEmail(email);
         setAdres(adres);

@@ -41,7 +41,6 @@
     -fx-background-color: -deepBlue;
 }
 
-/* Standaard JavaFX DatePicker styling */
 .filter-date {
     -fx-background-color: white;
     -fx-border-color: -lightGray;

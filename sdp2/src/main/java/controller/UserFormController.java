@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import utils.Rollen;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class UserFormController {
     @FXML private BorderPane rootLayout;
     @FXML private TextField firstNameField;
     @FXML private TextField lastNameField;
+    @FXML private DatePicker birthDatePicker;
     @FXML private TextField emailField;
     @FXML private TextField adressField;
     @FXML private PasswordField passwordField;
@@ -28,7 +30,7 @@ public class UserFormController {
     @FXML private Button save;
     @FXML private Button resetPasswordButton;
     @FXML private HBox passwordResetContainer;
-    @FXML private Label passwordLabel;
+    @FXML private VBox passwordContainer;
     @FXML private Label phoneRequiredLabel;
     private final UserService userService = UserService.getInstance();
     private User currentUser;
@@ -78,6 +80,7 @@ public class UserFormController {
 
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
+        LocalDate birthDate = birthDatePicker.getValue();
         String email = emailField.getText();
         String password = passwordField.getText();
         String adres = adressField.getText();
@@ -89,6 +92,7 @@ public class UserFormController {
         if (isEditMode) {
             currentUser.setFirstName(firstName);
             currentUser.setLastName(lastName);
+            currentUser.setBirthDate(birthDate);
             currentUser.setEmail(email);
             currentUser.setAdres(adres);
             currentUser.setGsmNummer(phoneNumber);
@@ -97,9 +101,9 @@ public class UserFormController {
 
             success = userService.editUser(currentUser);
         } else {
-            User newUser = new User(firstName, lastName, email, password, adres, phoneNumber, role);
+            User newUser = new User(firstName, lastName, birthDate,email, password, adres, phoneNumber, role);
             newUser.setDeleted(!isActive);
-            success = userService.register(firstName, lastName, email, password, adres, phoneNumber, role);
+            success = userService.register(firstName, lastName, birthDate,email, password, adres, phoneNumber, role);
         }
 
         if (success) {
@@ -131,6 +135,18 @@ public class UserFormController {
             lastNameField.getStyleClass().add("error-field");
         } else {
             lastNameField.getStyleClass().removeAll("error-field");
+        }
+
+        if (birthDatePicker.getValue() == null) {
+            errors.add("Birth date is required");
+            birthDatePicker.getStyleClass().add("error-field");
+        } else {
+            if (birthDatePicker.getValue().isAfter(LocalDate.now())) {
+                errors.add("Birth date cannot be in the future");
+                birthDatePicker.getStyleClass().add("error-field");
+            } else {
+                birthDatePicker.getStyleClass().removeAll("error-field");
+            }
         }
 
         if (emailField.getText().trim().isEmpty()) {
@@ -216,6 +232,7 @@ public class UserFormController {
         this.isEditMode = true;
         firstNameField.setText(user.getFirstName());
         lastNameField.setText(user.getLastName());
+        birthDatePicker.setValue(user.getBirthDate());
         emailField.setText(user.getEmail());
         adressField.setText(user.getAdres());
         phoneNumberField.setText(user.getGsmNummer());
@@ -244,15 +261,18 @@ public class UserFormController {
             passwordResetContainer.setManaged(true);
             passwordResetContainer.setVisible(true);
             resetPasswordButton.setVisible(true);
-            passwordLabel.setVisible(true);
             resetPasswordButton.setVisible(true);
+            passwordContainer.setManaged(false);
+            passwordContainer.setVisible(false);
+
         } else {
             save.setText("Add");
             passwordResetContainer.setManaged(false);
             passwordResetContainer.setManaged(false);
             resetPasswordButton.setVisible(false);
-            passwordLabel.setVisible(false);
             resetPasswordButton.setVisible(false);
+            passwordContainer.setManaged(true);
+            passwordContainer.setVisible(true);
         }
     }
 

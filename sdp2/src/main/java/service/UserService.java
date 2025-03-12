@@ -6,6 +6,7 @@ import repository.UserDaoJpa;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.Rollen;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class UserService {
         return false;  // Return false als login mislukt
     }
 
-    public boolean register(String firstName, String lastName, String email, String password,
+    public boolean register(String firstName, String lastName, LocalDate birthDate, String email, String password,
                             String adres, String gsmNummer, Rollen rol) {
         try {
             // Controleer of een gebruiker met dit e-mailadres al bestaat
@@ -60,7 +61,7 @@ public class UserService {
             }
 
             // Maak een nieuwe gebruiker aan
-            User newUser = new User(firstName, lastName, email, password, adres, gsmNummer, rol);
+            User newUser = new User(firstName, lastName, birthDate,email, password, adres, gsmNummer, rol);
 
             // Voeg de gebruiker toe aan de database
             UserDaoJpa.startTransaction();
@@ -127,6 +128,7 @@ public class UserService {
                 User oldUser = new User(
                         existingUser.getFirstName(),
                         existingUser.getLastName(),
+                        existingUser.getBirthDate(),
                         existingUser.getEmail(),
                         existingUser.getPassword(),
                         existingUser.getAdres(),
@@ -139,6 +141,7 @@ public class UserService {
                 existingUser.beheerGebruiker(
                         updatedUser.getFirstName(),
                         updatedUser.getLastName(),
+                        updatedUser.getBirthDate(),
                         updatedUser.getPassword(),
                         updatedUser.getEmail(),
                         updatedUser.getAdres(),
