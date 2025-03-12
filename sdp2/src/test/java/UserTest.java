@@ -7,6 +7,8 @@ import org.junit.jupiter.params.provider.*;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import utils.Rollen;
+
+import java.time.LocalDate;
 import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +19,7 @@ public class UserTest {
 
     @BeforeEach
     public void setUp(){
-        user = new User("Test", "De Tester", "test@mail.com", "test", "Testlaan", "123", Rollen.TECHNIEKER);
+        user = new User("Test", "De Tester", LocalDate.of(2000, 3, 25),"test@mail.com", "test", "Testlaan", "123", Rollen.TECHNIEKER);
     }
 
     @Test
