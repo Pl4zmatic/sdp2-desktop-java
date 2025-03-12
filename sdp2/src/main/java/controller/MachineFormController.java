@@ -57,6 +57,8 @@ public class MachineFormController {
 
     // text fields
     @FXML
+    private VBox machineCodeContainer;
+    @FXML
     private TextField machineCode;
     @FXML
     private TextField site;
@@ -110,15 +112,29 @@ public class MachineFormController {
     // error checking
     private List<String> errors = new ArrayList<>();
 
+    private boolean isEditingFlag;
+
     @FXML
     private void initialize() {
         machineService = new MachineService();
         setupCallbacks();
         setupScrollPane();
+        isEditingFlag = false;
 
         // Set default form title
         if (formTitle != null) {
             formTitle.setText("Machine Form");
+        }
+    }
+
+    protected void setupSaveOption() {
+        if(machine != null) {
+            save.setText("Pas Aan");
+            isEditingFlag = true;
+            machineCodeContainer.setDisable(true);
+        }
+        else {
+            isEditingFlag = false;
         }
     }
 
@@ -216,8 +232,10 @@ public class MachineFormController {
 
     private void validateLastMaintenanceField(String error) {
         errors.remove(error);
-        if (lastMaintenance.getValue().isAfter(LocalDate.now())) {
-            errors.add(error);
+        if(lastMaintenance.getValue() != null) {
+            if (lastMaintenance.getValue().isAfter(LocalDate.now())) {
+                errors.add(error);
+            }
         }
     }
 
@@ -231,13 +249,16 @@ public class MachineFormController {
     }
 
     private void checkAll() {
-        checkMachineCode("Code moet uniek zijn.");
+        if(!isEditingFlag) {
+            checkMachineCode("Code moet uniek zijn.");
+        }
+
         checkTextField(machineCode, "Code is vereist.");
         checkTextField(site, "Site is vereist.");
         checkTextField(machineLoc, "Locatie is vereist.");
         checkTextField(productInfo, "Product info is vereist.");
-        checkToggleGroup(productionStatus, "Productie status is vereist");
-        checkToggleGroup(status, "Status is vereist");
+        checkToggleGroup(productionStatus, "Productie status is vereist.");
+        checkToggleGroup(status, "Status is vereist.");
         checkTimeField(hours, "Uren");
 
         validateNextMaintenanceField("Datum volgende onderhoud is niet mogelijk.");
@@ -287,7 +308,14 @@ public class MachineFormController {
             // set productie status (gezond / (nood aan) onderhoud / falend)
             machine.setProductieStatus(((RadioButton) productionStatus.getSelectedToggle()).getText());
 
-            machineService.addMachine(machine);
+            //Edit or add machine to db
+            if(isEditingFlag) {
+                machineService.update(machine);
+            }
+            else {
+                machineService.addMachine(machine);
+            }
+
             cancelCallback();
             this.parentController.selectMachine(machine);
         }

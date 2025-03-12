@@ -8,6 +8,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -63,9 +64,12 @@ public class ManageMachinesController {
 
         private MachineService machineService;
 
+        private boolean isTableFiltered;
+
         @FXML
         private void initialize() {
                 machineService = new MachineService();
+                isTableFiltered = false;
                 try {
                         setupTable();
                         setupCallbacks();
@@ -94,13 +98,22 @@ public class ManageMachinesController {
 
         private void setupCallbacks() {
                 addButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> addButtonCallback(null));
-                searchBar.setOnAction((event) -> searchBarCallback());
+
+                searchBar.textProperty().addListener(new ChangeListener<String>() {
+                        @Override
+                        public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                        String newValue) {
+                                searchBarCallback(newValue);
+                        }
+                });
+
                 rootLayout.getChildren().addListener(new ListChangeListener<Node>() {
                         @Override
                         public void onChanged(Change<? extends Node> c) {
                                 loadTableContent();
                         }
                 });
+
                 tableView.setRowFactory(table -> {
                         TableRow<Machine> row = new TableRow<>();
                         row.setOnMouseClicked(event -> {
@@ -114,6 +127,7 @@ public class ManageMachinesController {
         }
 
         private void loadTableContent() {
+                this.tableView.getItems().clear();
                 this.tableView.setItems(FXCollections.observableList(machineService.getAllMachines()));
         }
 
@@ -128,6 +142,7 @@ public class ManageMachinesController {
                         if (m != null) {
                                 controller.setMachine(m);
                                 controller.fillFieldData();
+                                controller.setupSaveOption();
                         }
 
                         if (this.rootLayout.getChildren().size() > 2)
@@ -138,8 +153,27 @@ public class ManageMachinesController {
                 }
         }
 
-        private void searchBarCallback() {
+        private void searchBarCallback(String searchString) {
+                ObservableList<Machine> filteredItems = FXCollections.observableArrayList();
+                ObservableList<TableColumn<Machine, ?>> columns = tableView.getColumns();
 
+                for (Machine row : tableView.getItems()) {
+                        for (TableColumn<Machine, ?> column : columns) {
+                                if ((String.valueOf(column.getCellObservableValue(row).getValue()).toLowerCase()).contains(searchString.toLowerCase()) && !filteredItems.contains(row)) {
+                                        filteredItems.add(row);
+                                }
+                        }
+                }
+
+                if (!filteredItems.isEmpty() && !(searchString.isEmpty() || searchString.isBlank())) {
+                        tableView.setItems(filteredItems);
+                        isTableFiltered = true;
+                } else {
+                        if (isTableFiltered) {
+                                loadTableContent();
+                                isTableFiltered = false;
+                        }
+                }
         }
 
         protected void selectMachine(Machine m) {

@@ -33,7 +33,7 @@
                         <Insets bottom="15.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <VBox spacing="6.0">
+                  <VBox fx:id="machineCodeContainer" spacing="6.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="5.0">
                            <children>
