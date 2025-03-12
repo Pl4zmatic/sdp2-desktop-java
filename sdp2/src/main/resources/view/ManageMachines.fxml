@@ -1,71 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<HBox fx:id="rootLayout" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ManageMachinesController">
-   <children>
-      <HBox fx:id="manageMachinesContainer" alignment="CENTER" HBox.hgrow="ALWAYS">
+<BorderPane fx:id="rootLayout" prefHeight="720.0" prefWidth="1000.0" styleClass="root-layout" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ManageMachinesController">
+   <center>
+      <VBox alignment="CENTER" spacing="15.0" styleClass="content-container" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="VboxManageMachines" prefHeight="400.0" prefWidth="600.0" spacing="10.0" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_RIGHT" maxWidth="900.0" prefHeight="85.0" prefWidth="900.0" spacing="20.0" styleClass="search-bar">
                <children>
-                  <HBox alignment="CENTER" prefWidth="920.0" VBox.vgrow="NEVER">
+                  <VBox alignment="CENTER" prefHeight="40.0" prefWidth="150.0" styleClass="deleted-users-container">
                      <children>
-                        <TextField fx:id="searchBar" promptText="Zoeken">
-                           <font>
-                              <Font name="Inter Medium" size="12.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="20.0" top="5.0" />
-                           </padding>
-                        </TextField>
-                        <Pane HBox.hgrow="ALWAYS" />
-                        <ImageView fx:id="addButton" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-                           <image>
-                              <Image url="@../images/plus_circle.png" />
-                           </image>
-                        </ImageView>
+                        <Label styleClass="deleted-users-label" text="Deleted Machines" />
+                        <CheckBox fx:id="showDeletedMachines" mnemonicParsing="false" styleClass="deleted-users-checkbox" />
                      </children>
-                  </HBox>
-                  <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
-                     <columns>
-                        <TableColumn fx:id="siteColumn" prefWidth="75.0" text="Site" />
-                        <TableColumn fx:id="codeColumn" prefWidth="75.0" text="Code" />
-                        <TableColumn fx:id="locationColumn" prefWidth="75.0" text="Locatie" />
-                        <TableColumn fx:id="productInfoColumn" prefWidth="75.0" text="Product Info" />
-                        <TableColumn fx:id="statusColumn" prefWidth="75.0" text="Status" />
-                        <TableColumn fx:id="productionStatusColumn" prefWidth="100.0" text="Productie Status" />
-                        <TableColumn fx:id="uptimeColumn" prefWidth="75.0" text="Uptime" />
-                        <TableColumn fx:id="technicianColumn" prefWidth="75.0" text="Technieker" />
-                        <TableColumn fx:id="lastMaintenanceColumn" prefWidth="125.0" text="Vorige  Onderhoud" />
-                        <TableColumn fx:id="nextMaintenanceColumn" prefWidth="150.0" text="Volgende Onderhoud" />
-                     </columns>
-                  </TableView>
+                  </VBox>
+                  <TextField fx:id="searchBar" prefHeight="40.0" prefWidth="300.0" promptText="Search machines..." styleClass="search-field" />
                </children>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
                <padding>
-                  <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+                  <Insets bottom="15.0" left="15.0" top="15.0" />
                </padding>
-            </VBox>
+            </HBox>
+            <MFXTableView fx:id="tableView" prefHeight="550.0" prefWidth="900.0" styleClass="user-table" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets left="15.0" right="15.0" />
+               </VBox.margin>
+            </MFXTableView>
+            <Button fx:id="addMachineButton" contentDisplay="CENTER" styleClass="add-user-button" text="Add Machine">
+               <VBox.margin>
+                  <Insets bottom="15.0" top="10.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+               </padding>
+            </Button>
          </children>
-      </HBox>
-   </children>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </VBox>
+   </center>
    <stylesheets>
       <URL value="@../css/globals.css" />
       <URL value="@../css/ManageMachines.css" />
    </stylesheets>
-</HBox>
+</BorderPane>

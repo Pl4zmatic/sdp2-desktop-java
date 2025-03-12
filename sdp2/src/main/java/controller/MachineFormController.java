@@ -26,6 +26,7 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
@@ -41,17 +42,16 @@ public class MachineFormController {
     private MachineService machineService;
 
     @Setter
-    private HBox parent;
+    private BorderPane parent;
     @Setter
     ManageMachinesController parentController;
 
     @FXML
-    private ScrollPane rootLayout; // Changed to ScrollPane
+    private BorderPane rootLayout;
 
     @FXML
-    private VBox contentVBox; // Added reference to the content VBox
+    private VBox contentVBox;
 
-    // Added for the form title
     @FXML
     private Label formTitle;
 
@@ -139,8 +139,6 @@ public class MachineFormController {
     }
 
     private void setupScrollPane() {
-        // Configure ScrollPane to be transparent and fit content width
-        rootLayout.setFitToWidth(true);
         rootLayout.getStyleClass().add("edge-to-edge");
     }
 

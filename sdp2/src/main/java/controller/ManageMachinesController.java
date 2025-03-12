@@ -2,66 +2,46 @@ package controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Comparator;
 
 import domein.machine.Machine;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import service.MachineService;
 
+// Import MFXTableView and related classes
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+
 public class ManageMachinesController {
         @FXML
-        private HBox rootLayout;
-
-        @FXML
-        private HBox manageMachinesContainer;
-
-        @FXML
-        private VBox VboxManageMachines;
+        private BorderPane rootLayout;
 
         @FXML
         private TextField searchBar;
 
         @FXML
-        private ImageView addButton;
+        private Button addMachineButton;
 
         @FXML
-        private TableView<Machine> tableView;
-        @FXML
-        private TableColumn<Machine, String> siteColumn;
-        @FXML
-        private TableColumn<Machine, String> codeColumn;
-        @FXML
-        private TableColumn<Machine, String> locationColumn;
-        @FXML
-        private TableColumn<Machine, String> productInfoColumn;
-        @FXML
-        private TableColumn<Machine, String> productionStatusColumn;
-        @FXML
-        private TableColumn<Machine, String> statusColumn;
-        @FXML
-        private TableColumn<Machine, String> technicianColumn;
-        @FXML
-        private TableColumn<Machine, Integer> uptimeColumn;
-        @FXML
-        private TableColumn<Machine, LocalDate> lastMaintenanceColumn;
-        @FXML
-        private TableColumn<Machine, LocalDate> nextMaintenanceColumn;
+        private MFXTableView<Machine> tableView;
 
+        private ObservableList<Machine> machines;
+        private FilteredList<Machine> filteredMachines;
         private MachineService machineService;
 
         private boolean isTableFiltered;
@@ -74,36 +54,80 @@ public class ManageMachinesController {
                         setupTable();
                         setupCallbacks();
                         setupNavbar();
+                        loadTableContent();
                 } catch (Exception e) {
                         e.printStackTrace();
                 }
         }
 
         private void setupNavbar() throws IOException {
-                this.rootLayout.getChildren().add(0, NavbarManager.getNavbar());
+                this.rootLayout.setLeft(NavbarManager.getNavbar());
         }
 
         private void setupTable() {
-                siteColumn.setCellValueFactory(new PropertyValueFactory<>("siteNaam"));
-                codeColumn.setCellValueFactory(new PropertyValueFactory<>("code"));
-                locationColumn.setCellValueFactory(new PropertyValueFactory<>("locatie"));
-                productInfoColumn.setCellValueFactory(new PropertyValueFactory<>("productInfo"));
-                statusColumn.setCellValueFactory(new PropertyValueFactory<>("currentStateString"));
-                productionStatusColumn.setCellValueFactory(new PropertyValueFactory<>("productieStatus"));
-                uptimeColumn.setCellValueFactory(new PropertyValueFactory<>("uptimeInHours"));
-                technicianColumn.setCellValueFactory(new PropertyValueFactory<>("techniekerNaam"));
-                lastMaintenanceColumn.setCellValueFactory(new PropertyValueFactory<>("laatsteOnderhoudDatum"));
-                nextMaintenanceColumn.setCellValueFactory(new PropertyValueFactory<>("datumToekomstigeOnderhoud"));
+                tableView.getTableColumns().clear();
+
+                // Create columns with comparators
+                MFXTableColumn<Machine> siteColumn = new MFXTableColumn<>("Site", true, Comparator.comparing(Machine::getSiteNaam));
+                MFXTableColumn<Machine> codeColumn = new MFXTableColumn<>("Code", true, Comparator.comparing(Machine::getCode));
+                MFXTableColumn<Machine> locationColumn = new MFXTableColumn<>("Location", true, Comparator.comparing(Machine::getLocatie));
+                MFXTableColumn<Machine> productInfoColumn = new MFXTableColumn<>("Product Info", true, Comparator.comparing(Machine::getProductInfo));
+                MFXTableColumn<Machine> statusColumn = new MFXTableColumn<>("Status", true, Comparator.comparing(Machine::getCurrentStateString));
+                MFXTableColumn<Machine> productionStatusColumn = new MFXTableColumn<>("Production Status", true, Comparator.comparing(Machine::getProductieStatus));
+                MFXTableColumn<Machine> uptimeColumn = new MFXTableColumn<>("Uptime (hours)", true, Comparator.comparing(Machine::getUptimeInHours));
+                MFXTableColumn<Machine> technicianColumn = new MFXTableColumn<>("Technician", true, Comparator.comparing(Machine::getTechniekerNaam));
+                MFXTableColumn<Machine> lastMaintenanceColumn = new MFXTableColumn<>("Last Maintenance", true, Comparator.comparing(Machine::getLaatsteOnderhoudDatum));
+                MFXTableColumn<Machine> nextMaintenanceColumn = new MFXTableColumn<>("Next Maintenance", true, Comparator.comparing(Machine::getDatumToekomstigeOnderhoud));
+
+                // Set row cell factories
+                siteColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getSiteNaam));
+                codeColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getCode));
+                locationColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getLocatie));
+                productInfoColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getProductInfo));
+                statusColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getCurrentStateString));
+                productionStatusColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getProductieStatus));
+                uptimeColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getUptimeInHours));
+                technicianColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getTechniekerNaam));
+                lastMaintenanceColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getLaatsteOnderhoudDatum));
+                nextMaintenanceColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getDatumToekomstigeOnderhoud));
+
+                // Add columns to the table
+                tableView.getTableColumns().addAll(
+                        siteColumn, codeColumn, locationColumn, productInfoColumn,
+                        statusColumn, productionStatusColumn, uptimeColumn,
+                        technicianColumn, lastMaintenanceColumn, nextMaintenanceColumn
+                );
+
+                // Configure table appearance
+                tableView.setFooterVisible(false);
         }
 
         private void setupCallbacks() {
-                addButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> addButtonCallback(null));
+                addMachineButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> addButtonCallback(null));
 
-                searchBar.textProperty().addListener(new ChangeListener<String>() {
-                        @Override
-                        public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                        String newValue) {
-                                searchBarCallback(newValue);
+                // Setup search functionality
+                searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+                        if (filteredMachines != null) {
+                                filteredMachines.setPredicate(machine -> {
+                                        if (newValue == null || newValue.isEmpty()) {
+                                                return true;
+                                        }
+                                        String lowerCaseFilter = newValue.toLowerCase();
+                                        return machine.getSiteNaam().toLowerCase().contains(lowerCaseFilter) ||
+                                                machine.getCode().toLowerCase().contains(lowerCaseFilter) ||
+                                                machine.getLocatie().toLowerCase().contains(lowerCaseFilter);
+                                });
+                        }
+                });
+
+                // Setup double-click on row
+                tableView.setOnMouseClicked(event -> {
+                        if (event.getClickCount() == 2) {
+                                Machine selectedMachine = tableView.getSelectionModel().getSelectedValues().isEmpty() ?
+                                        null : tableView.getSelectionModel().getSelectedValues().get(0);
+                                if (selectedMachine != null) {
+                                        addButtonCallback(selectedMachine);
+                                }
                         }
                 });
 
@@ -113,22 +137,15 @@ public class ManageMachinesController {
                                 loadTableContent();
                         }
                 });
-
-                tableView.setRowFactory(table -> {
-                        TableRow<Machine> row = new TableRow<>();
-                        row.setOnMouseClicked(event -> {
-                                if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                                        Machine rowData = row.getItem();
-                                        addButtonCallback(rowData);
-                                }
-                        });
-                        return row;
-                });
         }
 
         private void loadTableContent() {
-                this.tableView.getItems().clear();
-                this.tableView.setItems(FXCollections.observableList(machineService.getAllMachines()));
+                // Get all machines and set up filtered list
+                machines = FXCollections.observableArrayList(machineService.getAllMachines());
+                filteredMachines = new FilteredList<>(machines, p -> true);
+
+                // Set the items directly instead of clearing first
+                tableView.setItems(filteredMachines);
         }
 
         private void addButtonCallback(Machine m) {
@@ -153,30 +170,8 @@ public class ManageMachinesController {
                 }
         }
 
-        private void searchBarCallback(String searchString) {
-                ObservableList<Machine> filteredItems = FXCollections.observableArrayList();
-                ObservableList<TableColumn<Machine, ?>> columns = tableView.getColumns();
-
-                for (Machine row : tableView.getItems()) {
-                        for (TableColumn<Machine, ?> column : columns) {
-                                if ((String.valueOf(column.getCellObservableValue(row).getValue()).toLowerCase()).contains(searchString.toLowerCase()) && !filteredItems.contains(row)) {
-                                        filteredItems.add(row);
-                                }
-                        }
-                }
-
-                if (!filteredItems.isEmpty() && !(searchString.isEmpty() || searchString.isBlank())) {
-                        tableView.setItems(filteredItems);
-                        isTableFiltered = true;
-                } else {
-                        if (isTableFiltered) {
-                                loadTableContent();
-                                isTableFiltered = false;
-                        }
-                }
-        }
-
         protected void selectMachine(Machine m) {
-                this.tableView.getSelectionModel().select(m);
+                tableView.getSelectionModel().clearSelection();
+                tableView.getSelectionModel().selectItem(m);
         }
 }

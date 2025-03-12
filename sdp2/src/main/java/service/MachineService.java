@@ -96,9 +96,5 @@ public class MachineService {
         m.startMachine();
         update(m);
     }
-
-
-
-
 }
 
