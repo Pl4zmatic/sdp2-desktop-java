@@ -48,6 +48,7 @@ public class LogController implements Initializable {
             "USER_EDIT",
             "USER_DELETE",
             "PASSWORD_RESET"
+
     );
 
     @Override

@@ -26,6 +26,7 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
@@ -41,21 +42,22 @@ public class MachineFormController {
     private MachineService machineService;
 
     @Setter
-    private HBox parent;
+    private BorderPane parent;
     @Setter
     ManageMachinesController parentController;
 
     @FXML
-    private ScrollPane rootLayout; // Changed to ScrollPane
+    private BorderPane rootLayout;
 
     @FXML
-    private VBox contentVBox; // Added reference to the content VBox
+    private VBox contentVBox;
 
-    // Added for the form title
     @FXML
     private Label formTitle;
 
     // text fields
+    @FXML
+    private VBox machineCodeContainer;
     @FXML
     private TextField machineCode;
     @FXML
@@ -110,11 +112,15 @@ public class MachineFormController {
     // error checking
     private List<String> errors = new ArrayList<>();
 
+    private boolean isEditingFlag;
+
     @FXML
     private void initialize() {
+        rootLayout.setLeft(NavbarManager.getNavbar());
         machineService = new MachineService();
         setupCallbacks();
         setupScrollPane();
+        isEditingFlag = false;
 
         // Set default form title
         if (formTitle != null) {
@@ -122,9 +128,22 @@ public class MachineFormController {
         }
     }
 
+    public void setupSaveOption() {
+        if(machine != null) {
+            save.setText("Update");
+            isEditingFlag = true;
+            machineCodeContainer.setDisable(true);
+            formTitle.setText("Edit Machine");
+        }
+        else {
+            save.setText("Add");
+            isEditingFlag = false;
+            machineCodeContainer.setDisable(false);
+            formTitle.setText("Add Machine");
+        }
+    }
+
     private void setupScrollPane() {
-        // Configure ScrollPane to be transparent and fit content width
-        rootLayout.setFitToWidth(true);
         rootLayout.getStyleClass().add("edge-to-edge");
     }
 
@@ -146,12 +165,18 @@ public class MachineFormController {
     }
 
     private void cancelCallback() {
-        this.parent.getChildren().remove(this.rootLayout);
+        try{
+            SceneSwitcher.switchScene("/view/ManageMachines.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void editMachineCodeCallback() {
-        machineCode.setStyle("-fx-background-color: white;");
-        machineCode.setText("");
+        if (!isEditingFlag) {
+            machineCode.setStyle("-fx-background-color: white;");
+            machineCode.setText("");
+        }
     }
 
     private <T extends TextInputControl> void checkTextField(T source, String error) {
@@ -206,18 +231,22 @@ public class MachineFormController {
 
     private void checkMachineCode(String error) {
         errors.remove(error);
-        Set<String> codesInDatabase = machineService.getAllMachines().stream()
-                .map((machine) -> machine.getCode())
-                .collect(Collectors.toSet());
-        if (codesInDatabase.contains(machineCode.getText().trim())) {
-            errors.add(error);
+        if (!isEditingFlag) {
+            Set<String> codesInDatabase = machineService.getAllMachines().stream()
+                    .map((machine) -> machine.getCode())
+                    .collect(Collectors.toSet());
+            if (codesInDatabase.contains(machineCode.getText().trim())) {
+                errors.add(error);
+            }
         }
     }
 
     private void validateLastMaintenanceField(String error) {
         errors.remove(error);
-        if (lastMaintenance.getValue().isAfter(LocalDate.now())) {
-            errors.add(error);
+        if(lastMaintenance.getValue() != null) {
+            if (lastMaintenance.getValue().isAfter(LocalDate.now())) {
+                errors.add(error);
+            }
         }
     }
 
@@ -231,13 +260,16 @@ public class MachineFormController {
     }
 
     private void checkAll() {
-        checkMachineCode("Code moet uniek zijn.");
+        if(!isEditingFlag) {
+            checkMachineCode("Code moet uniek zijn.");
+        }
+
         checkTextField(machineCode, "Code is vereist.");
         checkTextField(site, "Site is vereist.");
         checkTextField(machineLoc, "Locatie is vereist.");
         checkTextField(productInfo, "Product info is vereist.");
-        checkToggleGroup(productionStatus, "Productie status is vereist");
-        checkToggleGroup(status, "Status is vereist");
+        checkToggleGroup(productionStatus, "Productie status is vereist.");
+        checkToggleGroup(status, "Status is vereist.");
         checkTimeField(hours, "Uren");
 
         validateNextMaintenanceField("Datum volgende onderhoud is niet mogelijk.");
@@ -256,8 +288,9 @@ public class MachineFormController {
             }
             new Alert(AlertType.ERROR, errorNotification, ButtonType.OK).showAndWait();
         } else {
-            if (machine == null)
+            if (machine == null) {
                 machine = new Machine();
+            }
 
             machine.setCode(machineCode.getText());
             machine.setSiteNaam(site.getText());
@@ -287,42 +320,104 @@ public class MachineFormController {
             // set productie status (gezond / (nood aan) onderhoud / falend)
             machine.setProductieStatus(((RadioButton) productionStatus.getSelectedToggle()).getText());
 
-            machineService.addMachine(machine);
-            cancelCallback();
-            this.parentController.selectMachine(machine);
+            // Set deleted status based on active/inactive selection
+            try {
+                boolean isDeleted = ((RadioButton) status.getSelectedToggle()).equals(inactive);
+                machine.setDeleted(isDeleted);
+            } catch (Exception e) {
+                // If setDeleted method doesn't exist, we'll continue without setting it
+                System.out.println("Machine doesn't have setDeleted method, skipping");
+            }
+
+            // Save or update the machine
+            boolean success;
+            if (isEditingFlag) {
+                success = machineService.update(machine);
+            } else {
+                success = machineService.addMachine(machine);
+            }
+
+            if (success) {
+                String message = isEditingFlag ? "Machine successfully updated!" : "Machine successfully created!";
+                new Alert(AlertType.INFORMATION, message, ButtonType.OK).showAndWait();
+                try {
+                    SceneSwitcher.switchScene("/view/ManageMachines.fxml");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                new Alert(AlertType.ERROR, "Failed to save machine.", ButtonType.OK).showAndWait();
+            }
         }
     }
 
-    protected void fillFieldData() {
-        if (formTitle != null) {
-            formTitle.setText(machine != null && machine.getCode() != null && !machine.getCode().isEmpty() ?
-                    "Machine Bewerken" : "Machine Toevoegen");
-        }
+    public void fillFieldData() {
+        if (machine != null) {
+            machineCode.setText(machine.getCode());
+            site.setText(machine.getSiteNaam());
+            machineLoc.setText(machine.getLocatie());
+            productInfo.setText(machine.getProductInfo());
+            technician.setText(machine.getTechniekerNaam());
+            lastMaintenance.setValue(machine.getLaatsteOnderhoudDatum());
+            nextMaintenance.setValue(machine.getDatumToekomstigeOnderhoud());
+            hours.setText(String.format("%d", machine.getUptimeInHours()));
 
-        machineCode.setText(machine.getCode());
-        site.setText(machine.getSiteNaam());
-        machineLoc.setText(machine.getLocatie());
-        productInfo.setText(machine.getProductInfo());
-        technician.setText(machine.getTechniekerNaam());
-        lastMaintenance.setValue(machine.getLaatsteOnderhoudDatum());
-        nextMaintenance.setValue(machine.getDatumToekomstigeOnderhoud());
-        hours.setText(String.format("%d", machine.getUptimeInHours()));
+            if (days.getText().isEmpty()) days.setText("00");
+            if (minutes.getText().isEmpty()) minutes.setText("00");
 
-        if (days.getText().isEmpty()) days.setText("00");
-        if (minutes.getText().isEmpty()) minutes.setText("00");
+            // Set status based on machine's current state
+            if (machine.getCurrentState().equals("running")) {
+                active.setSelected(true);
+                inactive.setSelected(false);
+            } else {
+                active.setSelected(false);
+                inactive.setSelected(true);
+            }
 
-        status.selectToggle(machine.getCurrentState().equals("running") ? active : inactive);
+            // Set production status
+            switch (machine.getProductieStatus().toLowerCase()) {
+                case "gezond":
+                    productionStatus.selectToggle(healthy);
+                    break;
+                case "nood aan onderhoud":
+                    productionStatus.selectToggle(maintenance);
+                    break;
+                case "falend":
+                    productionStatus.selectToggle(failing);
+                    break;
+            }
 
-        switch (machine.getProductieStatus().toLowerCase()) {
-            case "gezond":
-                productionStatus.selectToggle(healthy);
-                break;
-            case "nood aan onderhoud":
-                productionStatus.selectToggle(maintenance);
-                break;
-            case "falend":
-                productionStatus.selectToggle(failing);
-                break;
+            // If the machine has a getDeleted method, use it to set active/inactive
+            try {
+                boolean isDeleted = machine.getDeleted();
+                if (isDeleted) {
+                    inactive.setSelected(true);
+                    active.setSelected(false);
+                } else {
+                    active.setSelected(true);
+                    inactive.setSelected(false);
+                }
+            } catch (Exception e) {
+                // If getDeleted method doesn't exist, we'll use the current state as already set above
+                System.out.println("Machine doesn't have getDeleted method, using current state instead");
+            }
+        } else {
+            // Clear fields for new machine
+            machineCode.setText("");
+            site.setText("");
+            machineLoc.setText("");
+            productInfo.setText("");
+            technician.setText("");
+            lastMaintenance.setValue(null);
+            nextMaintenance.setValue(null);
+            hours.setText("0");
+            days.setText("00");
+            minutes.setText("00");
+
+            // Set default values
+            if (active != null) active.setSelected(true);
+            if (healthy != null) healthy.setSelected(true);
         }
     }
 }
+

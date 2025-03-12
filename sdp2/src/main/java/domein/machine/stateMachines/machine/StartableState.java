@@ -8,12 +8,12 @@ public class StartableState extends MachineState {
 		super(machine);
 	}
 
-	public String StartMachine() {
+	public String startMachine() {
 		machine.setCurrentState(new RunningState(machine));
 		return "The machine has been started";
 	}
 
-	public String StopMachine() {
+	public String stopMachine() {
 		machine.setCurrentState(new StoppedState(machine));
 		return "The machine has been stopped";
 	}

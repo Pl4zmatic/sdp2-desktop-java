@@ -34,7 +34,7 @@
                   <Insets left="15.0" right="15.0" />
                </VBox.margin>
             </MFXTableView>
-            <Button fx:id="addUserButton" contentDisplay="CENTER" styleClass="add-user-button" text="Add User">
+            <Button fx:id="addUserButton" contentDisplay="CENTER" styleClass="add-user-button" text="+">
                <VBox.margin>
                   <Insets bottom="15.0" top="10.0" />
                </VBox.margin>

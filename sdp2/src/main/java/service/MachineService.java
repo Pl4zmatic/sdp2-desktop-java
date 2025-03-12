@@ -9,6 +9,7 @@ import repository.UserDaoJpa;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.Rollen;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MachineService {
@@ -29,28 +30,34 @@ public class MachineService {
 
 
 
-    public void update(Machine m){
+    public boolean update(Machine m){
 
             Machine existingMachine = machineDao.getMachineByCode(m.getCode());
+
             if (existingMachine != null) {
+
                 MachineDaoJpa.startTransaction();
                 machineDao.update(m);
                 MachineDaoJpa.commitTransaction();
                 logService.logMachineEdit(existingMachine, m);
+
+                return true;
             } else {
                 throw new EntityNotFoundException("Machine with code " + m.getCode() + " not found");
             }
 
     }
 
-    public void deleteMachine(String code){
+    public boolean deleteMachine(String code){
         Machine existingMachine = machineDao.getMachineByCode(code);
 
         if (existingMachine != null) {
             MachineDaoJpa.startTransaction();
-            machineDao.delete(existingMachine);
+            machineDao.softDelete(existingMachine);
             MachineDaoJpa.commitTransaction();
             logService.logMachineDelete(existingMachine);
+
+            return true;
         } else {
             throw new EntityNotFoundException("Machine with code " + code + " not found");
         }
@@ -60,16 +67,27 @@ public class MachineService {
         return machineDao.getAllMachines();
     }
 
-    public void addMachine(Machine m) {
+    public boolean addMachine(Machine m) {
         try {
             MachineDaoJpa.startTransaction();
             machineDao.insert(m);
             MachineDaoJpa.commitTransaction();
             logService.logMachineCreation(m);
+
+            return true;
         } catch (Exception e) {
 
             MachineDaoJpa.rollbackTransaction();
             throw new RuntimeException(e);
+        }
+    }
+
+    public List<Machine> getAllActiveMachines() {
+        try {
+            return Collections.unmodifiableList(machineDao.findAllActive());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
         }
     }
 
@@ -93,9 +111,5 @@ public class MachineService {
         m.startMachine();
         update(m);
     }
-
-
-
-
 }
 

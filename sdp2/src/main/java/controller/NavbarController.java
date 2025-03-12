@@ -3,19 +3,15 @@ package controller;
 import domein.Session;
 import domein.user.User;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import utils.Rollen;
 
 import java.io.IOException;
-
-import static utils.Rollen.ADMINISTRATOR;
 
 public class NavbarController {
 
@@ -107,7 +103,7 @@ public class NavbarController {
             case "Beheer Gebruikers" -> "/view/ManageUsers.fxml";
             case "Logs" -> "/view/UserLogs.fxml";
             case "Beheer Sites" -> "/view/SitesManagement.fxml";
-            case "Onderhoud" -> "/view/Maintenance.fxml";
+            case "Onderhoud" -> "/view/OnderhoudScherm.fxml";
             case "Beheer Machines" -> "/view/ManageMachines.fxml";
             case "Beheer Notificaties" -> "/view/NotificationsManagement.fxml";
             case "Logout" -> "/view/Logout.fxml";
