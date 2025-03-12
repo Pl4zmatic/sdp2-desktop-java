@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
 import lombok.*;
+import utils.SoftDeletable;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,12 +25,15 @@ import java.util.Set;
 @Getter
 @ToString
 @Setter
-public class Machine {
+public class Machine implements Serializable, SoftDeletable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true, nullable = false)
 	private Long id; // Primaire sleutel voor JPA
+
+	@Column(nullable = false)
+	private boolean deleted = false;
 
 	@Column(nullable = false)
 	private String siteNaam;
@@ -166,6 +171,8 @@ public class Machine {
 	}
 
 
-
-
+	@Override
+	public boolean getDeleted() {
+		return this.deleted;
+	}
 }
