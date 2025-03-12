@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<BorderPane fx:id="rootLayout" maxHeight="10000.0" maxWidth="10000.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OnderhoudSchermController">
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #f5f5f5;" BorderPane.alignment="CENTER">
+         <children>
+            <HBox minHeight="-Infinity" minWidth="-Infinity" spacing="15.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox minHeight="400.0" minWidth="200.0" style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 0); -fx-background-radius: 8;" HBox.hgrow="ALWAYS">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" style="-fx-background-color: #f8f8f8; -fx-background-radius: 8 8 0 0;">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Planned" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </Text>
+                              <MFXButton fx:id="planButton" text="Plan Maintenance" textAlignment="CENTER" textFill="WHITE" HBox.hgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </MFXButton>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="349.0" prefWidth="153.0" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
+                           <content>
+                              <AnchorPane fx:id="plannedScrollable" prefHeight="348.0" prefWidth="153.0" style="-fx-background-color: white;" />
+                           </content>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </ScrollPane>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="20.0" left="20.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox minHeight="400.0" minWidth="200.0" style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 0); -fx-background-radius: 8;" HBox.hgrow="ALWAYS">
+                     <children>
+                        <TextFlow prefHeight="50.0" style="-fx-background-color: #f8f8f8; -fx-background-radius: 8 8 0 0;" textAlignment="CENTER">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="In Progress">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" top="15.0" />
+                           </padding>
+                        </TextFlow>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="407.0" prefWidth="153.0" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
+                           <content>
+                              <AnchorPane fx:id="progressScrollable" prefHeight="407.0" prefWidth="153.0" style="-fx-background-color: white;" />
+                           </content>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </ScrollPane>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="20.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox prefHeight="400.0" prefWidth="200.0" style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 0); -fx-background-radius: 8;" HBox.hgrow="ALWAYS">
+                     <children>
+                        <TextFlow prefHeight="50.0" style="-fx-background-color: #f8f8f8; -fx-background-radius: 8 8 0 0;" textAlignment="CENTER">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Details Onderhoud" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" top="15.0" />
+                           </padding>
+                        </TextFlow>
+                        <VBox prefHeight="378.0" prefWidth="153.0" spacing="15.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <VBox prefHeight="43.0" prefWidth="152.0" VBox.vgrow="NEVER">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Machine *">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="machineField" prefHeight="35.0" prefWidth="114.0" promptText="*_****" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 4;" VBox.vgrow="NEVER" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="15.0" right="15.0" top="10.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox prefHeight="43.0" prefWidth="152.0" VBox.vgrow="NEVER">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Technieker *">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="techniekerField" prefHeight="35.0" prefWidth="114.0" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 4;" VBox.vgrow="NEVER" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="15.0" right="15.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox prefHeight="43.0" prefWidth="152.0" VBox.vgrow="NEVER">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Datum *">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="dateField" prefHeight="35.0" prefWidth="114.0" promptText="dd/mm/yyyy" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 4;" VBox.vgrow="NEVER" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="15.0" right="15.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox prefHeight="74.0" prefWidth="142.0" VBox.vgrow="NEVER">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reden *">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="reasonField" prefHeight="60.0" prefWidth="142.0" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 4;" VBox.vgrow="NEVER">
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </TextField>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="15.0" right="15.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox prefHeight="74.0" prefWidth="142.0" VBox.vgrow="NEVER">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Opmerkingen">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="notesField" prefHeight="60.0" prefWidth="152.0" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 4;" VBox.vgrow="NEVER">
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </TextField>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="15.0" right="15.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="73.0" prefWidth="152.0" spacing="10.0" VBox.vgrow="NEVER">
+                                 <children>
+                                    <MFXButton fx:id="cancelButton" style="-fx-background-color: #9e9e9e; -fx-background-radius: 4;" text="Annuleer" textFill="WHITE" HBox.hgrow="NEVER">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </MFXButton>
+                                    <MFXButton fx:id="submitButton" text="Plan" textFill="WHITE" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </MFXButton>
+                                 </children>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets bottom="15.0" right="15.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="20.0" right="20.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+   <stylesheets>
+      <URL value="@../css/globals.css" />
+      <URL value="@../css/OnderhoudScherm.css" />
+   </stylesheets>
+</BorderPane>
