@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import domein.machine.Machine;
-import domein.machine.MachineService;
 import domein.machine.stateMachines.machine.RunningState;
 import domein.machine.stateMachines.machine.StoppedState;
 import javafx.fxml.FXML;
@@ -30,6 +29,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
+import service.MachineService;
 
 public class MachineFormController {
 

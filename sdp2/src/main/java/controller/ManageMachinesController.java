@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import domein.machine.Machine;
-import domein.machine.MachineService;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import service.MachineService;
 
 public class ManageMachinesController {
         @FXML
