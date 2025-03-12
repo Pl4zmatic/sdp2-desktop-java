@@ -89,6 +89,7 @@
 .user-table {
     -fx-background-radius: 8px;
     -fx-border-radius: 8px;
+    -fx-pref-width: 1300px;
 }
 
 .user-table .column-header {
@@ -111,7 +112,7 @@
 }
 
 .user-table .table-row-cell:selected {
-    -fx-background-color: rgba(147, 112, 219, 0.2); /* Licht paarse selectie */
+    -fx-background-color: rgba(147, 112, 219, 0.2);
 }
 
 /* MFXTableRowCell styling for padding */
@@ -120,8 +121,8 @@
 }
 
 /* Add Machine Button */
-.add-user-button {
-    -fx-background-color: -rancidRed;
+.add-machine-button {
+    -fx-background-color: -delawareRed;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
@@ -131,11 +132,11 @@
     -fx-font-family: "Inter";
 }
 
-.add-user-button:hover {
+.add-machine-button:hover {
     -fx-background-color: derive(-rancidRed, 10%);
 }
 
-.add-user-button:pressed {
+.add-machine-button:pressed {
     -fx-background-color: derive(-rancidRed, -10%);
 }
 
@@ -197,4 +198,26 @@
 
 .edge-to-edge > .viewport {
     -fx-background-color: transparent;
+}
+
+.table-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.table-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.table-scroll-pane .scroll-bar:horizontal {
+    -fx-background-color: #f0f0f0;
+}
+
+.table-scroll-pane .scroll-bar:horizontal .thumb {
+    -fx-background-color: #c0c0c0;
+}
+
+.table-scroll-pane .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #a0a0a0;
 }

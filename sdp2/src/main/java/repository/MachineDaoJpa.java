@@ -26,7 +26,6 @@ public class MachineDaoJpa extends GenericDaoJpa<Machine> implements MachineDao 
 
 
 
-
     public List<Machine> getAllMachines() {
         return em.createQuery("SELECT m FROM Machine m", Machine.class).getResultList();
     }

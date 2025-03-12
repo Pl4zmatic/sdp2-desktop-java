@@ -1,28 +1,19 @@
 package controller;
-
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Comparator;
-
 import domein.machine.Machine;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import service.MachineService;
-
-// Import MFXTableView and related classes
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -38,18 +29,18 @@ public class ManageMachinesController {
         private Button addMachineButton;
 
         @FXML
+        private CheckBox showDeletedMachines;
+
+        @FXML
         private MFXTableView<Machine> tableView;
 
         private ObservableList<Machine> machines;
         private FilteredList<Machine> filteredMachines;
         private MachineService machineService;
 
-        private boolean isTableFiltered;
-
         @FXML
         private void initialize() {
                 machineService = new MachineService();
-                isTableFiltered = false;
                 try {
                         setupTable();
                         setupCallbacks();
@@ -67,7 +58,6 @@ public class ManageMachinesController {
         private void setupTable() {
                 tableView.getTableColumns().clear();
 
-                // Create columns with comparators
                 MFXTableColumn<Machine> siteColumn = new MFXTableColumn<>("Site", true, Comparator.comparing(Machine::getSiteNaam));
                 MFXTableColumn<Machine> codeColumn = new MFXTableColumn<>("Code", true, Comparator.comparing(Machine::getCode));
                 MFXTableColumn<Machine> locationColumn = new MFXTableColumn<>("Location", true, Comparator.comparing(Machine::getLocatie));
@@ -78,8 +68,8 @@ public class ManageMachinesController {
                 MFXTableColumn<Machine> technicianColumn = new MFXTableColumn<>("Technician", true, Comparator.comparing(Machine::getTechniekerNaam));
                 MFXTableColumn<Machine> lastMaintenanceColumn = new MFXTableColumn<>("Last Maintenance", true, Comparator.comparing(Machine::getLaatsteOnderhoudDatum));
                 MFXTableColumn<Machine> nextMaintenanceColumn = new MFXTableColumn<>("Next Maintenance", true, Comparator.comparing(Machine::getDatumToekomstigeOnderhoud));
+                MFXTableColumn<Machine> actionsColumn = new MFXTableColumn<>("Actions", true);
 
-                // Set row cell factories
                 siteColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getSiteNaam));
                 codeColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getCode));
                 locationColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getLocatie));
@@ -91,21 +81,121 @@ public class ManageMachinesController {
                 lastMaintenanceColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getLaatsteOnderhoudDatum));
                 nextMaintenanceColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(Machine::getDatumToekomstigeOnderhoud));
 
-                // Add columns to the table
+                MFXTableColumn<Machine> activeStatusColumn = new MFXTableColumn<>("Active Status", true, Comparator.comparing(machine -> !machine.getDeleted()));
+                activeStatusColumn.setRowCellFactory(machine -> new MFXTableRowCell<>(m -> m.getDeleted() ? "Inactive" : "Active"));
+
+                actionsColumn.setRowCellFactory(machine -> {
+                        MFXTableRowCell<Machine, String> cell = new MFXTableRowCell<>(m -> "");
+
+                        final String machineCode = machine.getCode();
+
+                        HBox hbox = new HBox(10);
+                        hbox.setAlignment(Pos.CENTER);
+                        hbox.getStyleClass().add("actions-container");
+                        hbox.setMinHeight(40);
+                        hbox.setPrefHeight(40);
+
+                        Button editButton = new Button("Edit");
+                        editButton.getStyleClass().add("edit-button");
+                        editButton.setMaxWidth(Double.MAX_VALUE);
+                        editButton.setOnAction(event -> {
+                                Machine selectedMachine = findMachineByCode(machineCode);
+                                if (selectedMachine != null) {
+                                        editMachine(selectedMachine);
+                                } else {
+                                        System.out.println("ERROR: Could not find machine with code: " + machineCode);
+                                }
+                        });
+
+                        Button deleteButton = new Button("Delete");
+                        deleteButton.getStyleClass().add("delete-button");
+                        deleteButton.setMaxWidth(Double.MAX_VALUE);
+                        deleteButton.setOnAction(event -> {
+                                Machine selectedMachine = findMachineByCode(machineCode);
+                                if (selectedMachine != null) {
+                                        deleteMachine(selectedMachine);
+                                } else {
+                                        System.out.println("ERROR: Could not find machine with code: " + machineCode);
+                                }
+                        });
+
+                        hbox.getChildren().addAll(editButton, deleteButton);
+                        cell.setGraphic(hbox);
+                        cell.setAlignment(Pos.CENTER);
+
+                        return cell;
+                });
+
+                actionsColumn.setPrefWidth(160);
+                actionsColumn.setMinWidth(160);
+
                 tableView.getTableColumns().addAll(
                         siteColumn, codeColumn, locationColumn, productInfoColumn,
                         statusColumn, productionStatusColumn, uptimeColumn,
-                        technicianColumn, lastMaintenanceColumn, nextMaintenanceColumn
+                        technicianColumn, lastMaintenanceColumn, nextMaintenanceColumn,
+                        activeStatusColumn, actionsColumn
                 );
 
-                // Configure table appearance
                 tableView.setFooterVisible(false);
         }
 
-        private void setupCallbacks() {
-                addMachineButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> addButtonCallback(null));
+        private Machine findMachineByCode(String code) {
+                for (Machine machine : machines) {
+                        if (machine.getCode().equals(code)) {
+                                return machine;
+                        }
+                }
+                return null;
+        }
 
-                // Setup search functionality
+        private void deleteMachine(Machine machine) {
+                Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION,
+                        "Are you sure you want to delete machine " + machine.getCode() + "?",
+                        ButtonType.YES, ButtonType.NO);
+                confirmDialog.setTitle("Confirm Delete");
+                confirmDialog.setHeaderText("Delete Machine");
+
+                confirmDialog.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.YES) {
+                                boolean success = machineService.deleteMachine(machine.getCode());
+                                if (success) {
+                                        refreshTable();
+                                } else {
+                                        Alert errorAlert = new Alert(Alert.AlertType.ERROR,
+                                                "Failed to delete machine with code: " + machine.getCode(),
+                                                ButtonType.OK);
+                                        errorAlert.setTitle("Error");
+                                        errorAlert.setHeaderText("Delete Failed");
+                                        errorAlert.showAndWait();
+                                }
+                        }
+                });
+        }
+
+        private void editMachine(Machine machine) {
+                try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MachineForm.fxml"));
+                        Parent root = loader.load();
+
+                        MachineFormController controller = loader.getController();
+                        controller.setMachine(machine);
+                        controller.setupSaveOption();
+                        controller.fillFieldData();
+
+                        Scene scene = new Scene(root);
+                        SceneSwitcher.getStage().setScene(scene);
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+        }
+
+        private void setupCallbacks() {
+                addMachineButton.setOnAction(event -> addButtonCallback());
+
+                showDeletedMachines.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                        loadTableContent();
+                });
+
                 searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
                         if (filteredMachines != null) {
                                 filteredMachines.setPredicate(machine -> {
@@ -120,51 +210,45 @@ public class ManageMachinesController {
                         }
                 });
 
-                // Setup double-click on row
                 tableView.setOnMouseClicked(event -> {
                         if (event.getClickCount() == 2) {
                                 Machine selectedMachine = tableView.getSelectionModel().getSelectedValues().isEmpty() ?
                                         null : tableView.getSelectionModel().getSelectedValues().get(0);
                                 if (selectedMachine != null) {
-                                        addButtonCallback(selectedMachine);
+                                        editMachine(selectedMachine);
                                 }
-                        }
-                });
-
-                rootLayout.getChildren().addListener(new ListChangeListener<Node>() {
-                        @Override
-                        public void onChanged(Change<? extends Node> c) {
-                                loadTableContent();
                         }
                 });
         }
 
         private void loadTableContent() {
-                // Get all machines and set up filtered list
-                machines = FXCollections.observableArrayList(machineService.getAllMachines());
+                if (machines != null) {
+                        machines.clear();
+                }
+
+                if (showDeletedMachines.isSelected()) {
+                        machines = FXCollections.observableArrayList(machineService.getAllMachines());
+                } else {
+                        machines = FXCollections.observableArrayList(machineService.getAllActiveMachines());
+                }
+
                 filteredMachines = new FilteredList<>(machines, p -> true);
 
-                // Set the items directly instead of clearing first
+                tableView.getItems().clear();
                 tableView.setItems(filteredMachines);
         }
 
-        private void addButtonCallback(Machine m) {
+        private void addButtonCallback() {
                 try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MachineForm.fxml"));
-                        Node form = loader.load();
-                        MachineFormController controller = ((MachineFormController) loader.getController());
-                        controller.setParent(rootLayout);
-                        controller.setParentController(this);
+                        Parent root = loader.load();
 
-                        if (m != null) {
-                                controller.setMachine(m);
-                                controller.fillFieldData();
-                                controller.setupSaveOption();
-                        }
+                        MachineFormController controller = loader.getController();
+                        controller.setMachine(null);
+                        controller.setupSaveOption();
 
-                        if (this.rootLayout.getChildren().size() > 2)
-                                this.rootLayout.getChildren().removeLast();
-                        this.rootLayout.getChildren().add(form);
+                        Scene scene = new Scene(root);
+                        SceneSwitcher.getStage().setScene(scene);
                 } catch (IOException e) {
                         e.printStackTrace();
                 }
@@ -174,4 +258,9 @@ public class ManageMachinesController {
                 tableView.getSelectionModel().clearSelection();
                 tableView.getSelectionModel().selectItem(m);
         }
+
+        public void refreshTable() {
+                loadTableContent();
+        }
 }
+
