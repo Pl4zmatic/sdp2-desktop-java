@@ -5,7 +5,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -13,7 +12,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane fx:id="rootLayout" maxHeight="10000.0" maxWidth="10000.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OnderhoudSchermController">
+<BorderPane fx:id="rootLayout" maxHeight="10000.0" maxWidth="10000.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OnderhoudSchermController">
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #f5f5f5;" BorderPane.alignment="CENTER">
          <children>
@@ -41,13 +40,13 @@
                               <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
                            </padding>
                         </HBox>
-                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="349.0" prefWidth="153.0" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
-                           <content>
-                              <AnchorPane fx:id="plannedScrollable" prefHeight="348.0" prefWidth="153.0" style="-fx-background-color: white;" />
-                           </content>
+                        <ScrollPane fx:id="plannedScrollable" fitToWidth="true" hbarPolicy="NEVER" prefHeight="349.0" prefWidth="153.0" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
+                           <content>
+                              <VBox fx:id="plannedVBox" />
+                           </content>
                         </ScrollPane>
                      </children>
                      <HBox.margin>
@@ -68,13 +67,13 @@
                               <Insets bottom="15.0" top="15.0" />
                            </padding>
                         </TextFlow>
-                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="407.0" prefWidth="153.0" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
-                           <content>
-                              <AnchorPane fx:id="progressScrollable" prefHeight="407.0" prefWidth="153.0" style="-fx-background-color: white;" />
-                           </content>
+                        <ScrollPane fx:id="progressScrollable" fitToWidth="true" hbarPolicy="NEVER" prefHeight="407.0" prefWidth="153.0" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
+                           <content>
+                              <VBox fx:id="progressVBox" />
+                           </content>
                         </ScrollPane>
                      </children>
                      <HBox.margin>

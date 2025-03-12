@@ -1,10 +1,18 @@
 package controller;
 
+import java.awt.Component;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.virtualizedfx.enums.ScrollPaneEnums.ScrollBarPolicy;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 public class OnderhoudSchermController {
 
@@ -13,6 +21,12 @@ public class OnderhoudSchermController {
 	@FXML
 	private MFXButton cancelButton;
 
+	@FXML
+    private VBox progressVBox;
+	
+    @FXML
+    private VBox plannedVBox;
+    
 	@FXML
 	private TextField dateField;
 
@@ -26,10 +40,10 @@ public class OnderhoudSchermController {
 	private MFXButton planButton;
 
 	@FXML
-	private AnchorPane plannedScrollable;
+    private ScrollPane plannedScrollable;
 
-	@FXML
-	private AnchorPane progressScrollable;
+    @FXML
+    private ScrollPane progressScrollable;
 
 	@FXML
 	private TextField reasonField;
@@ -43,5 +57,15 @@ public class OnderhoudSchermController {
 	@FXML
 	public void initialize() {
 		rootLayout.setLeft(NavbarManager.getNavbar());
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass()
+    			.getResource("/view/MaintenanceItem.fxml"));
+		
+		plannedScrollable.setVbarPolicy(javafx.scene.control.ScrollPane.ScrollBarPolicy.AS_NEEDED);	
+		try {
+			plannedVBox.getChildren().add(fxmlLoader.load());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
