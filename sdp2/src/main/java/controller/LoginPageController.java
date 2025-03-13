@@ -49,6 +49,8 @@ public class LoginPageController {
                 nextScene = "/view/ManageMachines.fxml";
             } else if (currentUser.getRol() == Rollen.TECHNIEKER) {
                 nextScene = "/view/OnderhoudScherm.fxml";
+            } else if (currentUser.getRol() == Rollen.MANAGER) {
+                nextScene = "/view/ManageMachines.fxml";
             }
 
             SceneSwitcher.switchScene(nextScene);

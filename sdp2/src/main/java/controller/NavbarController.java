@@ -77,6 +77,14 @@ public class NavbarController {
                 techniekerMenu.setManaged(true);
                 techniekerMenu.setVisible(true);
             }
+            case MANAGER -> {
+                administratorMenu.setManaged(false);
+                administratorMenu.setVisible(false);
+                verantwoordelijkeMenu.setManaged(true);
+                verantwoordelijkeMenu.setVisible(true);
+                techniekerMenu.setManaged(false);
+                techniekerMenu.setVisible(false);
+            }
         }
 
         setTextToUsername(profileLastName, currentUser.getLastName());
