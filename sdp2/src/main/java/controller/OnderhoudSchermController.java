@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import domein.machine.stateMachines.maintenance.PlannedState;
+import domein.Session;
+import domein.user.User;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.virtualizedfx.enums.ScrollPaneEnums.ScrollBarPolicy;
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import utils.Rollen;
 
 public class OnderhoudSchermController {
 
@@ -76,6 +78,13 @@ public class OnderhoudSchermController {
 			MaintenanceElement controller = fxmlLoader.getController();
 			controller.setText(textArray[0], textArray[1]);
 			plannedVBox.getChildren().add(element);
+		}
+		
+		User user = Session.getCurrentUser();
+		Rollen userRole = user.getRol();
+		
+		if(userRole == Rollen.TECHNIEKER) {
+			planButton.setVisible(false);
 		}
 		
 		plannedScrollable.setContent(plannedVBox);
