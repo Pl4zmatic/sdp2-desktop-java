@@ -1,7 +1,7 @@
 package domein.machine;
 
 import domein.machine.stateMachines.machine.*;
-
+import domein.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -54,6 +54,9 @@ public class Machine implements Serializable, SoftDeletable {
 
 	@Column(name = "technieker_naam", nullable = true)
 	private String techniekerNaam;
+	
+	@Transient
+	private User technieker;
 
 	@Column(name = "laatste_onderhoud_datum", nullable = true)
 	private LocalDate laatsteOnderhoudDatum;

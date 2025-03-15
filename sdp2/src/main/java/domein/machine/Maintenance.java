@@ -2,6 +2,7 @@ package domein.machine;
 
 import domein.machine.stateMachines.maintenance.MaintenanceState;
 import domein.machine.stateMachines.maintenance.PlannedState;
+import domein.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +25,11 @@ public class Maintenance {
     @ManyToOne
     @JoinColumn(name = "machine_id", nullable = false)  // Deze kolom linkt Maintenance naar Machine
     private Machine machine;
+    private String machineCode;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    @Transient
+    private User technician;
     private String nameTechnician;
     private String reason;
     private String maintenanceReport;
@@ -34,17 +38,19 @@ public class Maintenance {
     @Transient
     private MaintenanceState currentState;
     
-    public Maintenance(Machine machine, LocalDateTime startDate, LocalDateTime endDate, String nameTechnician, 
+    public Maintenance(Machine machine, LocalDateTime startDate, LocalDateTime endDate, 
     		String reason, String maintenanceReport, String remarks) {
     	this.machine = machine;
     	setStartDate(startDate);
         setEndDate(endDate);
-    	setNameTechnician(nameTechnician);
+    	this.technician = machine.getTechnieker();
+    	this.nameTechnician = technician.getFullName();
         setReason(reason);
         setMaintenanceReport(maintenanceReport);
         setRemarks(remarks);
     	this.currentState = new PlannedState(this);
     	this.currentStateString = currentState.toString();
+    	this.machineCode = machine.getCode();
     }
     
     public void setCurrentState(MaintenanceState state) {
@@ -69,11 +75,6 @@ public class Maintenance {
         }
 
         this.endDate = endDate;
-    }
-
-    public void setNameTechnician(String nameTechnician) {
-        checkString(nameTechnician);
-        this.nameTechnician = nameTechnician;
     }
 
     public void setReason(String reason) {

@@ -53,6 +53,9 @@ public class OnderhoudSchermController {
 	private TextField reasonField;
 
 	@FXML
+	private VBox fieldVBox;
+	  
+	@FXML
 	private MFXButton submitButton;
 
 	@FXML
@@ -87,10 +90,29 @@ public class OnderhoudSchermController {
 			planButton.setVisible(false);
 		}
 		
+		planButton.setOnAction(event -> {
+			openPlanMenu();
+		});
+		
+		cancelButton.setOnAction(event -> {
+			closeMaintenanceMenu();
+		});
+		
+		fieldVBox.setVisible(false);
+		
+		
 		plannedScrollable.setContent(plannedVBox);
 		
 		plannedScrollable.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);	
 		progressScrollable.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 		
+	}
+	
+	private void openPlanMenu() {
+		fieldVBox.setVisible(true);
+	}
+	
+	private void closeMaintenanceMenu() {
+		fieldVBox.setVisible(false);
 	}
 }
