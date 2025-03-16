@@ -90,6 +90,15 @@ public class MachineService {
             return Collections.emptyList();
         }
     }
+    
+    public Machine getMachineByCode(String code) {
+    	try {
+    		return machineDao.getMachineByCode(code);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		return null;
+    	}
+    }
 
     public void stopMachine(Machine m) {
         m.stopMachine();
@@ -111,5 +120,7 @@ public class MachineService {
         m.startMachine();
         update(m);
     }
+    
+    
 }
 

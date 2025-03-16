@@ -54,4 +54,9 @@ public class MaintenanceDaoJpa extends GenericDaoJpa<Maintenance> implements Mai
 		}
 		
 	}
+
+	public List<Maintenance> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import domein.Session;
+import domein.machine.Maintenance;
 import domein.user.User;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.virtualizedfx.enums.ScrollPaneEnums.ScrollBarPolicy;
@@ -16,10 +17,13 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import service.MaintenanceService;
 import utils.Rollen;
 
 public class OnderhoudSchermController {
 
+	private MaintenanceService maintenanceService;
+	
 	@FXML
 	private BorderPane rootLayout;
 	@FXML
@@ -64,10 +68,11 @@ public class OnderhoudSchermController {
 	@FXML
 	public void initialize() {
 		
-		String[][] mockMaintenance =  {{"M01", "1/03/2025"}, {"M02", "1/03/2025"}};
+		maintenanceService = new MaintenanceService();		
+		List<Maintenance> maintenances = maintenanceService.getAllMaintenance();
 		rootLayout.setLeft(NavbarManager.getNavbar());
 		
-		for(String[] textArray : mockMaintenance) {
+		for(Maintenance maintenance : maintenances) {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass()
 					.getResource("/view/MaintenanceItem.fxml"));
 			Parent element = null;
@@ -79,7 +84,7 @@ public class OnderhoudSchermController {
 			}
 			
 			MaintenanceElement controller = fxmlLoader.getController();
-			controller.setText(textArray[0], textArray[1]);
+			controller.setText(maintenance.getMachineCode(), maintenance.getStartDate().toString());
 			plannedVBox.getChildren().add(element);
 		}
 		
@@ -98,6 +103,10 @@ public class OnderhoudSchermController {
 			closeMaintenanceMenu();
 		});
 		
+		submitButton.setOnAction(event -> {
+			planMaintenance();
+		});
+		
 		fieldVBox.setVisible(false);
 		
 		
@@ -114,5 +123,9 @@ public class OnderhoudSchermController {
 	
 	private void closeMaintenanceMenu() {
 		fieldVBox.setVisible(false);
+	}
+	
+	private void planMaintenance() {
+		maintenanceService.planMaintenance(machineField.getText(), dateField.getText().split("/"), null, reasonField.getText(), null, notesField.getText());
 	}
 }
