@@ -75,7 +75,7 @@
     -fx-background-color: -lightGray;
     -fx-background-radius: 8px;
     -fx-border-radius: 8px;
-    -fx-pref-width: 1140px; /* Updated to match the new total width */
+    -fx-pref-width: 1140px;
 }
 
 /* Table header styling */

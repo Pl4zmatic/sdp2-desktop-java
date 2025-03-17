@@ -72,11 +72,11 @@ public class ManageMachinesController {
                         .collect(Collectors.toList());
 
                 ObservableList<String> locationOptions = FXCollections.observableArrayList();
-                locationOptions.add("All Locations"); // Optie om filter te resetten
+                locationOptions.add("All Locations");
                 locationOptions.addAll(locations);
 
                 locationFilterComboBox.setItems(locationOptions);
-                locationFilterComboBox.getSelectionModel().selectFirst(); // "All Locations" standaard geselecteerd
+                locationFilterComboBox.getSelectionModel().selectFirst();
 
                 locationFilterComboBox.setOnAction(event -> applyFilters());
         }
@@ -273,8 +273,7 @@ public class ManageMachinesController {
                         // Voeg een callback toe voor na het opslaan
                         formController.setOnSaveCallback(() -> {
                                 refreshTable();
-                                // Optioneel: sluit het formulier na opslaan
-                                // hideRightPanel();
+                                hideRightPanel();
                         });
 
                         // Toon het formulier in het rechterpaneel
@@ -361,8 +360,7 @@ public class ManageMachinesController {
                         // Voeg een callback toe voor na het opslaan
                         formController.setOnSaveCallback(() -> {
                                 refreshTable();
-                                // Optioneel: sluit het formulier na opslaan
-                                // hideRightPanel();
+                                hideRightPanel();
                         });
 
                         // Toon het formulier in het rechterpaneel

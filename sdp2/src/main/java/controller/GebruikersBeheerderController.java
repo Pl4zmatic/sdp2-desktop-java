@@ -23,7 +23,7 @@ import java.io.IOException;
 public class GebruikersBeheerderController {
 
     @FXML private BorderPane rootLayout;
-    @FXML private TableView<User> userTable; // Changed from MFXTableView to TableView
+    @FXML private TableView<User> userTable;
     @FXML private TextField searchField;
     @FXML private Button addUserButton;
     @FXML private CheckBox showDeletedUsers;
@@ -47,7 +47,6 @@ public class GebruikersBeheerderController {
 
         filteredUsers = new FilteredList<>(users, p -> true);
 
-        // Clear and reset the table
         userTable.getItems().clear();
         userTable.setItems(filteredUsers);
     }
@@ -60,7 +59,6 @@ public class GebruikersBeheerderController {
         loadUsersFromDatabase();
         setupSearch();
 
-        // Make sure the search bar container has the same width as the table
         userTable.widthProperty().addListener((obs, oldVal, newVal) -> {
             searchBarContainer.setPrefWidth(newVal.doubleValue());
         });
@@ -72,7 +70,7 @@ public class GebruikersBeheerderController {
             loadUsersFromDatabase();
         });
 
-        // Add double-click event handler for editing users
+        // Dubbelklik om te editten
         userTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 User selectedUser = userTable.getSelectionModel().getSelectedItem();
@@ -86,7 +84,7 @@ public class GebruikersBeheerderController {
     private void setupTable() {
         userTable.getColumns().clear();
 
-        // Create columns for User attributes
+        // Aanmaken kolommen
         TableColumn<User, String> firstNameColumn = new TableColumn<>("First Name");
         TableColumn<User, String> lastNameColumn = new TableColumn<>("Last Name");
         TableColumn<User, String> emailColumn = new TableColumn<>("Email");
@@ -95,14 +93,13 @@ public class GebruikersBeheerderController {
         TableColumn<User, Boolean> statusColumn = new TableColumn<>("Status");
         TableColumn<User, Void> actionsColumn = new TableColumn<>("Actions");
 
-        // Set cell value factories
+        // value instellen
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("adres"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("rol"));
 
-        // Custom cell factory for status to show "Active" or "Inactive"
         statusColumn.setCellValueFactory(cellData -> {
             boolean isDeleted = cellData.getValue().getDeleted();
             return javafx.beans.binding.Bindings.createObjectBinding(() -> !isDeleted);
@@ -119,17 +116,15 @@ public class GebruikersBeheerderController {
             }
         });
 
-        // Set column widths - INCREASED for better readability
-        firstNameColumn.setPrefWidth(150);  // Increased from 120
-        lastNameColumn.setPrefWidth(150);   // Increased from 120
-        emailColumn.setPrefWidth(220);      // Increased from 180
-        addressColumn.setPrefWidth(180);    // Increased from 150
-        roleColumn.setPrefWidth(120);       // Increased from 100
-        statusColumn.setPrefWidth(120);     // Increased from 100
+        firstNameColumn.setPrefWidth(150);
+        lastNameColumn.setPrefWidth(150);
+        emailColumn.setPrefWidth(220);
+        addressColumn.setPrefWidth(180);
+        roleColumn.setPrefWidth(120);
+        statusColumn.setPrefWidth(120);
         actionsColumn.setPrefWidth(200);
         actionsColumn.setMinWidth(160);
 
-        // Set column styles
         firstNameColumn.setStyle("-fx-alignment: CENTER-LEFT;");
         lastNameColumn.setStyle("-fx-alignment: CENTER-LEFT;");
         emailColumn.setStyle("-fx-alignment: CENTER-LEFT;");
@@ -138,7 +133,6 @@ public class GebruikersBeheerderController {
         statusColumn.setStyle("-fx-alignment: CENTER-LEFT;");
         actionsColumn.setStyle("-fx-alignment: CENTER;");
 
-        // Create the actions column with buttons
         actionsColumn.setCellFactory(new Callback<TableColumn<User, Void>, TableCell<User, Void>>() {
             @Override
             public TableCell<User, Void> call(final TableColumn<User, Void> param) {
@@ -176,7 +170,6 @@ public class GebruikersBeheerderController {
                         } else {
                             setGraphic(hbox);
 
-                            // Make sure the buttons perform the right action
                             User user = getTableView().getItems().get(getIndex());
 
                             editButton.setOnAction(event -> {
@@ -191,31 +184,24 @@ public class GebruikersBeheerderController {
                 };
             }
         });
-
-        // Add all columns to the table
+        //Kolommen toevoegen aan tabel
         userTable.getColumns().addAll(
                 firstNameColumn, lastNameColumn, emailColumn,
                 addressColumn, roleColumn, statusColumn, actionsColumn
         );
 
-        // Set the table to not grow beyond the columns
         userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        // Calculate the total width of all columns
         double totalWidth = firstNameColumn.getPrefWidth() + lastNameColumn.getPrefWidth() +
                 emailColumn.getPrefWidth() + addressColumn.getPrefWidth() +
                 roleColumn.getPrefWidth() + statusColumn.getPrefWidth() + actionsColumn.getPrefWidth();
 
-        // Set the width of the table with some extra padding
-        userTable.setPrefWidth(totalWidth + 70);  // Increased padding from 50 to 70
+        userTable.setPrefWidth(totalWidth + 70);
 
-        // Set the initial width of the search bar container to match the table
-        searchBarContainer.setPrefWidth(totalWidth + 70);  // Match the table width
+        searchBarContainer.setPrefWidth(totalWidth + 70);
 
-        // Make sure the rows have sufficient height
         userTable.setFixedCellSize(50);
 
-        // Add CSS class for styling
         userTable.getStyleClass().add("user-table");
     }
 
@@ -246,21 +232,16 @@ public class GebruikersBeheerderController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UserForm.fxml"));
             Parent formRoot = loader.load();
 
-            // Get the controller and configure it
             formController = loader.getController();
             formController.setEditMode(false);
 
-            // Add a close button to the form
             formController.addCloseButton(event -> hideRightPanel());
 
-            // Add a callback for after saving
             formController.setOnSaveCallback(() -> {
                 refreshTable();
-                // Optional: close the form after saving
-                // hideRightPanel();
+                hideRightPanel();
             });
 
-            // Show the form in the right panel
             showRightPanel(formRoot);
         } catch (IOException e) {
             e.printStackTrace();
@@ -272,22 +253,17 @@ public class GebruikersBeheerderController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UserForm.fxml"));
             Parent formRoot = loader.load();
 
-            // Get the controller and configure it
             formController = loader.getController();
             formController.setEditMode(true);
             formController.setUser(user);
 
-            // Add a close button to the form
             formController.addCloseButton(event -> hideRightPanel());
 
-            // Add a callback for after saving
             formController.setOnSaveCallback(() -> {
                 refreshTable();
-                // Optional: close the form after saving
-                // hideRightPanel();
+                hideRightPanel();
             });
 
-            // Show the form in the right panel
             showRightPanel(formRoot);
         } catch (IOException e) {
             e.printStackTrace();
@@ -319,7 +295,7 @@ public class GebruikersBeheerderController {
                 boolean success = userService.deleteUser(user.getEmail());
                 if (success) {
                     refreshTable();
-                    hideRightPanel(); // Hide the right panel after deleting
+                    hideRightPanel();
                 } else {
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR,
                             "Failed to delete user with email: " + user.getEmail(),
