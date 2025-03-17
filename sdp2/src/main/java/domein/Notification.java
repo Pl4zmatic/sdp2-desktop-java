@@ -1,16 +1,24 @@
 package domein;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
+@Table(name = "notifications")
 @Setter
 @Getter
 @NoArgsConstructor
 public class Notification {
+    @Id
+    private long id;
+    @Transient
     private LocalDateTime dateAndTime;
     private String type;
     private String message;
