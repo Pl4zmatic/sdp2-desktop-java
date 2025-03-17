@@ -112,8 +112,6 @@ public class LogService {
 
     public void logMachineEdit(Machine machineOld, Machine machineNew) {
         StringBuilder changes = new StringBuilder("Machine Changed : " + machineOld.getCode());
-        System.out.println(machineOld.getCurrentState());
-        System.out.println(machineNew.getCurrentState());
         if(!machineOld.getProductInfo().equals(machineNew.getProductInfo())) {
             changes.append(", Product Info: ").append(machineOld.getProductInfo()).append(" → ").append(machineNew.getProductInfo());
         }

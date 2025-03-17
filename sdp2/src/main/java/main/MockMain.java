@@ -14,7 +14,7 @@ public class MockMain {
         List<Machine> listMachines = ms.getAllMachines();
         listMachines.forEach(System.out::println);
 
-        listMachines.forEach(ms::startMachine);
+        listMachines.forEach(ms::stopMachine);
 
 
     }

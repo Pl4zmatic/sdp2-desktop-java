@@ -25,7 +25,7 @@ import java.util.Set;
 @Getter
 @ToString
 @Setter
-public class Machine implements Serializable, SoftDeletable {
+public class Machine implements Serializable, SoftDeletable,Cloneable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -177,5 +177,10 @@ public class Machine implements Serializable, SoftDeletable {
 	@Override
 	public boolean getDeleted() {
 		return this.deleted;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 }

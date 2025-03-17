@@ -32,20 +32,26 @@ public class MachineService {
 
     public boolean update(Machine m){
 
-            Machine existingMachine = machineDao.getMachineByCode(m.getCode());
 
+            try {
+                Machine existingMachine = machineDao.getMachineByCode(m.getCode());
+                Machine clone = (Machine) existingMachine.clone();
+                System.out.println(clone);
             if (existingMachine != null) {
 
                 MachineDaoJpa.startTransaction();
                 machineDao.update(m);
                 MachineDaoJpa.commitTransaction();
-                logService.logMachineEdit(existingMachine, m);
+                logService.logMachineEdit(clone, m);
 
                 return true;
             } else {
                 throw new EntityNotFoundException("Machine with code " + m.getCode() + " not found");
             }
-
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        return false;
     }
 
     public boolean deleteMachine(String code){
