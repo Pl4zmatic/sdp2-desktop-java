@@ -2,9 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,6 +10,8 @@ import java.util.stream.Collectors;
 import domein.machine.Machine;
 import domein.machine.stateMachines.machine.RunningState;
 import domein.machine.stateMachines.machine.StoppedState;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -28,6 +28,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
@@ -109,6 +110,10 @@ public class MachineFormController {
     @FXML
     private Button cancel;
 
+    // Nieuwe velden voor het rechterpaneel
+    private Runnable onSaveCallback;
+    private EventHandler<ActionEvent> closeHandler;
+
     // error checking
     private List<String> errors = new ArrayList<>();
 
@@ -116,7 +121,8 @@ public class MachineFormController {
 
     @FXML
     private void initialize() {
-        rootLayout.setLeft(NavbarManager.getNavbar());
+        // Verwijder de navbar setup omdat we in een zijpaneel zitten
+        // rootLayout.setLeft(NavbarManager.getNavbar());
         machineService = new MachineService();
         setupCallbacks();
         setupScrollPane();
@@ -144,11 +150,13 @@ public class MachineFormController {
     }
 
     private void setupScrollPane() {
-        rootLayout.getStyleClass().add("edge-to-edge");
+        if (rootLayout != null) {
+            rootLayout.getStyleClass().add("edge-to-edge");
+        }
     }
 
     private void setupCallbacks() {
-        cancel.setOnAction((event) -> cancelCallback());
+        // De cancel-knop actie wordt nu in de addCloseHandler methode ingesteld
 
         machineCode.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> editMachineCodeCallback());
         machineCode.focusedProperty().addListener((event) -> checkTextField(machineCode, "Code is vereist."));
@@ -165,10 +173,14 @@ public class MachineFormController {
     }
 
     private void cancelCallback() {
-        try{
-            SceneSwitcher.switchScene("/view/ManageMachines.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Roep de closeHandler aan als deze is ingesteld
+        if (closeHandler != null) {
+            closeHandler.handle(new ActionEvent());
+        }
+
+        // Roep ook de callback aan voor consistentie
+        if (onSaveCallback != null) {
+            onSaveCallback.run();
         }
     }
 
@@ -340,10 +352,10 @@ public class MachineFormController {
             if (success) {
                 String message = isEditingFlag ? "Machine successfully updated!" : "Machine successfully created!";
                 new Alert(AlertType.INFORMATION, message, ButtonType.OK).showAndWait();
-                try {
-                    SceneSwitcher.switchScene("/view/ManageMachines.fxml");
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+                // Roep de callback aan in plaats van naar een ander scherm te gaan
+                if (onSaveCallback != null) {
+                    onSaveCallback.run();
                 }
             } else {
                 new Alert(AlertType.ERROR, "Failed to save machine.", ButtonType.OK).showAndWait();
@@ -386,9 +398,6 @@ public class MachineFormController {
                     productionStatus.selectToggle(failing);
                     break;
             }
-
-            // If the machine has a getDeleted method, use it to set active/inactive
-            try {
                 boolean isDeleted = machine.getDeleted();
                 if (isDeleted) {
                     inactive.setSelected(true);
@@ -397,12 +406,8 @@ public class MachineFormController {
                     active.setSelected(true);
                     inactive.setSelected(false);
                 }
-            } catch (Exception e) {
-                // If getDeleted method doesn't exist, we'll use the current state as already set above
-                System.out.println("Machine doesn't have getDeleted method, using current state instead");
-            }
         } else {
-            // Clear fields for new machine
+            // Clear fields
             machineCode.setText("");
             site.setText("");
             machineLoc.setText("");
@@ -419,5 +424,16 @@ public class MachineFormController {
             if (healthy != null) healthy.setSelected(true);
         }
     }
-}
+    public void addCloseButton(EventHandler<ActionEvent> closeHandler) {
+        this.closeHandler = closeHandler;
 
+        if (cancel != null) {
+            cancel.setOnAction(event -> cancelCallback());
+
+        }
+    }
+
+    public void setOnSaveCallback(Runnable callback) {
+        this.onSaveCallback = callback;
+    }
+}
