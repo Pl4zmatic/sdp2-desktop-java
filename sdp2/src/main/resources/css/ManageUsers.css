@@ -18,6 +18,7 @@
     -fx-background-radius: 8px;
     -fx-border-radius: 8px;
     -fx-alignment: center-right;
+    -fx-pref-width: 1140px; /* Updated to match the new table width */
 }
 
 /* Search Field */
@@ -69,40 +70,45 @@
     -fx-background-color: white;
 }
 
-/* MFX Table View - Paarse achtergrond */
-.mfx-table-view {
-    -fx-background-color: -lightGray;
-}
-
-.mfx-table-row-cell {
-    -fx-padding: 10px 15px;
-    -fx-min-height: 40px;
-    -fx-pref-height: 40px;
-}
-
-.mfx-table-column {
-    -fx-background-color: -lightGray;
-    -fx-padding: 10px 15px;
-}
-
-/* User Table */
+/* Standard TableView styling */
 .user-table {
+    -fx-background-color: -lightGray;
     -fx-background-radius: 8px;
     -fx-border-radius: 8px;
+    -fx-pref-width: 1140px; /* Updated to match the new total width */
+}
+
+/* Table header styling */
+.user-table .column-header-background {
+    -fx-background-color: -lightGray;
+    -fx-background-radius: 8px 8px 0 0;
 }
 
 .user-table .column-header {
+    -fx-background-color: -lightGray;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-text-fill: -deepBlue;
     -fx-font-family: "Inter";
     -fx-padding: 10px 15px;
-    -fx-alignment: center-left;
+    -fx-alignment: CENTER-LEFT;
 }
 
+.user-table .column-header .label {
+    -fx-text-fill: -deepBlue;
+    -fx-font-weight: bold;
+    -fx-font-family: "Inter";
+    -fx-alignment: CENTER-LEFT;
+}
+
+/* Table cell styling */
 .user-table .table-row-cell {
+    -fx-background-color: white;
     -fx-border-color: -lightGray;
     -fx-border-width: 0 0 1 0;
+    -fx-padding: 0;
+    -fx-min-height: 50px;
+    -fx-pref-height: 50px;
 }
 
 .user-table .table-row-cell:hover {
@@ -110,12 +116,16 @@
 }
 
 .user-table .table-row-cell:selected {
-    -fx-background-color: rgba(147, 112, 219, 0.2); /* Licht paarse selectie */
+    -fx-background-color: rgba(147, 112, 219, 0.2);
 }
 
-/* MFXTableRowCell styling for padding */
-.mfx-table-row-cell {
+.user-table .table-cell {
+    -fx-alignment: center-left;
     -fx-padding: 10px 15px;
+    -fx-text-fill: -deepBlue;
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+    -fx-border-width: 0;
 }
 
 /* Add User Button */
@@ -139,18 +149,21 @@
 }
 
 /* Style voor de Edit/Delete knoppen in de tabel */
-.edit-button, .delete-button {
+.edit-button,
+.delete-button {
     -fx-font-family: "Inter";
     -fx-font-size: 12px;
     -fx-padding: 5px 10px;
     -fx-background-radius: 4px;
     -fx-cursor: hand;
     -fx-min-width: 70px;
-    -fx-min-height: 25px;
-    -fx-pref-height: 25px;
+    -fx-min-height: 30px;
+    -fx-pref-height: 30px;
+    -fx-max-height: 30px;
     -fx-pref-width: -1;
     -fx-max-width: Infinity;
     -fx-alignment: CENTER;
+    -fx-content-display: CENTER;
 }
 
 .edit-button {
@@ -175,8 +188,43 @@
 .actions-container {
     -fx-spacing: 10;
     -fx-alignment: CENTER;
-    -fx-padding: 0;
+    -fx-padding: 5px 0;
     -fx-min-width: 160px;
     -fx-pref-width: 160px;
     -fx-min-height: 40px;
+    -fx-pref-height: 40px;
 }
+
+/* Scrollbar styling */
+.user-table .scroll-bar:horizontal,
+.user-table .scroll-bar:vertical {
+    -fx-background-color: #f0f0f0;
+}
+
+.user-table .scroll-bar:horizontal .thumb,
+.user-table .scroll-bar:vertical .thumb {
+    -fx-background-color: #c0c0c0;
+    -fx-background-radius: 5em;
+}
+
+.user-table .scroll-bar:horizontal .thumb:hover,
+.user-table .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #a0a0a0;
+}
+
+/* Verwijder de focus highlight */
+.user-table:focused {
+    -fx-background-color: -lightGray;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8px;
+}
+
+.user-table:focused .table-row-cell:filled:selected {
+    -fx-background-color: rgba(255, 14, 0, 0.2);
+}
+
+/* Zorg ervoor dat de tabel niet groter wordt dan nodig */
+.user-table .filler {
+    -fx-background-color: -lightGray;
+}
+

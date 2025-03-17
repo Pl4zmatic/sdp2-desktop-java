@@ -30,5 +30,10 @@ public class MachineDaoJpa extends GenericDaoJpa<Machine> implements MachineDao 
         return em.createQuery("SELECT m FROM Machine m", Machine.class).getResultList();
     }
 
+    public List<String> getAllLocations() {
+        return em.createQuery("SELECT DISTINCT m.locatie FROM Machine m ORDER BY m.locatie", String.class)
+                .getResultList();
+    }
+
 
 }

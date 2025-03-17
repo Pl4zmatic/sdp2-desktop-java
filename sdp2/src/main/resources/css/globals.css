@@ -74,6 +74,25 @@
     -fx-text-fill: white;
 }
 
+.filter-combo {
+    -fx-background-color: white;
+    -fx-border-color: -lightGray;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.filter-combo:focused {
+    -fx-border-color: -delawareRed;
+    -fx-border-width: 2px;
+}
+
+.filter-combo .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.filter-combo .arrow {
+    -fx-background-color: -deepBlue;
+}
 
 * {
     -goodGreen: #3CEF3C;
@@ -89,3 +108,4 @@
     -graySelected: rgb(126, 136, 145, 0.5);
     -bgGray: rgb(126, 136, 145, 0.2);
 }
+

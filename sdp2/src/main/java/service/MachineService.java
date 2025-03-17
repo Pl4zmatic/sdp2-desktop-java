@@ -111,5 +111,9 @@ public class MachineService {
         m.startMachine();
         update(m);
     }
+
+    public List<String> getAllLocations(){
+        return machineDao.getAllLocations();
+    }
 }
 

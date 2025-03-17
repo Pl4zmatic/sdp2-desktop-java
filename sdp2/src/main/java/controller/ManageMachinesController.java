@@ -1,11 +1,15 @@
 package controller;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import domein.machine.Machine;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -24,6 +28,11 @@ public class ManageMachinesController {
 
         @FXML
         private TextField searchBar;
+        @FXML
+        private HBox searchBarContainer;
+
+        @FXML
+        private ComboBox<String> locationFilterComboBox;
 
         @FXML
         private Button addMachineButton;
@@ -43,22 +52,66 @@ public class ManageMachinesController {
         private MachineFormController formController;
 
         @FXML
-        private void initialize() {
-                machineService = new MachineService();
-                try {
-                        setupTable();
-                        setupCallbacks();
-                        setupNavbar();
-                        loadTableContent();
-                } catch (Exception e) {
-                        e.printStackTrace();
-                }
+        private void initialize() throws IOException {
+                machineService = MachineService.getInstance();
+                setupTable();
+                setupNavbar();
+                setupLocationFilter();
+                loadTableContent();
+                setupSearchFilter();
         }
 
         private void setupNavbar() throws IOException {
                 this.rootLayout.setLeft(NavbarManager.getNavbar());
         }
 
+        private void setupLocationFilter() {
+                List<String> locations = machineService.getAllLocations().stream()
+                        .distinct()
+                        .sorted()
+                        .collect(Collectors.toList());
+
+                ObservableList<String> locationOptions = FXCollections.observableArrayList();
+                locationOptions.add("All Locations"); // Optie om filter te resetten
+                locationOptions.addAll(locations);
+
+                locationFilterComboBox.setItems(locationOptions);
+                locationFilterComboBox.getSelectionModel().selectFirst(); // "All Locations" standaard geselecteerd
+
+                locationFilterComboBox.setOnAction(event -> applyFilters());
+        }
+
+        private void setupSearchFilter() {
+                searchBar.textProperty().addListener((observable, oldValue, newValue) -> applyFilters());
+        }
+
+        private void applyFilters() {
+                if (filteredMachines != null) {
+                        String selectedLocation = locationFilterComboBox.getValue();
+                        String searchText = searchBar.getText().toLowerCase();
+
+                        filteredMachines.setPredicate(machine -> {
+                                String laatsteOnderhoudDatum = (machine.getLaatsteOnderhoudDatum() != null)
+                                        ? machine.getLaatsteOnderhoudDatum().toString()
+                                        : "";
+                                String nextOnderhoudDatum = (machine.getDatumToekomstigeOnderhoud() != null)
+                                        ? machine.getLaatsteOnderhoudDatum().toString()
+                                        : "";
+                                boolean matchesLocation = selectedLocation == null || selectedLocation.equals("All Locations")
+                                        || machine.getLocatie().equals(selectedLocation);
+
+                                boolean matchesSearch = searchText == null || searchText.isEmpty()
+                                        || machine.getSiteNaam().toLowerCase().contains(searchText)
+                                        || machine.getCode().toLowerCase().contains(searchText)
+                                        || machine.getLocatie().toLowerCase().contains(searchText)
+                                        || machine.getCurrentState().toLowerCase().contains(searchText)
+                                        || laatsteOnderhoudDatum.toLowerCase().contains(searchText)
+                                        || nextOnderhoudDatum.toLowerCase().contains(searchText);
+
+                                return matchesLocation && matchesSearch;
+                        });
+                }
+        }
         private void setupTable() {
                 tableView.getColumns().clear();
 
@@ -78,21 +131,20 @@ public class ManageMachinesController {
                 nextMaintenanceColumn.setCellValueFactory(new PropertyValueFactory<>("datumToekomstigeOnderhoud"));
 
                 // Stel de breedtes in
-                siteColumn.setPrefWidth(120);
-                codeColumn.setPrefWidth(100);
-                statusColumn.setPrefWidth(120);
-                lastMaintenanceColumn.setPrefWidth(150);
-                nextMaintenanceColumn.setPrefWidth(150);
-                actionsColumn.setPrefWidth(160);
+                siteColumn.setPrefWidth(150);
+                codeColumn.setPrefWidth(120);
+                statusColumn.setPrefWidth(150);
+                lastMaintenanceColumn.setPrefWidth(180);
+                nextMaintenanceColumn.setPrefWidth(180);
+                actionsColumn.setPrefWidth(200);
                 actionsColumn.setMinWidth(160);
 
-                // Zorg ervoor dat alle headers links uitgelijnd zijn
                 siteColumn.setStyle("-fx-alignment: CENTER-LEFT;");
                 codeColumn.setStyle("-fx-alignment: CENTER-LEFT;");
                 statusColumn.setStyle("-fx-alignment: CENTER-LEFT;");
                 lastMaintenanceColumn.setStyle("-fx-alignment: CENTER-LEFT;");
                 nextMaintenanceColumn.setStyle("-fx-alignment: CENTER-LEFT;");
-                actionsColumn.setStyle("-fx-alignment: CENTER;"); // Actions kolom blijft gecentreerd
+                actionsColumn.setStyle("-fx-alignment: CENTER;");
 
                 // Maak de actiekolom met knoppen
                 actionsColumn.setCellFactory(new Callback<TableColumn<Machine, Void>, TableCell<Machine, Void>>() {
@@ -163,8 +215,8 @@ public class ManageMachinesController {
                         nextMaintenanceColumn.getPrefWidth() + actionsColumn.getPrefWidth();
 
                 // Stel de breedte van de tabel in
-                tableView.setPrefWidth(totalWidth);
-                tableView.setMaxWidth(totalWidth);
+                tableView.setPrefWidth(totalWidth + 50);
+
 
                 // Zorg ervoor dat de rijen voldoende hoogte hebben
                 tableView.setFixedCellSize(50);

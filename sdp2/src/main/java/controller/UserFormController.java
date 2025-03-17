@@ -4,6 +4,8 @@ import service.UserService;
 import domein.user.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -28,17 +30,26 @@ public class UserFormController {
     @FXML private RadioButton activeButton;
     @FXML private RadioButton inactiveButton;
     @FXML private Button save;
+    @FXML private Button cancel;
     @FXML private Button resetPasswordButton;
     @FXML private HBox passwordResetContainer;
     @FXML private VBox passwordContainer;
     @FXML private Label phoneRequiredLabel;
+
     private final UserService userService = UserService.getInstance();
     private User currentUser;
     private boolean isEditMode;
 
+    // New: Callback for after saving
+    private Runnable onSaveCallback;
+    // New: Handler for close button
+    private EventHandler<ActionEvent> closeHandler;
+
     @FXML
     public void initialize() {
-        rootLayout.setLeft(NavbarManager.getNavbar());
+        // Remove the navbar setup since we're in a side panel
+        // rootLayout.setLeft(NavbarManager.getNavbar());
+
         ObservableList<Rollen> roles = FXCollections.observableArrayList(Rollen.values());
         roleField.setItems(roles);
         ToggleGroup statusGroup = new ToggleGroup();
@@ -109,10 +120,10 @@ public class UserFormController {
         if (success) {
             String message = isEditMode ? "User successfully updated!" : "User successfully created!";
             showAlert("Success", message, Alert.AlertType.INFORMATION);
-            try {
-                SceneSwitcher.switchScene("/view/ManageUsers.fxml");
-            } catch (IOException e) {
-                e.printStackTrace();
+
+            // Call the callback instead of switching scenes
+            if (onSaveCallback != null) {
+                onSaveCallback.run();
             }
         } else {
             showAlert("Error", "Failed to save user. Email might already exist.", Alert.AlertType.ERROR);
@@ -210,12 +221,11 @@ public class UserFormController {
         alert.showAndWait();
     }
 
+    // Modified: Use the close handler instead of switching scenes
     @FXML
     private void handleCancel() {
-        try {
-            SceneSwitcher.switchScene("/view/ManageUsers.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (closeHandler != null) {
+            closeHandler.handle(new ActionEvent());
         }
     }
 
@@ -261,15 +271,13 @@ public class UserFormController {
             passwordResetContainer.setManaged(true);
             passwordResetContainer.setVisible(true);
             resetPasswordButton.setVisible(true);
-            resetPasswordButton.setVisible(true);
             passwordContainer.setManaged(false);
             passwordContainer.setVisible(false);
 
         } else {
             save.setText("Add");
             passwordResetContainer.setManaged(false);
-            passwordResetContainer.setManaged(false);
-            resetPasswordButton.setVisible(false);
+            passwordResetContainer.setVisible(false);
             resetPasswordButton.setVisible(false);
             passwordContainer.setManaged(true);
             passwordContainer.setVisible(true);
@@ -278,8 +286,30 @@ public class UserFormController {
 
     private void resetPassword(User user, String newPw) throws IOException {
         userService.resetPassword(user, newPw);
-        showAlert("Succes!", "The password has been succesfully reset.", Alert.AlertType.INFORMATION);
-        SceneSwitcher.switchScene("/view/ManageUsers.fxml");
+        showAlert("Success!", "The password has been successfully reset.", Alert.AlertType.INFORMATION);
+
+        // Call the callback instead of switching scenes
+        if (onSaveCallback != null) {
+            onSaveCallback.run();
+        }
+    }
+
+    // New: Method to add a close button handler
+    public void addCloseButton(EventHandler<ActionEvent> closeHandler) {
+        this.closeHandler = closeHandler;
+
+        if (cancel != null) {
+            cancel.setOnAction(event -> {
+                if (this.closeHandler != null) {
+                    this.closeHandler.handle(event);
+                }
+            });
+        }
+    }
+
+    // New: Method to set a callback for after saving
+    public void setOnSaveCallback(Runnable callback) {
+        this.onSaveCallback = callback;
     }
 }
 

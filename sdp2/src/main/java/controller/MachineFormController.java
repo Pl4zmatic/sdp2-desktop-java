@@ -121,8 +121,8 @@ public class MachineFormController {
 
     @FXML
     private void initialize() {
-        // Verwijder de navbar setup omdat we in een zijpaneel zitten
-        // rootLayout.setLeft(NavbarManager.getNavbar());
+
+        //rootLayout.setLeft(NavbarManager.getNavbar());
         machineService = new MachineService();
         setupCallbacks();
         setupScrollPane();

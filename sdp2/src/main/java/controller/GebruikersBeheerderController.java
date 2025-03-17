@@ -2,8 +2,6 @@ package controller;
 
 import domein.user.User;
 import service.UserService;
-import io.github.palexdev.materialfx.controls.*;
-import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -11,28 +9,31 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.util.Callback;
 import utils.Rollen;
 
 import java.io.IOException;
-import java.util.Comparator;
 
 public class GebruikersBeheerderController {
 
     @FXML private BorderPane rootLayout;
-    @FXML private MFXTableView<User> userTable;
+    @FXML private TableView<User> userTable; // Changed from MFXTableView to TableView
     @FXML private TextField searchField;
     @FXML private Button addUserButton;
     @FXML private CheckBox showDeletedUsers;
+    @FXML private StackPane rightPanelContainer;
+    @FXML private HBox searchBarContainer;
 
     private ObservableList<User> users;
     private FilteredList<User> filteredUsers;
     private UserService userService = UserService.getInstance();
+    private UserFormController formController;
 
     private void loadUsersFromDatabase() {
         if (users != null) {
@@ -59,85 +60,163 @@ public class GebruikersBeheerderController {
         loadUsersFromDatabase();
         setupSearch();
 
+        // Make sure the search bar container has the same width as the table
+        userTable.widthProperty().addListener((obs, oldVal, newVal) -> {
+            searchBarContainer.setPrefWidth(newVal.doubleValue());
+        });
+
         addUserButton.setText("+");
         addUserButton.setOnAction(e -> addUser());
 
         showDeletedUsers.selectedProperty().addListener((observable, oldValue, newValue) -> {
             loadUsersFromDatabase();
         });
+
+        // Add double-click event handler for editing users
+        userTable.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                User selectedUser = userTable.getSelectionModel().getSelectedItem();
+                if (selectedUser != null) {
+                    editUser(selectedUser);
+                }
+            }
+        });
     }
 
     private void setupTable() {
-        userTable.getTableColumns().clear();
+        userTable.getColumns().clear();
 
-        // Kolommen voor User-attributen
-        MFXTableColumn<User> firstNameColumn = new MFXTableColumn<>("First Name", true, Comparator.comparing(User::getFirstName));
-        MFXTableColumn<User> lastNameColumn = new MFXTableColumn<>("Last Name", true, Comparator.comparing(User::getLastName));
-        MFXTableColumn<User> emailColumn = new MFXTableColumn<>("Email", true, Comparator.comparing(User::getEmail));
-        MFXTableColumn<User> addressColumn = new MFXTableColumn<>("Address", true, Comparator.comparing(User::getAdres));
-        MFXTableColumn<User> roleColumn = new MFXTableColumn<>("Role", true, Comparator.comparing(User::getRol));
-        MFXTableColumn<User> statusColumn = new MFXTableColumn<>("Status", true, Comparator.comparing(user -> !user.getDeleted()));
-        MFXTableColumn<User> actionsColumn = new MFXTableColumn<>("Actions", true);
+        // Create columns for User attributes
+        TableColumn<User, String> firstNameColumn = new TableColumn<>("First Name");
+        TableColumn<User, String> lastNameColumn = new TableColumn<>("Last Name");
+        TableColumn<User, String> emailColumn = new TableColumn<>("Email");
+        TableColumn<User, String> addressColumn = new TableColumn<>("Address");
+        TableColumn<User, Rollen> roleColumn = new TableColumn<>("Role");
+        TableColumn<User, Boolean> statusColumn = new TableColumn<>("Status");
+        TableColumn<User, Void> actionsColumn = new TableColumn<>("Actions");
 
-        // Stel table cells in
-        firstNameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getFirstName));
-        lastNameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getLastName));
-        emailColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getEmail));
-        addressColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getAdres));
-        roleColumn.setRowCellFactory(user -> new MFXTableRowCell<>(User::getRol));
-        statusColumn.setRowCellFactory(user -> new MFXTableRowCell<>(u -> u.getDeleted() ? "Inactive" : "Active"));
+        // Set cell value factories
+        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        addressColumn.setCellValueFactory(new PropertyValueFactory<>("adres"));
+        roleColumn.setCellValueFactory(new PropertyValueFactory<>("rol"));
 
-        actionsColumn.setRowCellFactory(user -> {
-            MFXTableRowCell<User, String> cell = new MFXTableRowCell<>(u -> "");
-
-            final String userEmail = user.getEmail();
-            final Rollen userRole = user.getRol();
-            final boolean isDeleted = user.getDeleted();
-
-            HBox hbox = new HBox(10);
-            hbox.setAlignment(Pos.CENTER);
-            hbox.getStyleClass().add("actions-container");
-            hbox.setMinHeight(40);
-            hbox.setPrefHeight(40);
-
-            Button editButton = new Button("Edit");
-            editButton.getStyleClass().add("edit-button");
-            editButton.setMaxWidth(Double.MAX_VALUE);
-            editButton.setOnAction(event -> {
-                User selectedUser = findUserByEmail(userEmail);
-                if (selectedUser != null) {
-                    editUser(selectedUser);
+        // Custom cell factory for status to show "Active" or "Inactive"
+        statusColumn.setCellValueFactory(cellData -> {
+            boolean isDeleted = cellData.getValue().getDeleted();
+            return javafx.beans.binding.Bindings.createObjectBinding(() -> !isDeleted);
+        });
+        statusColumn.setCellFactory(column -> new TableCell<User, Boolean>() {
+            @Override
+            protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
                 } else {
-                    System.out.println("ERROR: Could not find user with email: " + userEmail);
+                    setText(item ? "Active" : "Inactive");
                 }
-            });
-
-            Button deleteButton = new Button("Delete");
-            deleteButton.getStyleClass().add("delete-button");
-            deleteButton.setMaxWidth(Double.MAX_VALUE);
-            deleteButton.setOnAction(event -> {
-                User selectedUser = findUserByEmail(userEmail);
-                if (selectedUser != null) {
-                    deleteUser(selectedUser);
-                } else {
-                    System.out.println("ERROR: Could not find user with email: " + userEmail);
-                }
-            });
-
-            hbox.getChildren().addAll(editButton, deleteButton);
-            cell.setGraphic(hbox);
-            cell.setAlignment(Pos.CENTER);
-
-            return cell;
+            }
         });
 
-        actionsColumn.setPrefWidth(160);
+        // Set column widths - INCREASED for better readability
+        firstNameColumn.setPrefWidth(150);  // Increased from 120
+        lastNameColumn.setPrefWidth(150);   // Increased from 120
+        emailColumn.setPrefWidth(220);      // Increased from 180
+        addressColumn.setPrefWidth(180);    // Increased from 150
+        roleColumn.setPrefWidth(120);       // Increased from 100
+        statusColumn.setPrefWidth(120);     // Increased from 100
+        actionsColumn.setPrefWidth(200);
         actionsColumn.setMinWidth(160);
 
-        userTable.getTableColumns().addAll(firstNameColumn, lastNameColumn, emailColumn, addressColumn, roleColumn, statusColumn, actionsColumn);
+        // Set column styles
+        firstNameColumn.setStyle("-fx-alignment: CENTER-LEFT;");
+        lastNameColumn.setStyle("-fx-alignment: CENTER-LEFT;");
+        emailColumn.setStyle("-fx-alignment: CENTER-LEFT;");
+        addressColumn.setStyle("-fx-alignment: CENTER-LEFT;");
+        roleColumn.setStyle("-fx-alignment: CENTER-LEFT;");
+        statusColumn.setStyle("-fx-alignment: CENTER-LEFT;");
+        actionsColumn.setStyle("-fx-alignment: CENTER;");
 
-        userTable.setFooterVisible(false);
-        searchField.setPromptText("Search name...");
+        // Create the actions column with buttons
+        actionsColumn.setCellFactory(new Callback<TableColumn<User, Void>, TableCell<User, Void>>() {
+            @Override
+            public TableCell<User, Void> call(final TableColumn<User, Void> param) {
+                return new TableCell<User, Void>() {
+                    private final HBox hbox = new HBox(10);
+                    private final Button editButton = new Button("Edit");
+                    private final Button deleteButton = new Button("Delete");
+
+                    {
+                        hbox.setAlignment(Pos.CENTER);
+                        hbox.getStyleClass().add("actions-container");
+                        hbox.setMinHeight(40);
+                        hbox.setPrefHeight(40);
+
+                        editButton.getStyleClass().add("edit-button");
+                        editButton.setMaxWidth(Double.MAX_VALUE);
+                        editButton.setMinHeight(30);
+                        editButton.setPrefHeight(30);
+                        HBox.setHgrow(editButton, Priority.ALWAYS);
+
+                        deleteButton.getStyleClass().add("delete-button");
+                        deleteButton.setMaxWidth(Double.MAX_VALUE);
+                        deleteButton.setMinHeight(30);
+                        deleteButton.setPrefHeight(30);
+                        HBox.setHgrow(deleteButton, Priority.ALWAYS);
+
+                        hbox.getChildren().addAll(editButton, deleteButton);
+                    }
+
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(hbox);
+
+                            // Make sure the buttons perform the right action
+                            User user = getTableView().getItems().get(getIndex());
+
+                            editButton.setOnAction(event -> {
+                                editUser(user);
+                            });
+
+                            deleteButton.setOnAction(event -> {
+                                deleteUser(user);
+                            });
+                        }
+                    }
+                };
+            }
+        });
+
+        // Add all columns to the table
+        userTable.getColumns().addAll(
+                firstNameColumn, lastNameColumn, emailColumn,
+                addressColumn, roleColumn, statusColumn, actionsColumn
+        );
+
+        // Set the table to not grow beyond the columns
+        userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // Calculate the total width of all columns
+        double totalWidth = firstNameColumn.getPrefWidth() + lastNameColumn.getPrefWidth() +
+                emailColumn.getPrefWidth() + addressColumn.getPrefWidth() +
+                roleColumn.getPrefWidth() + statusColumn.getPrefWidth() + actionsColumn.getPrefWidth();
+
+        // Set the width of the table with some extra padding
+        userTable.setPrefWidth(totalWidth + 70);  // Increased padding from 50 to 70
+
+        // Set the initial width of the search bar container to match the table
+        searchBarContainer.setPrefWidth(totalWidth + 70);  // Match the table width
+
+        // Make sure the rows have sufficient height
+        userTable.setFixedCellSize(50);
+
+        // Add CSS class for styling
+        userTable.getStyleClass().add("user-table");
     }
 
     private User findUserByEmail(String email) {
@@ -162,46 +241,99 @@ public class GebruikersBeheerderController {
         });
     }
 
-    private void addUser(){
+    private void addUser() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UserForm.fxml"));
-            Parent root = loader.load();
+            Parent formRoot = loader.load();
 
-            UserFormController controller = loader.getController();
-            controller.setEditMode(false);
+            // Get the controller and configure it
+            formController = loader.getController();
+            formController.setEditMode(false);
 
-            // In plaats van switchScene, direct de root zetten
-            Scene scene = new Scene(root);
-            SceneSwitcher.getStage().setScene(scene);
+            // Add a close button to the form
+            formController.addCloseButton(event -> hideRightPanel());
+
+            // Add a callback for after saving
+            formController.setOnSaveCallback(() -> {
+                refreshTable();
+                // Optional: close the form after saving
+                // hideRightPanel();
+            });
+
+            // Show the form in the right panel
+            showRightPanel(formRoot);
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void deleteUser(User user) {
-        boolean success = userService.deleteUser(user.getEmail());
-        if (success) {
-            loadUsersFromDatabase();
-        } else {
-            System.out.println("Failed to delete user with email: " + user.getEmail());
         }
     }
 
     private void editUser(User user) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UserForm.fxml"));
-            Parent root = loader.load();
+            Parent formRoot = loader.load();
 
-            UserFormController controller = loader.getController();
-            controller.setEditMode(true);
-            controller.setUser(user);
+            // Get the controller and configure it
+            formController = loader.getController();
+            formController.setEditMode(true);
+            formController.setUser(user);
 
-            // In plaats van switchScene, direct de root zetten
-            Scene scene = new Scene(root);
-            SceneSwitcher.getStage().setScene(scene);
+            // Add a close button to the form
+            formController.addCloseButton(event -> hideRightPanel());
+
+            // Add a callback for after saving
+            formController.setOnSaveCallback(() -> {
+                refreshTable();
+                // Optional: close the form after saving
+                // hideRightPanel();
+            });
+
+            // Show the form in the right panel
+            showRightPanel(formRoot);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showRightPanel(Parent content) {
+        rightPanelContainer.getChildren().clear();
+        rightPanelContainer.getChildren().add(content);
+        rightPanelContainer.setVisible(true);
+        rightPanelContainer.setManaged(true);
+    }
+
+    private void hideRightPanel() {
+        rightPanelContainer.getChildren().clear();
+        rightPanelContainer.setVisible(false);
+        rightPanelContainer.setManaged(false);
+    }
+
+    private void deleteUser(User user) {
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION,
+                "Are you sure you want to delete user " + user.getFirstName() + " " + user.getLastName() + "?",
+                ButtonType.YES, ButtonType.NO);
+        confirmDialog.setTitle("Confirm Delete");
+        confirmDialog.setHeaderText("Delete User");
+
+        confirmDialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                boolean success = userService.deleteUser(user.getEmail());
+                if (success) {
+                    refreshTable();
+                    hideRightPanel(); // Hide the right panel after deleting
+                } else {
+                    Alert errorAlert = new Alert(Alert.AlertType.ERROR,
+                            "Failed to delete user with email: " + user.getEmail(),
+                            ButtonType.OK);
+                    errorAlert.setTitle("Error");
+                    errorAlert.setHeaderText("Delete Failed");
+                    errorAlert.showAndWait();
+                }
+            }
+        });
+    }
+
+    public void refreshTable() {
+        loadUsersFromDatabase();
     }
 }
 
