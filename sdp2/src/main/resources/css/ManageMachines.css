@@ -16,7 +16,7 @@
     -fx-background-radius: 8px;
     -fx-border-radius: 8px;
     -fx-alignment: center-right;
-    -fx-pref-width: 1050px; /* Updated to match the new table width */
+    -fx-pref-width: 1050px;
 }
 
 /* Search Field */
@@ -134,7 +134,6 @@
     -fx-font-size: 14px;
     -fx-background-radius: 6px;
     -fx-cursor: hand;
-    -fx-min-width: 120px;
     -fx-font-family: "Inter";
 }
 

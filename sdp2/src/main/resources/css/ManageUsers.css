@@ -130,13 +130,12 @@
 
 /* Add User Button */
 .add-user-button {
-    -fx-background-color: -rancidRed;
+    -fx-background-color: -delawareRed;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-background-radius: 6px;
     -fx-cursor: hand;
-    -fx-min-width: 120px;
     -fx-font-family: "Inter";
 }
 

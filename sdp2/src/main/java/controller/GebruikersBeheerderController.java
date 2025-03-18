@@ -29,6 +29,7 @@ public class GebruikersBeheerderController {
     @FXML private CheckBox showDeletedUsers;
     @FXML private StackPane rightPanelContainer;
     @FXML private HBox searchBarContainer;
+    @FXML private ComboBox RoleFilterComboBox;
 
     private ObservableList<User> users;
     private FilteredList<User> filteredUsers;
@@ -57,6 +58,7 @@ public class GebruikersBeheerderController {
 
         setupTable();
         loadUsersFromDatabase();
+        setupRoleFilter();
         setupSearch();
 
         userTable.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -68,6 +70,7 @@ public class GebruikersBeheerderController {
 
         showDeletedUsers.selectedProperty().addListener((observable, oldValue, newValue) -> {
             loadUsersFromDatabase();
+            applyFilters();
         });
 
         // Dubbelklik om te editten
@@ -205,6 +208,36 @@ public class GebruikersBeheerderController {
         userTable.getStyleClass().add("user-table");
     }
 
+    private void setupRoleFilter() {
+        ObservableList<String> roleOptions = FXCollections.observableArrayList();
+        roleOptions.add("All Roles");
+
+        for (Rollen rol : Rollen.values()) {
+            roleOptions.add(rol.toString());
+        }
+
+        RoleFilterComboBox.setItems(roleOptions);
+        RoleFilterComboBox.getSelectionModel().selectFirst();
+
+        RoleFilterComboBox.setOnAction(event -> applyFilters());
+    }
+
+    private void applyFilters() {
+        String searchText = searchField.getText().toLowerCase();
+        String selectedRole = (String) RoleFilterComboBox.getValue();
+
+        filteredUsers.setPredicate(user -> {
+            boolean matchesSearch = searchText == null || searchText.isEmpty() ||
+                    user.getFirstName().toLowerCase().contains(searchText) ||
+                    user.getLastName().toLowerCase().contains(searchText);
+
+            boolean matchesRole = selectedRole == null || selectedRole.equals("All Roles") ||
+                    user.getRol().toString().equals(selectedRole);
+
+            return matchesSearch && matchesRole;
+        });
+    }
+
     private User findUserByEmail(String email) {
         for (User user : users) {
             if (user.getEmail().equals(email)) {
@@ -216,14 +249,7 @@ public class GebruikersBeheerderController {
 
     private void setupSearch() {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredUsers.setPredicate(user -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true; // niks ingegeven --> toon alle users
-                }
-                String lowerCaseFilter = newValue.toLowerCase();
-                return user.getFirstName().toLowerCase().contains(lowerCaseFilter) ||
-                        user.getLastName().toLowerCase().contains(lowerCaseFilter);
-            });
+            applyFilters();
         });
     }
 

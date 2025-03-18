@@ -94,6 +94,35 @@
     -fx-background-color: -deepBlue;
 }
 
+/* ComboBox dropdown styling */
+.combo-box-popup .list-view {
+    -fx-background-color: white;
+    -fx-border-color: -lightGray;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 2);
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: -deepBlue;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 14px;
+    -fx-font-family: "Inter";
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: -bgGray;
+    -fx-text-fill: -deepBlue;
+}
+
+.combo-box-popup .list-cell:filled:selected,
+.combo-box-popup .list-cell:filled:selected:hover {
+    -fx-background-color: -bgGray;
+    -fx-text-fill: -deepBlue;
+}
+
+
 * {
     -goodGreen: #3CEF3C;
     -rancidRed: #FF0E00;

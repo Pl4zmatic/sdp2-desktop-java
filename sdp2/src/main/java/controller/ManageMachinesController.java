@@ -33,6 +33,8 @@ public class ManageMachinesController {
 
         @FXML
         private ComboBox<String> locationFilterComboBox;
+        @FXML
+        private ComboBox statusFilterComboBox;
 
         @FXML
         private Button addMachineButton;
@@ -57,6 +59,7 @@ public class ManageMachinesController {
                 setupTable();
                 setupNavbar();
                 setupLocationFilter();
+                setupStatusFilter();
                 loadTableContent();
                 setupSearchFilter();
         }
@@ -81,6 +84,18 @@ public class ManageMachinesController {
                 locationFilterComboBox.setOnAction(event -> applyFilters());
         }
 
+        private void setupStatusFilter(){
+                ObservableList<String> statusOptions = FXCollections.observableArrayList();
+                statusOptions.add("All Statuses");
+                statusOptions.add("Running");
+                statusOptions.add("Stopped");
+
+                statusFilterComboBox.setItems(statusOptions);
+                statusFilterComboBox.getSelectionModel().selectFirst();
+
+                statusFilterComboBox.setOnAction(event -> applyFilters());
+        }
+
         private void setupSearchFilter() {
                 searchBar.textProperty().addListener((observable, oldValue, newValue) -> applyFilters());
         }
@@ -88,6 +103,7 @@ public class ManageMachinesController {
         private void applyFilters() {
                 if (filteredMachines != null) {
                         String selectedLocation = locationFilterComboBox.getValue();
+                        String selectedStatus = (String) statusFilterComboBox.getValue();
                         String searchText = searchBar.getText().toLowerCase();
 
                         filteredMachines.setPredicate(machine -> {
@@ -97,8 +113,12 @@ public class ManageMachinesController {
                                 String nextOnderhoudDatum = (machine.getDatumToekomstigeOnderhoud() != null)
                                         ? machine.getLaatsteOnderhoudDatum().toString()
                                         : "";
+
                                 boolean matchesLocation = selectedLocation == null || selectedLocation.equals("All Locations")
                                         || machine.getLocatie().equals(selectedLocation);
+
+                                boolean matchesStatus = selectedStatus == null || selectedStatus.equals("All Statuses")
+                                        || machine.getCurrentState().toLowerCase().equals(selectedStatus.toLowerCase());
 
                                 boolean matchesSearch = searchText == null || searchText.isEmpty()
                                         || machine.getSiteNaam().toLowerCase().contains(searchText)
@@ -108,7 +128,7 @@ public class ManageMachinesController {
                                         || laatsteOnderhoudDatum.toLowerCase().contains(searchText)
                                         || nextOnderhoudDatum.toLowerCase().contains(searchText);
 
-                                return matchesLocation && matchesSearch;
+                                return matchesLocation && matchesStatus && matchesSearch;
                         });
                 }
         }

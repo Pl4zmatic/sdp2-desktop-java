@@ -26,7 +26,13 @@
                      </children>
                   </VBox>
                   <ComboBox fx:id="locationFilterComboBox" prefHeight="40.0" prefWidth="200.0" promptText="Filter on location" styleClass="filter-combo" />
+                  <ComboBox fx:id="statusFilterComboBox" prefHeight="40.0" prefWidth="200.0" promptText="Filter on status" styleClass="filter-combo" />
                   <TextField fx:id="searchBar" prefHeight="40.0" prefWidth="300.0" promptText="Search machines..." styleClass="search-field" />
+                  <Button fx:id="addMachineButton" contentDisplay="CENTER" prefWidth="60.0" styleClass="add-machine-button" text="+">
+                     <padding>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                     </padding>
+                  </Button>
                </children>
                <padding>
                   <Insets bottom="15.0" left="15.0" top="15.0" />
@@ -37,14 +43,6 @@
                   <Insets left="15.0" right="15.0" />
                </VBox.margin>
             </TableView>
-            <Button fx:id="addMachineButton" contentDisplay="CENTER" styleClass="add-machine-button" text="+">
-               <VBox.margin>
-                  <Insets bottom="15.0" top="10.0" />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-               </padding>
-            </Button>
          </children>
          <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />

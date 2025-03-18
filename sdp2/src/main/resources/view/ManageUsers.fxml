@@ -4,6 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -16,7 +17,7 @@
    <center>
       <VBox alignment="CENTER" fillWidth="false" spacing="15.0" styleClass="content-container" BorderPane.alignment="CENTER">
          <children>
-            <HBox fx:id="searchBarContainer" alignment="CENTER_RIGHT" prefHeight="85.0" styleClass="search-bar">
+            <HBox fx:id="searchBarContainer" alignment="CENTER_RIGHT" prefHeight="85.0" spacing="20.0" styleClass="search-bar">
                <children>
                   <VBox alignment="CENTER" prefHeight="40.0" prefWidth="150.0" styleClass="deleted-users-container">
                      <children>
@@ -24,7 +25,13 @@
                         <CheckBox fx:id="showDeletedUsers" mnemonicParsing="false" styleClass="deleted-users-checkbox" />
                      </children>
                   </VBox>
+                  <ComboBox fx:id="RoleFilterComboBox" prefHeight="40.0" prefWidth="200.0" promptText="Filter on role" styleClass="filter-combo" />
                   <TextField fx:id="searchField" prefHeight="40.0" prefWidth="300.0" promptText="Search users..." styleClass="search-field" />
+                  <Button fx:id="addUserButton" contentDisplay="CENTER" prefWidth="60.0" styleClass="add-user-button" text="+">
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
+                  </Button>
                </children>
                <padding>
                   <Insets bottom="15.0" left="15.0" top="15.0" />
@@ -35,14 +42,6 @@
                   <Insets left="15.0" right="15.0" />
                </VBox.margin>
             </TableView>
-            <Button fx:id="addUserButton" contentDisplay="CENTER" styleClass="add-user-button" text="+">
-               <VBox.margin>
-                  <Insets bottom="15.0" top="10.0" />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-               </padding>
-            </Button>
          </children>
          <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
