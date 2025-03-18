@@ -1,8 +1,10 @@
 package controller;
 
+import domein.Session;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -46,6 +48,17 @@ public class SceneSwitcher {
             FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(fxmlPath));
             Parent root = loader.load();
 
+            // If the root is a BorderPane, set the left to the navbar
+            if (root instanceof BorderPane) {
+                BorderPane borderPane = (BorderPane) root;
+
+                // Force the NavbarManager to check if it needs to reload
+                // This ensures we get the correct navbar (collapsed or expanded)
+                NavbarManager.reloadNavbar();
+                Parent navbar = NavbarManager.getNavbar();
+                borderPane.setLeft(navbar);
+            }
+
             Scene scene = new Scene(root);
 
             // Zet de nieuwe scène en herstel grootte en positie van het venster
@@ -63,3 +76,4 @@ public class SceneSwitcher {
         }
     }
 }
+

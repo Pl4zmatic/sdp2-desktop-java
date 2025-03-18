@@ -83,5 +83,47 @@
     -fx-text-fill: #1b1b1b;
 }
 
+.toggle-button {
+    -fx-background-color: transparent;
+    -fx-padding: 5px;
+    -fx-background-radius: 4px;
+}
+
+.toggle-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.toggle-button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+#collapsedNavbar {
+    -fx-background-color: -delawareRed;
+}
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 50%;
+    -fx-padding: 5px;
+}
+
+.icon-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+.icon-button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
+
+.tooltip {
+    -fx-background-color: white;
+    -fx-text-fill: -deepBlue;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 8px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-border-color: -lightGray;
+}
+
 
 

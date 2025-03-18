@@ -15,11 +15,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="rootLayout" prefWidth="280.0" styleClass="parentContainer" stylesheets="@../css/Navbar.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavbarController">
+<VBox fx:id="rootLayout" maxWidth="150.0" prefWidth="150.0" styleClass="parentContainer" stylesheets="@../css/Navbar.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavbarController">
    <children>
       <VBox alignment="TOP_CENTER">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+            <ImageView fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                <image>
                   <Image url="@../images/logo.png" />
                </image>
@@ -30,121 +30,137 @@
             <Line endX="160.0" startX="-100.0" stroke="WHITE" strokeDashOffset="100.0" strokeWidth="2.0" styleClass="dottedLine" />
          </children>
       </VBox>
-      <VBox fx:id="menuContainer" prefHeight="727.0" prefWidth="273.0" VBox.vgrow="ALWAYS">
+      <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
          <children>
-            <VBox fx:id="administratorMenu">
+            <VBox fx:id="menuContainer" prefHeight="727.0" prefWidth="273.0">
                <children>
-                  <VBox fx:id="subMenuAdministrator">
+                  <VBox fx:id="administratorMenu">
                      <children>
-                        <Button fx:id="beheerGebruikerItem" styleClass="subMenuItem, subMenuItem" text="Beheer Gebruikers">
-                           <VBox.margin>
-                              <Insets left="30.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="Inter Medium" size="12.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
-                        <Button fx:id="logItem" styleClass="subMenuItem" text="Logs">
-                           <VBox.margin>
-                              <Insets left="30.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="Inter Medium" size="12.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
+                        <VBox fx:id="subMenuAdministrator">
+                           <children>
+                              <Button fx:id="beheerGebruikerItem" styleClass="subMenuItem, subMenuItem" text="Beheer Gebruikers">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button fx:id="logItem" styleClass="subMenuItem" text="Logs">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                           </children>
+                        </VBox>
                      </children>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <VBox fx:id="verantwoordelijkeMenu">
+                     <children>
+                        <VBox fx:id="subMenuVerantwoordelijke">
+                           <children>
+                              <Button fx:id="beheerSiteItem" styleClass="subMenuItem" text="Beheer Sites">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button fx:id="onderhoudItem" styleClass="subMenuItem" text="Onderhoud">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button fx:id="beheerMachineItem" styleClass="subMenuItem" text="Beheer Machines">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button fx:id="beheerNotificatieItem" styleClass="subMenuItem" text="Beheer Notificaties">
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <VBox fx:id="techniekerMenu">
+                     <children>
+                        <VBox fx:id="subMenuTechnieker">
+                           <children>
+                              <Button fx:id="onderhoudTechniekerItem" styleClass="subMenuItem" text="Onderhoud">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Inter Medium" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
                   </VBox>
                </children>
-               <VBox.margin>
-                  <Insets top="15.0" />
-               </VBox.margin>
             </VBox>
-            <VBox fx:id="verantwoordelijkeMenu">
-               <children>
-                  <VBox fx:id="subMenuVerantwoordelijke">
-                     <children>
-                        <Button fx:id="beheerSiteItem" styleClass="subMenuItem" text="Beheer Sites">
-                           <VBox.margin>
-                              <Insets left="30.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="Inter Medium" size="12.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
-                        <Button fx:id="onderhoudItem" styleClass="subMenuItem" text="Onderhoud">
-                           <VBox.margin>
-                              <Insets left="30.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="Inter Medium" size="12.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
-                        <Button fx:id="beheerMachineItem" styleClass="subMenuItem" text="Beheer Machines">
-                           <VBox.margin>
-                              <Insets left="30.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="Inter Medium" size="12.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
-                        <Button fx:id="beheerNotificatieItem" styleClass="subMenuItem" text="Beheer Notificaties">
-                           <font>
-                              <Font name="Inter Medium" size="12.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <VBox.margin>
-                              <Insets left="30.0" />
-                           </VBox.margin>
-                        </Button>
-                     </children>
-                  </VBox>
-               </children>
-               <VBox.margin>
-                  <Insets top="15.0" />
-               </VBox.margin>
-            </VBox>
-            <VBox fx:id="techniekerMenu">
-               <children>
-                  <VBox fx:id="subMenuTechnieker">
-                     <children>
-                        <Button fx:id="onderhoudTechniekerItem" styleClass="subMenuItem" text="Onderhoud">
-                           <VBox.margin>
-                              <Insets left="30.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="Inter Medium" size="12.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
-                     </children>
-                  </VBox>
-               </children>
-               <VBox.margin>
-                  <Insets top="15.0" />
-               </VBox.margin>
-            </VBox>
+            <Button fx:id="collapseButton" styleClass="toggle-button">
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/arrow-left-icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
          </children>
-      </VBox>
-      <HBox alignment="CENTER" prefWidth="280.0" spacing="10.0" styleClass="profileContainer">
+      </HBox>
+      <HBox alignment="CENTER" prefWidth="280.0" spacing="5.0" styleClass="profileContainer">
          <children>
             <VBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="101.0">
                <children>
@@ -156,6 +172,9 @@
                      <font>
                         <Font name="Inter Medium" size="14.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </Text>
                   <Text fx:id="profileFirstName" fill="#2f2f2f" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="profileText" text="John" wrappingWidth="190.421875">
                      <font>
@@ -165,10 +184,13 @@
                         <String fx:value="profileTextFirstName" />
                         <String fx:value="text" />
                      </styleClass>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </Text>
                </children>
                <HBox.margin>
-                  <Insets left="3.0" />
+                  <Insets left="10.0" />
                </HBox.margin>
             </VBox>
             <Button fx:id="profileIcon" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" styleClass="profileIcon" stylesheets="@../css/Navbar.css" textAlignment="CENTER">

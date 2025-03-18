@@ -3,9 +3,14 @@ package domein;
 import domein.user.User;
 import javafx.scene.control.Button;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Session {
     private static User currentUser;  // Houdt de ingelogde gebruiker bij
     private static Button activeNavItem;
+    private static boolean navbarCollapsed = false; // Default state is expanded
+    private static final Map<String, Object> attributes = new HashMap<>();
 
     public static Button getActiveNavItem(){
         return activeNavItem;
@@ -28,9 +33,38 @@ public class Session {
         currentUser = user;
     }
 
+    // Specifieke methodes voor navbar collapsed state
+    public static boolean isNavbarCollapsed() {
+        return navbarCollapsed;
+    }
+
+    public static void setNavbarCollapsed(boolean collapsed) {
+        navbarCollapsed = collapsed;
+    }
+
+    public static void toggleNavbarCollapsed() {
+        navbarCollapsed = !navbarCollapsed;
+    }
+
+    // Generic attribute methods (kept for backward compatibility)
+    public static Object getAttribute(String key) {
+        return attributes.get(key);
+    }
+
+    public static void setAttribute(String key, Object value) {
+        attributes.put(key, value);
+    }
+
+    public static void removeAttribute(String key) {
+        attributes.remove(key);
+    }
+
     // Current User op null zetten bij bv. uitloggen
     public static void clear() {
         currentUser = null;
         activeNavItem = null;
+
+        navbarCollapsed = false;
     }
 }
+

@@ -9,8 +9,6 @@
 
 .filter-bar {
     -fx-background-color: white;
-    -fx-border-width: 0 0 1 0;
-    -fx-border-color: -lightGray;
     -fx-alignment: center-left;
 }
 

@@ -3,10 +3,14 @@ package controller;
 import domein.Session;
 import domein.user.User;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import utils.Rollen;
@@ -14,6 +18,22 @@ import utils.Rollen;
 import java.io.IOException;
 
 public class NavbarController {
+
+    @FXML private VBox rootLayout;
+    @FXML private VBox collapsedNavbar;
+    @FXML private Button collapseButton;
+    @FXML private Button expandButton;
+
+    @FXML private VBox quickNavAdmin;
+    @FXML private VBox quickNavManager;
+
+    @FXML private Button quickNavUsers;
+    @FXML private Button quickNavLogs;
+    @FXML private Button quickNavSites;
+    @FXML private Button quickNavMaintenance;
+    @FXML private Button quickNavMachines;
+    @FXML private Button quickNavNotifications;
+    @FXML private Button quickNavProfile;
 
     @FXML private VBox administratorMenu;
     @FXML private VBox verantwoordelijkeMenu;
@@ -33,79 +53,340 @@ public class NavbarController {
     @FXML private ContextMenu logoutMenu;
     @FXML private MenuItem logoutItem;
 
+    private Parent expandedNavbar;
+    private Parent collapsedNavbarView;
+
     @FXML
     public void initialize() {
-        updateNavbar();
+        if (rootLayout != null) {
+            expandedNavbar = rootLayout;
 
-        for (Button button : getAllMenuButtons()) {
-            button.setOnAction(event -> {
-                try {
-                    handleNavigation(button);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            boolean isCollapsed = Session.isNavbarCollapsed();
+            if (isCollapsed) {
+                javafx.application.Platform.runLater(this::collapseNavbar);
+            } else {
+                if (collapseButton != null) {
+                    collapseButton.setOnAction(event -> collapseNavbar());
                 }
-            });
+
+                updateNavbar();
+
+                for (Button button : getAllMenuButtons()) {
+                    if (button != null) {
+                        button.setOnAction(event -> {
+                            try {
+                                handleNavigation(button);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+        if (collapsedNavbar != null) {
+            if (expandButton != null) {
+                expandButton.setOnAction(event -> expandNavbar());
+            }
+
+            updateQuickNavVisibility();
+
+            if (quickNavProfile != null) {
+                quickNavProfile.setOnAction(event -> {
+                    try {
+                        showLogoutMenu();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+
+            // Set up quick nav buttons
+            if (quickNavUsers != null) {
+                quickNavUsers.setOnAction(event -> quickNavToUsers());
+            }
+            if (quickNavLogs != null) {
+                quickNavLogs.setOnAction(event -> quickNavToLogs());
+            }
+            if (quickNavSites != null) {
+                quickNavSites.setOnAction(event -> quickNavToSites());
+            }
+            if (quickNavMaintenance != null) {
+                quickNavMaintenance.setOnAction(event -> quickNavToMaintenance());
+            }
+            if (quickNavMachines != null) {
+                quickNavMachines.setOnAction(event -> quickNavToMachines());
+            }
+            if (quickNavNotifications != null) {
+                quickNavNotifications.setOnAction(event -> quickNavToNotifications());
+            }
+        }
+    }
+
+    private void updateQuickNavVisibility() {
+        if (quickNavAdmin == null || quickNavManager == null) return;
+
+        User currentUser = Session.getCurrentUser();
+        if (currentUser == null) return;
+
+        Rollen userRole = currentUser.getRol();
+
+        switch (userRole) {
+            case ADMINISTRATOR -> {
+                quickNavAdmin.setVisible(true);
+                quickNavAdmin.setManaged(true);
+                quickNavManager.setVisible(false);
+                quickNavManager.setManaged(false);
+            }
+            case VERANTWOORDELIJKE, MANAGER -> {
+                quickNavAdmin.setVisible(false);
+                quickNavAdmin.setManaged(false);
+                quickNavManager.setVisible(true);
+                quickNavManager.setManaged(true);
+            }
+            case TECHNIEKER -> {
+                quickNavAdmin.setVisible(false);
+                quickNavAdmin.setManaged(false);
+                quickNavManager.setVisible(true);
+                quickNavManager.setManaged(true);
+
+                // Hide all buttons except maintenance for technician
+                if (quickNavSites != null) quickNavSites.setVisible(false);
+                if (quickNavSites != null) quickNavSites.setManaged(false);
+                if (quickNavMachines != null) quickNavMachines.setVisible(false);
+                if (quickNavMachines != null) quickNavMachines.setManaged(false);
+                if (quickNavNotifications != null) quickNavNotifications.setVisible(false);
+                if (quickNavNotifications != null) quickNavNotifications.setManaged(false);
+            }
+        }
+    }
+
+    // Quick navigation methods
+    @FXML
+    private void quickNavToUsers() {
+        try {
+            SceneSwitcher.switchScene("/view/ManageUsers.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void quickNavToLogs() {
+        try {
+            SceneSwitcher.switchScene("/view/UserLogs.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void quickNavToSites() {
+        try {
+            SceneSwitcher.switchScene("/view/SitesManagement.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void quickNavToMaintenance() {
+        try {
+            SceneSwitcher.switchScene("/view/OnderhoudScherm.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void quickNavToMachines() {
+        try {
+            SceneSwitcher.switchScene("/view/ManageMachines.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void quickNavToNotifications() {
+        try {
+            SceneSwitcher.switchScene("/view/NotificationsManagement.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showLogoutMenu() {
+        ContextMenu menu = new ContextMenu();
+        MenuItem logoutItem = new MenuItem("Logout");
+        logoutItem.setOnAction(e -> {
+            try {
+                handleLougout();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+        menu.getItems().add(logoutItem);
+
+        menu.show(quickNavProfile, javafx.geometry.Side.RIGHT, 0, 0);
+    }
+
+    private void collapseNavbar() {
+        try {
+            // First update the session state
+            Session.setNavbarCollapsed(true);
+
+            // Then load the collapsed navbar
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CollapsedNavbar.fxml"));
+            collapsedNavbarView = loader.load();
+
+            // Get the parent BorderPane
+            BorderPane mainLayout = (BorderPane) rootLayout.getParent();
+            if (mainLayout != null) {
+                // Set the collapsed navbar
+                mainLayout.setLeft(collapsedNavbarView);
+
+                // Force a layout pass to ensure UI updates
+                mainLayout.layout();
+            } else {
+                System.err.println("Could not find parent BorderPane for navbar");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void expandNavbar() {
+        try {
+            // First update the session state
+            Session.setNavbarCollapsed(false);
+
+            // Then load the expanded navbar
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Navbar.fxml"));
+            Parent expandedNavbarView = loader.load();
+
+            // Get the parent BorderPane
+            BorderPane mainLayout = (BorderPane) collapsedNavbar.getParent();
+            if (mainLayout != null) {
+                // Set the expanded navbar
+                mainLayout.setLeft(expandedNavbarView);
+
+                // Get and initialize the controller
+                NavbarController controller = loader.getController();
+                controller.updateNavbar();
+
+                // Force a layout pass to ensure UI updates
+                mainLayout.layout();
+            } else {
+                System.err.println("Could not find parent BorderPane for navbar");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public void updateNavbar() {
         User currentUser = Session.getCurrentUser();
 
+        if (currentUser == null) {
+            return; // Exit early if no user is logged in
+        }
+
         Rollen userRole = currentUser.getRol();
-        switch (userRole) {
-            case ADMINISTRATOR -> {
-                administratorMenu.setManaged(true);
-                administratorMenu.setVisible(true);
-                verantwoordelijkeMenu.setManaged(false);
-                verantwoordelijkeMenu.setVisible(false);
-                techniekerMenu.setManaged(false);
-                techniekerMenu.setVisible(false);
+
+        // Check if we're in the expanded or collapsed view
+        boolean isCollapsedView = (collapsedNavbar != null && rootLayout == null);
+
+        if (isCollapsedView) {
+            // We're in the collapsed view, update only the quick nav elements
+            updateQuickNavVisibility();
+
+            // Set profile info if available
+            if (quickNavProfile != null) {
+                // You might want to add some visual indicator of the user here
+                // For example, set a tooltip with the user's name
+                Tooltip tooltip = new Tooltip(currentUser.getFirstName() + " " + currentUser.getLastName());
+                Tooltip.install(quickNavProfile, tooltip);
             }
-            case VERANTWOORDELIJKE -> {
-                administratorMenu.setManaged(false);
-                administratorMenu.setVisible(false);
-                verantwoordelijkeMenu.setManaged(true);
-                verantwoordelijkeMenu.setVisible(true);
-                techniekerMenu.setManaged(false);
-                techniekerMenu.setVisible(false);
+        } else {
+            // We're in the expanded view, update the full menu
+            if (administratorMenu != null && verantwoordelijkeMenu != null && techniekerMenu != null) {
+                switch (userRole) {
+                    case ADMINISTRATOR -> {
+                        administratorMenu.setManaged(true);
+                        administratorMenu.setVisible(true);
+                        verantwoordelijkeMenu.setManaged(false);
+                        verantwoordelijkeMenu.setVisible(false);
+                        techniekerMenu.setManaged(false);
+                        techniekerMenu.setVisible(false);
+
+                        setActiveMenuItem(beheerGebruikerItem);
+                    }
+                    case VERANTWOORDELIJKE -> {
+                        administratorMenu.setManaged(false);
+                        administratorMenu.setVisible(false);
+                        verantwoordelijkeMenu.setManaged(true);
+                        verantwoordelijkeMenu.setVisible(true);
+                        techniekerMenu.setManaged(false);
+                        techniekerMenu.setVisible(false);
+
+                        setActiveMenuItem(beheerMachineItem);
+                    }
+                    case TECHNIEKER -> {
+                        administratorMenu.setManaged(false);
+                        administratorMenu.setVisible(false);
+                        verantwoordelijkeMenu.setManaged(false);
+                        verantwoordelijkeMenu.setVisible(false);
+                        techniekerMenu.setManaged(true);
+                        techniekerMenu.setVisible(true);
+
+                        setActiveMenuItem(onderhoudTechniekerItem);
+                    }
+                    case MANAGER -> {
+                        administratorMenu.setManaged(false);
+                        administratorMenu.setVisible(false);
+                        verantwoordelijkeMenu.setManaged(true);
+                        verantwoordelijkeMenu.setVisible(true);
+                        techniekerMenu.setManaged(false);
+                        techniekerMenu.setVisible(false);
+
+                        setActiveMenuItem(beheerMachineItem);
+                    }
+                }
+
+                // Set profile text if available
+                if (profileLastName != null && profileFirstName != null) {
+                    setTextToUsername(profileLastName, currentUser.getLastName());
+                    setTextToUsername(profileFirstName, currentUser.getFirstName());
+                }
+
+                // Setup profile menu if available
+                if (profileIcon != null && logoutMenu != null && logoutItem != null) {
+                    setupProfileMenu();
+                }
             }
-            case TECHNIEKER -> {
-                administratorMenu.setManaged(false);
-                administratorMenu.setVisible(false);
-                verantwoordelijkeMenu.setManaged(false);
-                verantwoordelijkeMenu.setVisible(false);
-                techniekerMenu.setManaged(true);
-                techniekerMenu.setVisible(true);
-            }
-            case MANAGER -> {
-                administratorMenu.setManaged(false);
-                administratorMenu.setVisible(false);
-                verantwoordelijkeMenu.setManaged(true);
-                verantwoordelijkeMenu.setVisible(true);
-                techniekerMenu.setManaged(false);
-                techniekerMenu.setVisible(false);
+        }
+    }
+
+    private void setActiveMenuItem(Button button) {
+        if (button == null) return;
+
+        for (Button menuButton : getAllMenuButtons()) {
+            if (menuButton != null) {
+                menuButton.setText(menuButton.getText().replace("➡ ", ""));
             }
         }
 
-        setTextToUsername(profileLastName, currentUser.getLastName());
-        setTextToUsername(profileFirstName, currentUser.getFirstName());
-
-        for (Button button : getAllMenuButtons()) {
-            button.setText(button.getText().replace("➡ ", ""));
+        if (!button.getText().startsWith("➡ ")) {
+            button.setText("➡ " + button.getText());
         }
 
-        setupProfileMenu();
+        Session.setActiveButton(button);
     }
 
     private void handleNavigation(Button clickedButton) throws IOException {
-        for (Button button : getAllMenuButtons()) {
-            button.setText(button.getText().replace("➡ ", ""));
-        }
-
-        clickedButton.setText("➡ " + clickedButton.getText());
-
-        Session.setActiveButton(clickedButton);
-
+        setActiveMenuItem(clickedButton);
 
         String fxmlPath = switch (clickedButton.getText().replace("➡ ", "")) {
             case "Beheer Gebruikers" -> "/view/ManageUsers.fxml";
@@ -121,10 +402,7 @@ public class NavbarController {
         if (fxmlPath != null) {
             SceneSwitcher.switchScene(fxmlPath);
         }
-        System.out.println(fxmlPath);
-    System.out.println(clickedButton.getText());
     }
-
 
     private Button[] getAllMenuButtons() {
         return new Button[]{
@@ -139,6 +417,11 @@ public class NavbarController {
     }
 
     private void setupProfileMenu() {
+        if (profileLastName == null || profileFirstName == null ||
+                logoutMenu == null || logoutItem == null || profileIcon == null) {
+            return;
+        }
+
         setTextToUsername(profileLastName, Session.getCurrentUser().getLastName());
         setTextToUsername(profileFirstName, Session.getCurrentUser().getFirstName());
 
@@ -161,11 +444,15 @@ public class NavbarController {
     }
 
     private void handleLougout() throws IOException {
+        Session.setNavbarCollapsed(false); // Reset to expanded on logout
         Session.clear();
         SceneSwitcher.switchScene("/view/LoginPage.fxml");
     }
 
     private void setTextToUsername(Text text, String fullName) {
-        text.setText(fullName);
+        if (text != null) {
+            text.setText(fullName);
+        }
     }
 }
+

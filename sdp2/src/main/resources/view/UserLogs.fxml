@@ -5,7 +5,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -13,11 +12,10 @@
 
 <BorderPane fx:id="rootLayout" prefHeight="720.0" prefWidth="1000.0" styleClass="root-layout" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LogController">
     <center>
-        <VBox alignment="CENTER" spacing="15.0" styleClass="content-container" BorderPane.alignment="CENTER">
+        <VBox alignment="CENTER_RIGHT" spacing="15.0" styleClass="content-container" BorderPane.alignment="CENTER">
             <children>
                 <HBox alignment="CENTER_LEFT" maxWidth="900.0" prefHeight="85.0" prefWidth="900.0" spacing="20.0" styleClass="filter-bar">
                     <children>
-                        <Label styleClass="logs-title" text="User Logs" />
                         <HBox HBox.hgrow="ALWAYS" />
                         <ComboBox fx:id="actionFilterComboBox" prefHeight="40.0" prefWidth="200.0" promptText="Filter op actie" styleClass="filter-combo" />
                         <DatePicker fx:id="dateFilterPicker" prefHeight="40.0" prefWidth="200.0" promptText="Filter op datum" styleClass="filter-date" />
