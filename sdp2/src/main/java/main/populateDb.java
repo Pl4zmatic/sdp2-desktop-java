@@ -66,7 +66,7 @@ public class populateDb {
     	MaintenanceDaoJpa maintenanceDaoJpa = new MaintenanceDaoJpa();
     	
     	maintenanceDaoJpa.startTransaction();
-    	maintenanceDaoJpa.insert(new Maintenance("a-04", LocalDateTime.now().plusDays(1), null, "test", "test", "probleem nog niet opegelost"));
+    	maintenanceDaoJpa.insert(new Maintenance("a-04", LocalDate.now().plusDays(1), null, "test", "test", "probleem nog niet opegelost"));
     	maintenanceDaoJpa.commitTransaction();
     }
 }

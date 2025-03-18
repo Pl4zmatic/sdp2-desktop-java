@@ -7,6 +7,9 @@ import java.util.List;
 
 import domein.Session;
 import domein.machine.Maintenance;
+import domein.machine.stateMachines.maintenance.MaintenanceState;
+import domein.machine.stateMachines.maintenance.PlannedState;
+import domein.machine.stateMachines.maintenance.ProgressState;
 import domein.user.User;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.virtualizedfx.enums.ScrollPaneEnums.ScrollBarPolicy;
@@ -72,21 +75,7 @@ public class OnderhoudSchermController {
 		List<Maintenance> maintenances = maintenanceService.getAllMaintenance();
 		rootLayout.setLeft(NavbarManager.getNavbar());
 		
-		for(Maintenance maintenance : maintenances) {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass()
-					.getResource("/view/MaintenanceItem.fxml"));
-			Parent element = null;
-			try {
-				element = fxmlLoader.load();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			MaintenanceElement controller = fxmlLoader.getController();
-			controller.setText(maintenance.getMachineCode(), maintenance.getStartDate().toString());
-			plannedVBox.getChildren().add(element);
-		}
+		fillVBox(maintenances);
 		
 		User user = Session.getCurrentUser();
 		Rollen userRole = user.getRol();
@@ -111,6 +100,7 @@ public class OnderhoudSchermController {
 		
 		
 		plannedScrollable.setContent(plannedVBox);
+		progressScrollable.setContent(progressVBox);
 		
 		plannedScrollable.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);	
 		progressScrollable.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -119,6 +109,7 @@ public class OnderhoudSchermController {
 	
 	private void openPlanMenu() {
 		fieldVBox.setVisible(true);
+		techniekerField.setVisible(false);
 	}
 	
 	private void closeMaintenanceMenu() {
@@ -127,5 +118,48 @@ public class OnderhoudSchermController {
 	
 	private void planMaintenance() {
 		maintenanceService.planMaintenance(machineField.getText(), dateField.getText().split("/"), null, reasonField.getText(), null, notesField.getText());
+		machineField.clear();
+		dateField.clear();
+		reasonField.clear();
+		notesField.clear();
 	}
+	
+	private void fillVBox(List<Maintenance> maintenances) {
+		for(Maintenance maintenance : maintenances) {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass()
+					.getResource("/view/MaintenanceItem.fxml"));
+			Parent element = null;
+			try {
+				element = fxmlLoader.load();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			MaintenanceElement controller = fxmlLoader.getController();
+			controller.setText(maintenance.getMachineCode(), maintenance.getStartDate().toString());
+			controller.setMaintenance(maintenance);
+			switch(maintenance.getCurrentStateString()) {
+			case "PlannedState" -> {
+				plannedVBox.getChildren().add(element);
+			}
+			case "ProgressState" -> {
+				progressVBox.getChildren().add(element);
+			}
+			
+			
+			
+			}
+			element.setOnMouseClicked(event -> {
+				openPlanMenu();
+				techniekerField.setVisible(true);
+				techniekerField.setText(maintenance.getNameTechnician());
+				machineField.setText(maintenance.getMachineCode());
+				dateField.setText(maintenance.getStartDate().toString());
+				reasonField.setText(maintenance.getReason());
+				notesField.setText(maintenance.getRemarks());
+			});
+		}
+	}
+
+	
 }

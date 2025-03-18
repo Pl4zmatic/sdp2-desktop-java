@@ -49,7 +49,7 @@ public class Maintenance {
     	this.machine = machineService.getMachineByCode(machineCode);
     	setStartDate(startDate);
     	this.technician = machine.getTechnieker();
-    	//this.nameTechnician = technician.getFullName();
+    	this.nameTechnician = technician.getFullName();
         setReason(reason);
         setMaintenanceReport(maintenanceReport);
         setRemarks(remarks);
@@ -88,7 +88,6 @@ public class Maintenance {
     }
 
     public void setMaintenanceReport(String maintenanceReport) {
-        checkString(maintenanceReport);
         this.maintenanceReport = maintenanceReport;
     }
 
