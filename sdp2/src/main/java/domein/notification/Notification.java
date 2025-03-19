@@ -1,11 +1,10 @@
-package domein;
+package domein.notification;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import domein.notification.UserNotification;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,7 +23,9 @@ public class Notification {
     private String message;
     private String title;
     private String status;
-    
+
+    @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserNotification> userNotifications;
     public Notification(String type, String message, String title, String status) {
         this.dateAndTime = LocalDateTime.now();
         this.type = type;
