@@ -8,4 +8,9 @@ public class FinishedState extends MaintenanceState {
 		super(maintenance);
 	}
 
+	@Override
+	public String toString() {
+		return "FinishedState";
+		
+	}
 }
