@@ -12,6 +12,8 @@
         <class>domein.machine.Machine</class>
         <class>domein.machine.Maintenance</class>
         <class>domein.logging.LogEntry</class>
+        <class>domein.notification.Notification</class>
+        <class>domein.notification.UserNotification</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:mariadb://vichogent.be:40058/SDP2_2425_DB_G02"/>
