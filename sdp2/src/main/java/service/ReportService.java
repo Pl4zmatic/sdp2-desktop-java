@@ -1,17 +1,23 @@
 package service;
 
+import java.util.Collections;
+import java.util.List;
+
 import domein.machine.Report;
 import lombok.NoArgsConstructor;
 import repository.ReportDaoJpa;
 
-@NoArgsConstructor
 public class ReportService {
-  private ReportDaoJpa rapportDaoJpa;
+  private ReportDaoJpa reportDaoJpa;
+
+  public ReportService() {
+    this.reportDaoJpa = new ReportDaoJpa();
+  }
 
   public void addReport(Report report) {
     try {
       ReportDaoJpa.startTransaction();
-      rapportDaoJpa.insert(report);
+      reportDaoJpa.insert(report);
       ReportDaoJpa.commitTransaction();
     } catch (Exception e) {
       System.out.printf("%s\n%s\n%s\n", "=".repeat(20), "Adding report failed.", "=".repeat(20));
@@ -22,7 +28,7 @@ public class ReportService {
   public void deleteReport(Report report) {
     try {
       ReportDaoJpa.startTransaction();
-      rapportDaoJpa.delete(report);
+      reportDaoJpa.delete(report);
       ReportDaoJpa.commitTransaction();
     } catch (Exception e) {
       System.out.printf("%s\n%s\n%s\n", "=".repeat(20), "Deleting report failed.", "=".repeat(20));
@@ -33,7 +39,7 @@ public class ReportService {
   public void updateReport(Report report) {
     try {
       ReportDaoJpa.startTransaction();
-      rapportDaoJpa.update(report);
+      reportDaoJpa.update(report);
       ReportDaoJpa.commitTransaction();
     } catch (Exception e) {
       System.out.printf("%s\n%s\n%\n", "=".repeat(20), "Updating report failed.", "=".repeat(20));
@@ -43,9 +49,20 @@ public class ReportService {
 
   public Report getReportById(int id) {
     try {
-      return rapportDaoJpa.get(id);
+      return reportDaoJpa.get(id);
     } catch (Exception e) {
       System.out.printf("%s\n%s%d\n%s\n", "=".repeat(20), "No report found with id = ", id, "=".repeat(20));
+      e.printStackTrace();
+    }
+
+    return null;
+  }
+
+  public List<Report> getAllReports() {
+    try {
+      return Collections.unmodifiableList(reportDaoJpa.findAll());
+    } catch (Exception e) {
+      System.out.printf("%s\n%s%d\n%s\n", "=".repeat(20), "getAllReports Failed.", "=".repeat(20));
       e.printStackTrace();
     }
 

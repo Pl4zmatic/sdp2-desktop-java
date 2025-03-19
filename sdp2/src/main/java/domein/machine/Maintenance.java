@@ -49,7 +49,6 @@ public class Maintenance {
     	this.machine = machineService.getMachineByCode(machineCode);
     	setStartDate(startDate);
     	this.technician = machine.getTechnieker();
-    	this.nameTechnician = technician.getFullName();
         setReason(reason);
         setMaintenanceReport(maintenanceReport);
         setRemarks(remarks);
@@ -105,5 +104,10 @@ public class Maintenance {
         if(date.isBefore(LocalDate.now())) {
             throw new DateTimeException("The datetime is from the past");
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("|" + "%-18s|".repeat(8), String.valueOf(maintenanceId), currentStateString, String.valueOf(startDate), String.valueOf(endDate), nameTechnician, reason, remarks, String.valueOf(machine.getId()));
     }
 }

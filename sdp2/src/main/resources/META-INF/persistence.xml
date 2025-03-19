@@ -12,7 +12,7 @@
         <class>domein.machine.Machine</class>
         <class>domein.machine.Maintenance</class>
         <class>domein.logging.LogEntry</class>
-        <class>domein.machine.Rapport</class>
+        <class>domein.machine.Report</class>
 
 
         <properties>

@@ -16,7 +16,6 @@ import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class Report {
   @Id
@@ -30,7 +29,7 @@ public class Report {
 
   @Setter
   @Column(nullable = false)
-  private List<String> Steps;
+  private List<String> steps;
 
   @Setter
   @Column(length = 500, nullable = true)
@@ -40,5 +39,15 @@ public class Report {
   @OneToOne
   private Maintenance maintenance;
 
-  
+  public Report(List<String> imagePaths, List<String> steps, String notes, Maintenance maintenance) {
+    setImagePaths(imagePaths);
+    setMaintenance(maintenance);
+    setNotes(notes);
+    setSteps(steps);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("|" + "%-18s|".repeat(5), String.valueOf(rapportId), imagePaths, steps, notes, String.valueOf(maintenance.getMaintenanceId()));
+  }
 }

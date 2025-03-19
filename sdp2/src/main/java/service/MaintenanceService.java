@@ -52,4 +52,8 @@ public class MaintenanceService {
              return Collections.emptyList();
          }
     }
+
+    public Maintenance getMaintenanceById(int id) {
+        return maintenanceDaoJpa.get(id);
+    }
 }
