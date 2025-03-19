@@ -369,7 +369,7 @@ public class NavbarController {
         String fxmlPath = switch (clickedButton.getText()) {
             case "Beheer Gebruikers" -> "/view/ManageUsers.fxml";
             case "Logs" -> "/view/UserLogs.fxml";
-            case "Beheer Sites" -> "/view/SitesManagement.fxml";
+            case "Beheer Sites" -> "/view/ManageSites.fxml";
             case "Onderhoud" -> "/view/OnderhoudScherm.fxml";
             case "Beheer Machines" -> "/view/ManageMachines.fxml";
             case "Beheer Notificaties" -> "/view/NotificationsManagement.fxml";
