@@ -7,8 +7,10 @@ import java.util.List;
 
 import domein.machine.Machine;
 import domein.machine.Maintenance;
+import domein.user.User;
 import repository.MachineDaoJpa;
 import repository.MaintenanceDaoJpa;
+import repository.UserDaoJpa;
 
 public class MaintenanceService {
 	private final MaintenanceDaoJpa maintenanceDaoJpa;
@@ -51,5 +53,23 @@ public class MaintenanceService {
              e.printStackTrace();
              return Collections.emptyList();
          }
+    }
+    
+    public boolean editMaintenance(Maintenance updatedMaintenance) {
+        try {
+            Maintenance existingMaintenance = maintenanceDaoJpa.getMaintenanceById(updatedMaintenance.getMaintenanceId());
+            if (existingMaintenance != null) {
+                MaintenanceDaoJpa.startTransaction();
+                maintenanceDaoJpa.update(updatedMaintenance);
+                MaintenanceDaoJpa.commitTransaction();
+                return true;
+            } else {
+                System.out.println("Maintenance not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            MaintenanceDaoJpa.rollbackTransaction();
+        }
+        return false;
     }
 }

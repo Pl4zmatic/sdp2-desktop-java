@@ -72,9 +72,9 @@ public class OnderhoudSchermController {
 	public void initialize() {
 		
 		maintenanceService = new MaintenanceService();		
-		List<Maintenance> maintenances = maintenanceService.getAllMaintenance();
 		rootLayout.setLeft(NavbarManager.getNavbar());
 		
+		List<Maintenance> maintenances = maintenanceService.getAllMaintenance();
 		fillVBox(maintenances);
 		
 		User user = Session.getCurrentUser();
@@ -86,6 +86,10 @@ public class OnderhoudSchermController {
 		
 		planButton.setOnAction(event -> {
 			openPlanMenu();
+			machineField.clear();
+			dateField.clear();
+			reasonField.clear();
+			notesField.clear();
 		});
 		
 		cancelButton.setOnAction(event -> {
@@ -146,10 +150,8 @@ public class OnderhoudSchermController {
 				progressVBox.getChildren().add(element);
 			}
 			
-			
-			
 			}
-			element.setOnMouseClicked(event -> {
+			controller.textBox.setOnMouseClicked(event -> {
 				openPlanMenu();
 				techniekerField.setVisible(true);
 				techniekerField.setText(maintenance.getNameTechnician());
@@ -158,6 +160,14 @@ public class OnderhoudSchermController {
 				reasonField.setText(maintenance.getReason());
 				notesField.setText(maintenance.getRemarks());
 			});
+			
+			controller.nextArrow.setOnMouseClicked(event -> {
+	    		System.out.println("Clicked");
+				maintenance.setCurrentState(new ProgressState(maintenance));
+				maintenanceService.editMaintenance(maintenance);
+	    	});
+			
+			
 		}
 	}
 

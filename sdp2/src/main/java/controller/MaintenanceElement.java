@@ -3,22 +3,37 @@ package controller;
 import java.io.IOException;
 
 import domein.machine.Maintenance;
+import domein.machine.stateMachines.maintenance.FinishedState;
+import domein.machine.stateMachines.maintenance.MaintenanceState;
+import domein.machine.stateMachines.maintenance.ProgressState;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import service.MaintenanceService;
 
 public class MaintenanceElement {
 
+	private MaintenanceService maintenanceService;
+	
     @FXML
     private Text dateLabel;
+    
+    @FXML
+    public VBox textBox;
 
     @FXML
     private Text machineLabel;
     
+    @FXML
+    public VBox nextArrow;
+    
     private Maintenance maintenance;
-
+    
     @FXML
     public void intialize() {
+    	maintenanceService = new MaintenanceService();	
     	FXMLLoader fxmlLoader = new FXMLLoader(getClass()
     			.getResource("/view/MaintenanceItem.fxml"));
     	
@@ -30,6 +45,7 @@ public class MaintenanceElement {
     	}catch(IOException e) {
     		throw new RuntimeException(e);
     	}
+    	
     }
     
     public void setText(String textMachine, String textDate){
@@ -44,4 +60,5 @@ public class MaintenanceElement {
     public Maintenance getMaintenance() {
     	return this.maintenance;
     }
+        
 }

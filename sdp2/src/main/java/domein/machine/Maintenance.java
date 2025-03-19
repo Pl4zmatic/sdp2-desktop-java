@@ -22,7 +22,7 @@ public class Maintenance {
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int maintenanceId;
+    private long maintenanceId;
 
     @ManyToOne
     @JoinColumn(name = "machine_id", nullable = false)  // Deze kolom linkt Maintenance naar Machine
@@ -49,7 +49,7 @@ public class Maintenance {
     	this.machine = machineService.getMachineByCode(machineCode);
     	setStartDate(startDate);
     	this.technician = machine.getTechnieker();
-    	this.nameTechnician = technician.getFullName();
+    	//this.nameTechnician = technician.getFullName();
         setReason(reason);
         setMaintenanceReport(maintenanceReport);
         setRemarks(remarks);
@@ -58,8 +58,23 @@ public class Maintenance {
     	this.machineCode = machine.getCode();
     }
     
+    public Maintenance(Maintenance m) {
+    	machine = m.machine;
+    	machineCode = m.machineCode;
+    	startDate = m.startDate;
+    	endDate = m.endDate;
+    	technician = m.technician;
+    	nameTechnician = m.nameTechnician;
+    	reason = m.reason;
+    	maintenanceReport = m.maintenanceReport;
+    	remarks = m.remarks;
+    	currentStateString = m.currentStateString;
+    	currentState = m.currentState;
+    }
+    
     public void setCurrentState(MaintenanceState state) {
         this.currentState = state;
+        this.currentStateString = state.toString();
     }
 
     public String getCurrentState(){
