@@ -229,7 +229,11 @@ public class GebruikersBeheerderController {
         filteredUsers.setPredicate(user -> {
             boolean matchesSearch = searchText == null || searchText.isEmpty() ||
                     user.getFirstName().toLowerCase().contains(searchText) ||
-                    user.getLastName().toLowerCase().contains(searchText);
+                    user.getLastName().toLowerCase().contains(searchText) ||
+                    user.getRol().toString().toLowerCase().contains(searchText) ||
+                    user.getAdres().toLowerCase().contains(searchText) ||
+                    user.getEmail().toLowerCase().contains(searchText);
+
 
             boolean matchesRole = selectedRole == null || selectedRole.equals("All Roles") ||
                     user.getRol().toString().equals(selectedRole);
