@@ -33,7 +33,6 @@ public class NavbarManager {
 
             NavbarController controller = navbarLoader.getController();
 
-            // Only call updateNavbar if the controller is properly initialized
             try {
                 controller.updateNavbar();
             } catch (Exception e) {

@@ -49,7 +49,7 @@
       </VBox>
    </center>
    <right>
-      <StackPane fx:id="rightPanelContainer" managed="false" prefWidth="400" visible="false" />
+      <StackPane fx:id="rightPanelContainer" alignment="CENTER" managed="false" prefWidth="400" visible="false" />
    </right>
    <stylesheets>
       <URL value="@../css/globals.css" />

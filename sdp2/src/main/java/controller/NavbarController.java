@@ -234,20 +234,15 @@ public class NavbarController {
 
     private void collapseNavbar() {
         try {
-            // First update the session state
             Session.setNavbarCollapsed(true);
 
-            // Then load the collapsed navbar
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CollapsedNavbar.fxml"));
             collapsedNavbarView = loader.load();
 
-            // Get the parent BorderPane
             BorderPane mainLayout = (BorderPane) rootLayout.getParent();
             if (mainLayout != null) {
-                // Set the collapsed navbar
                 mainLayout.setLeft(collapsedNavbarView);
 
-                // Force a layout pass to ensure UI updates
                 mainLayout.layout();
             } else {
                 System.err.println("Could not find parent BorderPane for navbar");
@@ -259,24 +254,18 @@ public class NavbarController {
 
     private void expandNavbar() {
         try {
-            // First update the session state
             Session.setNavbarCollapsed(false);
 
-            // Then load the expanded navbar
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Navbar.fxml"));
             Parent expandedNavbarView = loader.load();
 
-            // Get the parent BorderPane
             BorderPane mainLayout = (BorderPane) collapsedNavbar.getParent();
             if (mainLayout != null) {
-                // Set the expanded navbar
                 mainLayout.setLeft(expandedNavbarView);
 
-                // Get and initialize the controller
                 NavbarController controller = loader.getController();
                 controller.updateNavbar();
 
-                // Force a layout pass to ensure UI updates
                 mainLayout.layout();
             } else {
                 System.err.println("Could not find parent BorderPane for navbar");
@@ -290,27 +279,21 @@ public class NavbarController {
         User currentUser = Session.getCurrentUser();
 
         if (currentUser == null) {
-            return; // Exit early if no user is logged in
+            return;
         }
 
         Rollen userRole = currentUser.getRol();
 
-        // Check if we're in the expanded or collapsed view
         boolean isCollapsedView = (collapsedNavbar != null && rootLayout == null);
 
         if (isCollapsedView) {
-            // We're in the collapsed view, update only the quick nav elements
             updateQuickNavVisibility();
 
-            // Set profile info if available
             if (quickNavProfile != null) {
-                // You might want to add some visual indicator of the user here
-                // For example, set a tooltip with the user's name
                 Tooltip tooltip = new Tooltip(currentUser.getFirstName() + " " + currentUser.getLastName());
                 Tooltip.install(quickNavProfile, tooltip);
             }
         } else {
-            // We're in the expanded view, update the full menu
             if (administratorMenu != null && verantwoordelijkeMenu != null && techniekerMenu != null) {
                 switch (userRole) {
                     case ADMINISTRATOR -> {
