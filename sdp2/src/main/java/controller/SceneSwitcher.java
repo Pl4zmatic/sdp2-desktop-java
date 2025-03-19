@@ -49,11 +49,7 @@ public class SceneSwitcher {
             Parent root = loader.load();
 
             if (root instanceof BorderPane) {
-                BorderPane borderPane = (BorderPane) root;
-
                 NavbarManager.reloadNavbar();
-                Parent navbar = NavbarManager.getNavbar();
-                borderPane.setLeft(navbar);
             }
 
             Scene scene = new Scene(root);

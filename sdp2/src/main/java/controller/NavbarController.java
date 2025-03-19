@@ -422,7 +422,7 @@ public class NavbarController {
     }
 
     private void handleLougout() throws IOException {
-        Session.setNavbarCollapsed(false); // Reset to expanded on logout
+        Session.setNavbarCollapsed(false);
         Session.clear();
         SceneSwitcher.switchScene("/view/LoginPage.fxml");
     }

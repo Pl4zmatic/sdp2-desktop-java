@@ -5,6 +5,11 @@
 
 @font-face {
     font-family: 'Inter';
+    src: url('fonts/Inter-Bold.otf');
+}
+
+@font-face {
+    font-family: 'Inter';
     src: url('fonts/Inter-Medium.otf');
 }
 
