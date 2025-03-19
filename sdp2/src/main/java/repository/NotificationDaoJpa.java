@@ -11,7 +11,8 @@ public class NotificationDaoJpa extends GenericDaoJpa<Notification> implements N
         super(Notification.class);
     }
 
-    public Notification getNotificationById(int id) {
+    @Override
+    public Notification getNotificationById(long id) {
         try {
             return em.createQuery("SELECT n FROM notifications n WHERE n.id = :id", Notification.class)
                 .setParameter("id", id)
