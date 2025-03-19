@@ -357,12 +357,7 @@ public class NavbarController {
 
         for (Button menuButton : getAllMenuButtons()) {
             if (menuButton != null) {
-                menuButton.setText(menuButton.getText().replace("➡ ", ""));
             }
-        }
-
-        if (!button.getText().startsWith("➡ ")) {
-            button.setText("➡ " + button.getText());
         }
 
         Session.setActiveButton(button);
@@ -371,7 +366,7 @@ public class NavbarController {
     private void handleNavigation(Button clickedButton) throws IOException {
         setActiveMenuItem(clickedButton);
 
-        String fxmlPath = switch (clickedButton.getText().replace("➡ ", "")) {
+        String fxmlPath = switch (clickedButton.getText()) {
             case "Beheer Gebruikers" -> "/view/ManageUsers.fxml";
             case "Logs" -> "/view/UserLogs.fxml";
             case "Beheer Sites" -> "/view/SitesManagement.fxml";
