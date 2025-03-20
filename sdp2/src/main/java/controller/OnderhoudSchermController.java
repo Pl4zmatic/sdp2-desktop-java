@@ -93,6 +93,10 @@ public class OnderhoudSchermController {
 			dateField.clear();
 			reasonField.clear();
 			notesField.clear();
+			submitButton.setText("Plan");
+			submitButton.setOnAction(eventt -> {
+				planMaintenance();
+			});
 		});
 		
 		cancelButton.setOnAction(event -> {
@@ -125,6 +129,24 @@ public class OnderhoudSchermController {
 	
 	private void planMaintenance() {
 		maintenanceService.planMaintenance(machineField.getText(), dateField.getText().split("/"), null, reasonField.getText(), null, notesField.getText());
+		machineField.clear();
+		dateField.clear();
+		reasonField.clear();
+		notesField.clear();
+		plannedVBox.getChildren().clear();
+		progressVBox.getChildren().clear();
+		plannedScrollable.setContent(plannedVBox);
+		progressScrollable.setContent(progressVBox);
+		List<Maintenance> maintenancesList = maintenanceService.getAllMaintenance();
+		fillVBox(maintenancesList);
+		plannedScrollable.setContent(plannedVBox);
+		progressScrollable.setContent(progressVBox);
+	}
+	
+	private void updateMaintenance(Maintenance maintenance) {
+		maintenance.setReason(reasonField.getText());
+		maintenance.setRemarks(notesField.getText());
+		maintenanceService.editMaintenance(maintenance);
 		machineField.clear();
 		dateField.clear();
 		reasonField.clear();
@@ -162,6 +184,10 @@ public class OnderhoudSchermController {
 				dateField.setText(maintenance.getStartDate().toString());
 				reasonField.setText(maintenance.getReason());
 				notesField.setText(maintenance.getRemarks());
+				submitButton.setText("Edit");
+				submitButton.setOnAction(eventt -> {
+					updateMaintenance(maintenance);
+				});
 			});
 			
 			controller.nextArrow.setOnMouseClicked(event -> {

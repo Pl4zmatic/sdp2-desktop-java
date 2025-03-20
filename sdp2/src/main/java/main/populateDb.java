@@ -51,7 +51,7 @@ public class populateDb {
 //                Rollen.TECHNIEKER
 //        ));
 //        UserDaoJpa.commitTransaction();
-        NotificationService ns = new NotificationService();
+        /*NotificationService ns = new NotificationService();
         List<User> userList = UserService.getInstance().getAllActiveUsers();
 
         SiteDaoJpa siteDaoJpa = new SiteDaoJpa();
@@ -88,8 +88,8 @@ public class populateDb {
     	
     	MaintenanceDaoJpa maintenanceDaoJpa = new MaintenanceDaoJpa();
     	
-    	maintenanceDaoJpa.startTransaction();
+    	MaintenanceDaoJpa.startTransaction();
     	maintenanceDaoJpa.insert(new Maintenance("a-04", LocalDate.now().plusDays(1), null, "test", "test", "probleem nog niet opegelost"));
-    	maintenanceDaoJpa.commitTransaction();
+    	MaintenanceDaoJpa.commitTransaction();
     }
 }
