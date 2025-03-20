@@ -8,6 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.shape.Circle?>
 <VBox fx:id="collapsedNavbar" alignment="TOP_CENTER" maxWidth="40.0" prefWidth="40.0" styleClass="parentContainer" stylesheets="@../css/Navbar.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavbarController">
     <children>
         <!-- Expand button -->
@@ -136,6 +137,19 @@
 
         <!-- Profile icon at bottom -->
         <VBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
+
+
+                <Button fx:id="profileIcon1" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" styleClass="profileIcon" stylesheets="@../css/Navbar.css" textAlignment="CENTER">
+                    <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/notification-bell.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Circle fx:id="notificationCircle" fill="#ff605b" layoutX="33.0" layoutY="12.0" radius="10.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.2" />
+
             <Button fx:id="quickNavProfile" styleClass="icon-button">
                 <graphic>
                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">

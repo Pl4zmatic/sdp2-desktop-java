@@ -49,8 +49,8 @@ public class LoginPageController {
             NavbarController navbarController = (NavbarController) NavbarManager.getNavbar().getUserData();
             if (navbarController != null) {
                 navbarController.updateNavbar();
-                NotificationPoller.getInstance().addObserver(navbarController);
                 NotificationPoller.getInstance().startPolling();
+
                 
             }
 
