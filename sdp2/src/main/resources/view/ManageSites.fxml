@@ -1,152 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-
-<?import java.lang.String?>
 <?import java.net.URL?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.ManageSitesController"
-            prefHeight="700.0" prefWidth="1200.0">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-   <!-- Left Sidebar -->
-   <left>
-      <VBox styleClass="sidebar" style="-fx-background-color: -delawareRed;">
-         <padding>
-            <Insets top="20" right="20" bottom="20" left="20"/>
-         </padding>
-
-         <!-- Logo -->
-         <Label text="delaware" styleClass="text" style="-fx-font-size: 28px; -fx-text-fill: white; -fx-font-family: 'Inter'; -fx-font-weight: bold;"/>
-         <Separator style="-fx-background-color: transparent; -fx-padding: 20 0 20 0;"/>
-
-         <!-- Navigation Menu -->
-         <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 8 0;">
-            <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
-               <Image url="@/images/users-icon.png"/>
-            </ImageView>
-            <Label text="Beheer Gebruikers" styleClass="text" style="-fx-text-fill: white;"/>
-         </HBox>
-
-         <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 8 0;">
-            <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
-               <Image url="@/images/logs-icon.png"/>
-            </ImageView>
-            <Label text="Logs" styleClass="text" style="-fx-text-fill: white;"/>
-         </HBox>
-
-         <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 8 0;">
-            <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
-               <Image url="@/images/sites-icon.png"/>
-            </ImageView>
-            <Label text="Sites" styleClass="text" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
-         </HBox>
-
-         <Region VBox.vgrow="ALWAYS"/>
-
-         <!-- User Info at Bottom -->
-         <HBox alignment="CENTER_LEFT" spacing="10">
-            <ImageView fitHeight="30" fitWidth="30" preserveRatio="true" style="-fx-background-color: white; -fx-background-radius: 15;">
-               <Image url="@/images/User_fill.png"/>
-            </ImageView>
-            <VBox>
-               <Label text="de Admin" styleClass="text" style="-fx-text-fill: white; -fx-font-size: 12px;"/>
-               <Label text="Admin" styleClass="text" style="-fx-text-fill: white; -fx-font-size: 12px; -fx-opacity: 0.8;"/>
-            </VBox>
-         </HBox>
-      </VBox>
-   </left>
-
-   <!-- Main Content -->
+<BorderPane fx:id="rootLayout" prefHeight="720.0" prefWidth="1000.0" styleClass="root-layout" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ManageSitesController">
    <center>
-      <VBox spacing="20" style="-fx-background-color: white;">
+      <VBox alignment="CENTER" fillWidth="false" spacing="15.0" styleClass="content-container" BorderPane.alignment="CENTER">
+         <children>
+            <HBox fx:id="searchBarContainer" alignment="CENTER_RIGHT" prefHeight="85.0" spacing="20.0" styleClass="search-bar">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="40.0" prefWidth="150.0" styleClass="deleted-users-container">
+                     <children>
+                        <Label styleClass="deleted-users-label" text="Deleted Sites" />
+                        <CheckBox fx:id="showDeletedMachines" mnemonicParsing="false" styleClass="deleted-users-checkbox" />
+                     </children>
+                  </VBox>
+                  <ComboBox fx:id="locationFilterComboBox" prefHeight="40.0" prefWidth="200.0" promptText="Filter on location" styleClass="filter-combo" />
+                  <TextField fx:id="searchBar" prefHeight="40.0" prefWidth="300.0" promptText="Search sites..." styleClass="search-field" />
+                  <Button fx:id="addMachineButton" contentDisplay="CENTER" prefWidth="60.0" styleClass="add-user-button" text="+">
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" top="15.0" />
+               </padding>
+            </HBox>
+            <TableView fx:id="tableView" prefHeight="550.0" styleClass="user-table" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets left="15.0" right="15.0" />
+               </VBox.margin>
+            </TableView>
+         </children>
          <padding>
-            <Insets top="20" right="20" bottom="20" left="20"/>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
          </padding>
-
-         <!-- Header -->
-         <HBox alignment="CENTER_LEFT" spacing="20">
-            <Label text="Sites" styleClass="text" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-            <Region HBox.hgrow="ALWAYS"/>
-
-            <!-- Filter Controls -->
-            <ComboBox promptText="All Statuses" styleClass="filter-combo" prefWidth="150"/>
-            <TextField promptText="Search sites..." styleClass="inputField" prefWidth="250"/>
-            <Button text="+" style="-fx-background-color: -delawareRed; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 40px; -fx-min-height: 40px; -fx-background-radius: 4;"/>
-         </HBox>
-
-         <!-- Table -->
-         <TableView VBox.vgrow="ALWAYS" styleClass="sites-table">
-            <columns>
-               <TableColumn text="Site Name" prefWidth="150"/>
-               <TableColumn text="Location" prefWidth="150"/>
-               <TableColumn text="Address" prefWidth="200"/>
-               <TableColumn text="Contact Person" prefWidth="150"/>
-               <TableColumn text="Email" prefWidth="200"/>
-               <TableColumn text="Status" prefWidth="100"/>
-               <TableColumn text="Actions" prefWidth="120"/>
-            </columns>
-
-            <placeholder>
-               <Label text="No sites found" styleClass="text"/>
-            </placeholder>
-         </TableView>
       </VBox>
    </center>
-
-   <!-- Right Panel (Initially Hidden) -->
    <right>
-      <VBox fx:id="siteFormPanel" visible="false" managed="false" style="-fx-background-color: white; -fx-border-color: -lightGray; -fx-border-width: 0 0 0 1;" prefWidth="350">
-         <padding>
-            <Insets top="20" right="20" bottom="20" left="20"/>
-         </padding>
-
-         <Label text="Site Form" styleClass="text" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-         <Separator style="-fx-background-color: -lightGray;"/>
-
-         <Label text="Site Name *" styleClass="text" style="-fx-padding: 10 0 5 0;"/>
-         <TextField styleClass="inputField"/>
-
-         <Label text="Location *" styleClass="text" style="-fx-padding: 10 0 5 0;"/>
-         <TextField styleClass="inputField"/>
-
-         <Label text="Address *" styleClass="text" style="-fx-padding: 10 0 5 0;"/>
-         <TextField styleClass="inputField"/>
-
-         <Label text="Contact Person *" styleClass="text" style="-fx-padding: 10 0 5 0;"/>
-         <TextField styleClass="inputField"/>
-
-         <Label text="Email *" styleClass="text" style="-fx-padding: 10 0 5 0;"/>
-         <TextField styleClass="inputField"/>
-
-         <Label text="Phone Number" styleClass="text" style="-fx-padding: 10 0 5 0;"/>
-         <TextField styleClass="inputField"/>
-
-         <Label text="Status *" styleClass="text" style="-fx-padding: 10 0 5 0;"/>
-         <HBox spacing="10" style="-fx-padding: 5 0;">
-            <RadioButton text="Active" selected="true">
-               <toggleGroup>
-                  <ToggleGroup fx:id="statusGroup"/>
-               </toggleGroup>
-            </RadioButton>
-            <RadioButton text="Inactive" toggleGroup="$statusGroup"/>
-         </HBox>
-
-         <Region VBox.vgrow="ALWAYS"/>
-
-         <HBox spacing="10" alignment="CENTER_RIGHT">
-            <Button text="Cancel" style="-fx-background-color: -gray; -fx-text-fill: white; -fx-background-radius: 4;"/>
-            <Button text="Save" style="-fx-background-color: -delawareRed; -fx-text-fill: white; -fx-background-radius: 4;"/>
-         </HBox>
-      </VBox>
+      <StackPane fx:id="rightPanelContainer" alignment="CENTER" managed="false" prefWidth="400" visible="false" />
    </right>
-
    <stylesheets>
       <URL value="@../css/globals.css" />
+      <URL value="@../css/ManageSites.css" />
    </stylesheets>
 </BorderPane>
