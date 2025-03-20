@@ -3,6 +3,7 @@ package service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import controller.Observer;
 import domein.notification.Notification;
 import domein.notification.UserNotification;
 import domein.user.User;
@@ -11,11 +12,12 @@ import repository.NotificationDaoJpa;
 import repository.UserNotificationDao;
 import repository.UserNotificationDaoJpa;
 
-public class NotificationService {
+public class NotificationService implements Subject{
     private final NotificationDaoJpa notificationDaoJpa;
     private final UserNotificationDaoJpa userNotificationDaoJpa;
     private static NotificationService instance;
 
+    private List<Observer> observers;
 
     public NotificationService() {
         this.notificationDaoJpa = new NotificationDaoJpa();
@@ -35,11 +37,12 @@ public class NotificationService {
         return notificationDaoJpa.getNotificationsByIds(idList.stream().map(UserNotification::getId).collect(Collectors.toList()));
     }
 
-    public boolean sendNotification(Notification n) {
+    public boolean createAndAddNotification(Notification n) {
         try {
             NotificationDaoJpa.startTransaction();
             notificationDaoJpa.insert(n);
             NotificationDaoJpa.commitTransaction();
+            notifyObservers();
             return true;
         } catch (Exception e) {
             NotificationDaoJpa.rollbackTransaction();
@@ -59,5 +62,19 @@ public class NotificationService {
         } else {
             throw new EntityNotFoundException("Notification with id %d not found".formatted(n.getId()));
         }
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    private void notifyObservers() {
+        observers.forEach(observer -> observer.updateNotifications());
     }
 }

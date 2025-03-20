@@ -1,6 +1,8 @@
 package service;
 
+import controller.Observer;
+
 public interface Subject {
-    public void addObserver();
-    public void removeObserver();
+    public void addObserver(Observer observer);
+    public void removeObserver(Observer observer);
 }

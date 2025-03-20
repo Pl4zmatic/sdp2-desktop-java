@@ -9,13 +9,15 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="rootLayout" maxWidth="150.0" prefWidth="150.0" styleClass="parentContainer" stylesheets="@../css/Navbar.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavbarController">
+<VBox fx:id="rootLayout" maxWidth="150.0" prefWidth="150.0" styleClass="parentContainer" stylesheets="@../css/Navbar.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavbarController">
    <children>
       <VBox alignment="TOP_CENTER">
          <children>
@@ -201,6 +203,24 @@
                   </ContextMenu>
                </contextMenu>
             </Button>
+            <AnchorPane>
+               <children>
+                  <Button fx:id="profileIcon1" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" styleClass="profileIcon" stylesheets="@../css/Navbar.css" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/notification-bell.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Circle fx:id="notificationCircle" fill="#ff605b" layoutX="33.0" layoutY="12.0" radius="10.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.2" />
+                  <Label fx:id="amountOfNotificationsLabel" layoutX="27.0" layoutY="3.0" text="9+" textFill="WHITE" />
+               </children>
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </AnchorPane>
          </children>
          <cursor>
             <Cursor fx:constant="HAND" />
