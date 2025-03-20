@@ -38,6 +38,13 @@ public class GenericDaoJpa<T> implements GenericDao<T> {
         return em.createQuery("SELECT entity FROM " + type.getSimpleName() + " entity WHERE entity.deleted = false", type).getResultList();
     }
 
+    public T findByName(String name) {
+            String queryString = "SELECT entity FROM " + type.getSimpleName() + " entity WHERE entity.name = :name";
+            return em.createQuery(queryString, type)
+                    .setParameter("name", name)
+                    .getSingleResult();
+    }
+
     @Override
     public List<T> findAll()
     {

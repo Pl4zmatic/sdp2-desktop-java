@@ -62,6 +62,7 @@ public class ManageMachinesController {
                 setupStatusFilter();
                 loadTableContent();
                 setupSearchFilter();
+                setupCallbacks();
         }
 
         private void setupNavbar() throws IOException {
@@ -87,6 +88,7 @@ public class ManageMachinesController {
         private void setupStatusFilter(){
                 ObservableList<String> statusOptions = FXCollections.observableArrayList();
                 statusOptions.add("All Statuses");
+                statusOptions.add("Startable");
                 statusOptions.add("Running");
                 statusOptions.add("Stopped");
 
@@ -111,7 +113,7 @@ public class ManageMachinesController {
                                         ? machine.getLaatsteOnderhoudDatum().toString()
                                         : "";
                                 String nextOnderhoudDatum = (machine.getDatumToekomstigeOnderhoud() != null)
-                                        ? machine.getLaatsteOnderhoudDatum().toString()
+                                        ? machine.getDatumToekomstigeOnderhoud().toString()
                                         : "";
 
                                 boolean matchesLocation = selectedLocation == null || selectedLocation.equals("All Locations")
@@ -121,7 +123,7 @@ public class ManageMachinesController {
                                         || machine.getCurrentState().toLowerCase().equals(selectedStatus.toLowerCase());
 
                                 boolean matchesSearch = searchText == null || searchText.isEmpty()
-                                        || machine.getSiteNaam().toLowerCase().contains(searchText)
+                                        || machine.getSite().getName().toLowerCase().contains(searchText)
                                         || machine.getCode().toLowerCase().contains(searchText)
                                         || machine.getLocatie().toLowerCase().contains(searchText)
                                         || machine.getCurrentState().toLowerCase().contains(searchText)
@@ -330,7 +332,7 @@ public class ManageMachinesController {
                                                 return true;
                                         }
                                         String lowerCaseFilter = newValue.toLowerCase();
-                                        return machine.getSiteNaam().toLowerCase().contains(lowerCaseFilter) ||
+                                        return machine.getSite().getName().toLowerCase().contains(lowerCaseFilter) ||
                                                 machine.getCode().toLowerCase().contains(lowerCaseFilter) ||
                                                 machine.getLocatie().toLowerCase().contains(lowerCaseFilter);
                                 });
@@ -371,8 +373,9 @@ public class ManageMachinesController {
 
                         // Haal de controller op en configureer deze
                         formController = loader.getController();
-                        formController.setMachine(null); // Nieuwe machine
+                        //formController.setMachine(null); // Nieuwe machine
                         formController.setupSaveOption();
+                        formController.fillFieldData();
 
                         // Voeg een knop toe om het formulier te sluiten
                         formController.addCloseButton(event -> hideRightPanel());

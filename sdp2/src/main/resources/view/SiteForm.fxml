@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.ComboBox?>
+<BorderPane fx:id="rootLayout" prefHeight="1400.0" prefWidth="1000.0" styleClass="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SiteFormController">
+    <center>
+        <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+            <children>
+                <ScrollPane fitToWidth="true" styleClass="edge-to-edge" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                            <children>
+                                <VBox fx:id="contentVBox" maxWidth="500.0" prefWidth="500.0" spacing="15.0" styleClass="formContainer">
+                                    <children>
+                                        <HBox styleClass="headerContainer">
+                                            <children>
+                                                <Label fx:id="formTitle" styleClass="headerText" text="Site Form">
+                                                    <font>
+                                                        <Font size="24.0" />
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="15.0" top="5.0" />
+                                            </padding>
+                                        </HBox>
+                                        <VBox fx:id="siteIdContainer" spacing="6.0">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                    <children>
+                                                        <Label styleClass="fieldLabel" text="Site Name" />
+                                                        <Label styleClass="required" text="*" />
+                                                    </children>
+                                                </HBox>
+                                                <TextField fx:id="siteName" styleClass="inputField" />
+                                            </children>
+                                        </VBox>
+                                        <VBox spacing="6.0">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                    <children>
+                                                        <Label styleClass="fieldLabel" text="Street" />
+                                                        <Label styleClass="required" text="*" />
+                                                    </children>
+                                                </HBox>
+                                                <TextField fx:id="street" styleClass="inputField" />
+                                            </children>
+                                        </VBox>
+                                        <VBox spacing="6.0">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                    <children>
+                                                        <Label styleClass="fieldLabel" text="House Number" />
+                                                        <Label styleClass="required" text="*" />
+                                                    </children>
+                                                </HBox>
+                                                <TextField fx:id="houseNumber" styleClass="inputField" />
+                                            </children>
+                                        </VBox>
+                                        <VBox spacing="6.0">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                    <children>
+                                                        <Label styleClass="fieldLabel" text="Postal Code" />
+                                                        <Label styleClass="required" text="*" />
+                                                    </children>
+                                                </HBox>
+                                                <TextField fx:id="postalCode" styleClass="inputField" />
+                                            </children>
+                                        </VBox>
+                                        <VBox spacing="6.0">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                    <children>
+                                                        <Label styleClass="fieldLabel" text="City" />
+                                                        <Label styleClass="required" text="*" />
+                                                    </children>
+                                                </HBox>
+                                                <TextField fx:id="city" styleClass="inputField" />
+                                            </children>
+                                        </VBox>
+                                        <VBox spacing="6.0">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                    <children>
+                                                        <Label styleClass="fieldLabel" text="Verantwoordelijke" />
+                                                        <Label styleClass="required" text="*" />
+                                                    </children>
+                                                </HBox>
+                                                <ComboBox fx:id="verantwoordelijkeComboBox" promptText="Select responsible person" prefWidth="300" editable="true" />
+                                            </children>
+                                        </VBox>
+                                        <HBox alignment="CENTER" spacing="10.0">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                    <children>
+                                                        <Label styleClass="fieldLabel" text="Status:" />
+                                                        <Label styleClass="required" text="*" />
+                                                    </children>
+                                                </HBox>
+                                                <Pane HBox.hgrow="ALWAYS" />
+                                                <HBox spacing="20.0">
+                                                    <children>
+                                                        <RadioButton fx:id="active" mnemonicParsing="false" styleClass="radioButton" text="Actief">
+                                                            <toggleGroup>
+                                                                <ToggleGroup fx:id="status" />
+                                                            </toggleGroup>
+                                                        </RadioButton>
+                                                        <RadioButton fx:id="inactive" mnemonicParsing="false" styleClass="radioButton" text="Inactief" toggleGroup="$status" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                            <VBox.margin>
+                                                <Insets top="5.0" />
+                                            </VBox.margin>
+                                        </HBox>
+                                        <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                                            <children>
+                                                <Button fx:id="cancel" mnemonicParsing="false" styleClass="cancelButton" text="Annuleer" />
+                                                <Button fx:id="save" mnemonicParsing="false" styleClass="primaryButton" text="Voeg Toe" />
+                                            </children>
+                                            <VBox.margin>
+                                                <Insets top="15.0" />
+                                            </VBox.margin>
+                                        </HBox>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="20.0" left="25.0" right="25.0" top="20.0" />
+                                    </padding>
+                                </VBox>
+                            </children>
+                            <padding>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                            </padding>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </center>
+    <stylesheets>
+        <URL value="@../css/globals.css" />
+        <URL value="@../css/SiteForm.css" />
+    </stylesheets>
+</BorderPane>
