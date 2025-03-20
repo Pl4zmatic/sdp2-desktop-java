@@ -100,7 +100,7 @@ public class LogService {
     // Machine Logging
 
     public void logMachineCreation(Machine machine) {
-        String details = "Machine Added: " + machine.getCode() + "in Site : " + machine.getSiteNaam();
+        String details = "Machine Added: " + machine.getCode() + "in Site : " + machine.getSite().getName();
         logUserAction("MACHINE_ADD", details);
     }
 

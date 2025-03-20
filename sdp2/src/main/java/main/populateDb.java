@@ -1,8 +1,10 @@
 package main;
 
 import domein.machine.Machine;
+import domein.site.Site;
 import domein.user.User;
 import repository.MachineDaoJpa;
+import repository.SiteDaoJpa;
 import repository.UserDaoJpa;
 import utils.Rollen;
 
@@ -39,22 +41,30 @@ public class populateDb {
 //        ));
 //        UserDaoJpa.commitTransaction();
 
+        SiteDaoJpa siteDaoJpa = new SiteDaoJpa();
+
+        SiteDaoJpa.startTransaction();
+        siteDaoJpa.insert(new Site("AntwerpenA", "Antwerpen", "K. De Gieter"));
+        SiteDaoJpa.commitTransaction();
+
         MachineDaoJpa machineDaoJpa = new MachineDaoJpa();
 
         MachineDaoJpa.startTransaction();
-        machineDaoJpa.insert(new Machine("AntwerpenA", "a-04", "Antwerpen"
+
+        Site site = siteDaoJpa.findByName("AntwerpenA");
+        machineDaoJpa.insert(new Machine(site, "a-04", "Antwerpen"
                 , "Info over het product"
                 , "groen", "L.DeVlieger"));
-        machineDaoJpa.insert(new Machine("AntwerpenA", "a-03", "Antwerpen"
+        machineDaoJpa.insert(new Machine(site, "a-03", "Antwerpen"
                 , "Info over het product"
                 , "groen", "L.DeVlieger"));
-        machineDaoJpa.insert(new Machine("AntwerpenA", "a-02", "Antwerpen"
+        machineDaoJpa.insert(new Machine(site, "a-02", "Antwerpen"
                 , "Info over het product"
                 , "groen", "L.DeVlieger"));
-        machineDaoJpa.insert(new Machine("AntwerpenA", "a-05", "Antwerpen"
+        machineDaoJpa.insert(new Machine(site, "a-05", "Antwerpen"
                 , "Info over het product"
                 , "groen", "L.DeVlieger"));
-        machineDaoJpa.insert(new Machine("AntwerpenA", "a-01", "Antwerpen"
+        machineDaoJpa.insert(new Machine(site, "a-01", "Antwerpen"
                 , "Info over het product"
                 , "groen", "L.DeVlieger"));
 
