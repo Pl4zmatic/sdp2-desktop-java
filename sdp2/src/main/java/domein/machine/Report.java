@@ -1,5 +1,7 @@
 package domein.machine;
 
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -7,12 +9,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import service.ImageService;
 
 @Entity
 @NoArgsConstructor
@@ -23,9 +26,10 @@ public class Report {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int rapportId;
 
-  @Setter
+
+  @Lob
   @Column(nullable = true)
-  private List<String> imagePaths;
+  private List<byte[]> images;
 
   @Setter
   @Column(nullable = false)
@@ -40,14 +44,24 @@ public class Report {
   private Maintenance maintenance;
 
   public Report(List<String> imagePaths, List<String> steps, String notes, Maintenance maintenance) {
-    setImagePaths(imagePaths);
+    setImagesFromStrings(imagePaths);
     setMaintenance(maintenance);
     setNotes(notes);
     setSteps(steps);
   }
 
+  public void setImagesFromStrings(List<String> imagePaths) {
+    if(images == null)
+      images = new ArrayList<>();
+
+    ImageService imageService = new ImageService();
+    for(String path : imagePaths) {
+      images.add(imageService.getImageBytesFromPath(path));
+    }
+  }
+
   @Override
   public String toString() {
-    return String.format("|" + "%-18s|".repeat(5), String.valueOf(rapportId), imagePaths, steps, notes, String.valueOf(maintenance.getMaintenanceId()));
+    return String.format("|" + "%-18s|".repeat(5), String.valueOf(rapportId), String.valueOf(images.size()), steps, notes, String.valueOf(maintenance.getMaintenanceId()));
   }
 }

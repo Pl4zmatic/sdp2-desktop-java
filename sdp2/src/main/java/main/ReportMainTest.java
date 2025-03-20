@@ -1,11 +1,13 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 import domein.machine.Maintenance;
 import domein.machine.Report;
+import service.ImageService;
 import service.MaintenanceService;
 import service.ReportService;
 
@@ -49,13 +51,14 @@ public class ReportMainTest {
   }
 
   private static void printMenu() {
-    System.out.printf("%s\n".repeat(6),
-        "Reports\n" + "-".repeat(10),
-        "1. Add",
-        "2. Delete",
-        "3. Update",
-        "4. Show list",
-        "5. Stop");
+    List<String> menuItems = Arrays.asList("Reports\n" + "-".repeat(10),
+    "1. Add",
+    "2. Delete",
+    "3. Update",
+    "4. Show list",
+    "5. Download images from report");
+
+    System.out.printf("%s\n".repeat(menuItems.size()), menuItems.toArray());
   }
 
   private static int getMenuChoice() {
@@ -80,6 +83,10 @@ public class ReportMainTest {
 
       case 4:
         printDbTable(reportService.getAllReports());
+        break;
+
+      case 5:
+        downloadImages();
         break;
 
       default:
@@ -146,12 +153,44 @@ public class ReportMainTest {
     String notes = inputScanner.nextLine();
 
     if (!paths.isEmpty())
-      toUpdateReport.setImagePaths(paths);
-    if(!steps.isEmpty())
+      toUpdateReport.setImagesFromStrings(paths);
+    if (!steps.isEmpty())
       toUpdateReport.setSteps(steps);
-    if(!notes.isBlank() && !notes.isEmpty())
+    if (!notes.isBlank() && !notes.isEmpty())
       toUpdateReport.setNotes(notes);
 
     reportService.updateReport(toUpdateReport);
+  }
+
+  private static void downloadImages() {
+    ReportService reportService = new ReportService();
+    printDbTable(reportService.getAllReports());
+
+    System.out.println("Choose a report with id: ");
+    int maintenanceId = inputScanner.nextInt();
+    scannerFlush();
+
+    Report report = reportService.getReportById(maintenanceId);
+
+    System.out.println("Give a destination for the file: ");
+    String destination = inputScanner.nextLine();
+
+    System.out.println("Give a name for the file: ");
+    String fileName = inputScanner.nextLine();
+
+    System.out.println("Give the extension for the file: ");
+    String extension = inputScanner.nextLine();
+
+    ImageService imageService = new ImageService();
+
+    int index = 0;
+    for(byte[] imgBytes : report.getImages()) {
+      imageService.download(destination, fileName + String.valueOf(index), extension, imgBytes);
+      index += 1;
+    }
+  }
+
+  private static void scannerFlush() {
+    inputScanner.nextLine();
   }
 }
