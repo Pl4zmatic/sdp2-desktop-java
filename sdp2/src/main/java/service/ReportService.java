@@ -3,8 +3,7 @@ package service;
 import java.util.Collections;
 import java.util.List;
 
-import domein.machine.Report;
-import lombok.NoArgsConstructor;
+import domein.machine.report.Report;
 import repository.ReportDaoJpa;
 
 public class ReportService {

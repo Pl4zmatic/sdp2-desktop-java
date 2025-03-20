@@ -1,9 +1,11 @@
-package domein.machine;
+package domein.machine.report;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import domein.machine.Maintenance;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,11 +26,9 @@ public class Report {
   @Column(unique = true, nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int rapportId;
-
-
-  @Lob
+  
   @Column(nullable = true)
-  private List<byte[]> images;
+  private List<Image> images;
 
   @Setter
   @Column(nullable = false)
@@ -51,17 +50,32 @@ public class Report {
   }
 
   public void setImagesFromStrings(List<String> imagePaths) {
-    if(images == null)
+    if (images == null)
       images = new ArrayList<>();
 
     ImageService imageService = new ImageService();
-    for(String path : imagePaths) {
-      images.add(imageService.getImageBytesFromPath(path));
+    for (String path : imagePaths) {
+      Matcher fileNameMatcher = Pattern.compile("(?<!\\/)[^./]*(?<=\\.)").matcher(path);
+      Matcher extensionMatcher = Pattern.compile("[.].*$").matcher(path);
+
+      Image image = new Image();
+      image.setData(imageService.getImageBytesFromPath(path));
+
+      if(fileNameMatcher.find())
+        image.setName(fileNameMatcher.group(0));
+      else throw new IllegalArgumentException("No name found for image.");
+
+      if(extensionMatcher.find())
+        image.setName(extensionMatcher.group(0));
+      else throw new IllegalArgumentException("No extension found for image.");
+
+      images.add(image);
     }
   }
 
   @Override
   public String toString() {
-    return String.format("|" + "%-18s|".repeat(5), String.valueOf(rapportId), String.valueOf(images.size()), steps, notes, String.valueOf(maintenance.getMaintenanceId()));
+    return String.format("|" + "%-18s|".repeat(5), String.valueOf(rapportId), String.valueOf(images.size()), steps,
+        notes, String.valueOf(maintenance.getMaintenanceId()));
   }
 }

@@ -1,6 +1,6 @@
 package repository;
 
-import domein.machine.Report;
+import domein.machine.report.Report;
 
 public class ReportDaoJpa extends GenericDaoJpa<Report>{
 

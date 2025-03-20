@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import domein.machine.Maintenance;
-import domein.machine.Report;
+import domein.machine.report.Image;
+import domein.machine.report.Report;
 import service.ImageService;
 import service.MaintenanceService;
 import service.ReportService;
@@ -175,18 +176,10 @@ public class ReportMainTest {
     System.out.println("Give a destination for the file: ");
     String destination = inputScanner.nextLine();
 
-    System.out.println("Give a name for the file: ");
-    String fileName = inputScanner.nextLine();
-
-    System.out.println("Give the extension for the file: ");
-    String extension = inputScanner.nextLine();
-
     ImageService imageService = new ImageService();
 
-    int index = 0;
-    for(byte[] imgBytes : report.getImages()) {
-      imageService.download(destination, fileName + String.valueOf(index), extension, imgBytes);
-      index += 1;
+    for(Image image : report.getImages()) {
+      imageService.download(destination, image);
     }
   }
 

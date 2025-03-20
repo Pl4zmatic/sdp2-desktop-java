@@ -12,7 +12,8 @@
         <class>domein.machine.Machine</class>
         <class>domein.machine.Maintenance</class>
         <class>domein.logging.LogEntry</class>
-        <class>domein.machine.Report</class>
+        <class>domein.machine.report.Report</class>
+        <!-- <class>domein.machine.report.Image</class> -->
 
 
         <properties>

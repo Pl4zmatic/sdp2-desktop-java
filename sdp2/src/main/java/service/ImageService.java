@@ -1,11 +1,11 @@
 package service;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import domein.machine.report.Image;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -22,11 +22,11 @@ public class ImageService {
     return null;
   }
 
-  public void download(String destination, String fileName, String extension, byte[] imageBytes) {
-    String filePath = String.format("%s%s%s", destination, fileName, extension);
+  public void download(String destination, Image image) {
+    String filePath = String.format("%s%s%s", destination, image.getName(), image.getExtension());
     try {
       FileOutputStream outStream  = new FileOutputStream(filePath);
-      outStream.write(imageBytes);
+      outStream.write(image.getData());
       outStream.close();
     } catch (IOException e) {
       System.out.printf("%s\n%s%s\n%s\n", "=".repeat(20), "Writing file failed, to: ", filePath, "=".repeat(20));

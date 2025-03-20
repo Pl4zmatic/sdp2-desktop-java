@@ -1,6 +1,6 @@
 package controller;
 
-import domein.machine.Report;
+import domein.machine.report.Report;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 
