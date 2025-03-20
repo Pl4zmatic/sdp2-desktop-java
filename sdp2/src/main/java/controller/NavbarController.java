@@ -73,7 +73,7 @@ public class NavbarController implements Observer {
     @FXML
     public void initialize() {
         notificationService = NotificationService.getInstance();
-        updateNotifications();
+
         if (rootLayout != null) {
             expandedNavbar = rootLayout;
 
@@ -450,27 +450,8 @@ public class NavbarController implements Observer {
         }
     }
 
-    @Override
-    public void updateNotifications() {
-        User currentUser = Session.getCurrentUser();
-        int amountOfNotifications = notificationService.getAllNotificationsByUser(currentUser.getId()).size();
-        amountOfNotificationsLabel.setVisible(true);
-        notificationCircle.setVisible(true);
 
-        if(amountOfNotifications < 1) {
-            amountOfNotificationsLabel.setVisible(false);
-            notificationCircle.setVisible(false);
-        } else {
-            if(amountOfNotifications > 9) {
-                amountOfNotificationsLabel.setText("9+");
-                amountOfNotificationsLabel.setLayoutX(27);
-            } else {
-                amountOfNotificationsLabel.setText(String.format("%d", amountOfNotifications));
-                amountOfNotificationsLabel.setLayoutX(30);
-            }
-        }
 
-    }
 
 
 
@@ -478,13 +459,15 @@ public class NavbarController implements Observer {
     public void update(boolean hasNotifications) {
         System.out.println(hasNotifications);
 
+        notificationCircle.setVisible(hasNotifications);
 
-        if (hasNotifications) {
-            Image image = new Image(getClass().getResourceAsStream("/images/User_fill_notif_3x.png"));
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(40);
-            imageView.setFitWidth(40);
-            profileIcon.setGraphic(imageView);}
+
+//            Image image = new Image(getClass().getResourceAsStream("/images/User_fill_notif_3x.png"));
+//            ImageView imageView = new ImageView(image);
+//            imageView.setFitHeight(40);
+//            imageView.setFitWidth(40);
+//            profileIcon.setGraphic(imageView);
+        }
 //        } else {
 //            Image image = new Image(getClass().getResourceAsStream("/images/User_fill.png"));
 //            profileIcon.setGraphic(new ImageView(image));

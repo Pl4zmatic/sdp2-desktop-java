@@ -3,7 +3,8 @@ package service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import controller.Observer;
+import utils.Observer;
+
 import domein.notification.Notification;
 import domein.notification.UserNotification;
 import domein.user.User;
@@ -11,8 +12,9 @@ import jakarta.persistence.EntityNotFoundException;
 import repository.NotificationDaoJpa;
 import repository.UserNotificationDao;
 import repository.UserNotificationDaoJpa;
+import utils.Subject;
 
-public class NotificationService implements Subject{
+public class NotificationService{
     private final NotificationDaoJpa notificationDaoJpa;
     private final UserNotificationDaoJpa userNotificationDaoJpa;
     private static NotificationService instance;
@@ -93,17 +95,6 @@ public class NotificationService implements Subject{
         }
     }
 
-    @Override
-    public void addObserver(Observer observer) {
-        observers.add(observer);
-    }
 
-    @Override
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-    }
 
-    private void notifyObservers() {
-        observers.forEach(observer -> observer.updateNotifications());
-    }
 }
