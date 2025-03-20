@@ -2,6 +2,8 @@ package controller;
 
 import domein.Session;
 import domein.user.User;
+
+import service.NotificationPoller;
 import service.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -23,10 +25,10 @@ public class LoginPageController {
     @FXML
     private Button loginButton;
 
-    private final UserService userSerivce;
+    private final UserService userService;
 
     public LoginPageController() {
-        this.userSerivce = UserService.getInstance();
+        this.userService = UserService.getInstance();
     }
 
     @FXML
@@ -39,30 +41,38 @@ public class LoginPageController {
         String email = emailField.getText();
         String password = passwordField.getText();
 
-        if (userSerivce.login(email, password)) {
-            User currentUser = Session.getCurrentUser();
-
-            String nextScene = "";
-            if (currentUser.getRol() == Rollen.ADMINISTRATOR) {
-                nextScene = "/view/ManageUsers.fxml";
-            } else if (currentUser.getRol() == Rollen.VERANTWOORDELIJKE) {
-                nextScene = "/view/ManageMachines.fxml";
-            } else if (currentUser.getRol() == Rollen.TECHNIEKER) {
-                nextScene = "/view/OnderhoudScherm.fxml";
-            } else if (currentUser.getRol() == Rollen.MANAGER) {
-                nextScene = "/view/ManageMachines.fxml";
-            }
+        if (userService.login(email, password)) {
+            String nextScene = getNextSceneString();
 
             SceneSwitcher.switchScene(nextScene);
 
             NavbarController navbarController = (NavbarController) NavbarManager.getNavbar().getUserData();
             if (navbarController != null) {
                 navbarController.updateNavbar();
+                NotificationPoller.getInstance().addObserver(navbarController);
+                NotificationPoller.getInstance().startPolling();
+                
             }
 
         } else {
             showAlert("Login Mislukt", "Ongeldige gebruikersnaam of wachtwoord.", Alert.AlertType.ERROR);
         }
+    }
+
+    private static String getNextSceneString() {
+        User currentUser = Session.getCurrentUser();
+
+        String nextScene = "";
+        if (currentUser.getRol() == Rollen.ADMINISTRATOR) {
+            nextScene = "/view/ManageUsers.fxml";
+        } else if (currentUser.getRol() == Rollen.VERANTWOORDELIJKE) {
+            nextScene = "/view/ManageMachines.fxml";
+        } else if (currentUser.getRol() == Rollen.TECHNIEKER) {
+            nextScene = "/view/OnderhoudScherm.fxml";
+        } else if (currentUser.getRol() == Rollen.MANAGER) {
+            nextScene = "/view/ManageMachines.fxml";
+        }
+        return nextScene;
     }
 
 

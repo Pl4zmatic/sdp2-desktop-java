@@ -9,15 +9,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import service.NotificationPoller;
+import utils.Observer;
 import utils.Rollen;
 
 import java.io.IOException;
 
-public class NavbarController {
+public class NavbarController implements Observer {
 
     @FXML private VBox rootLayout;
     @FXML private VBox collapsedNavbar;
@@ -50,6 +54,7 @@ public class NavbarController {
     @FXML private Text profileLastName;
     @FXML private Text profileFirstName;
     @FXML private Button profileIcon;
+
     @FXML private ContextMenu logoutMenu;
     @FXML private MenuItem logoutItem;
 
@@ -425,6 +430,7 @@ public class NavbarController {
         Session.setNavbarCollapsed(false);
         Session.clear();
         SceneSwitcher.switchScene("/view/LoginPage.fxml");
+        NotificationPoller.getInstance().stopPolling();
     }
 
     private void setTextToUsername(Text text, String fullName) {
@@ -432,5 +438,25 @@ public class NavbarController {
             text.setText(fullName);
         }
     }
+
+    @Override
+    public void update(boolean hasNotifications) {
+        System.out.println(hasNotifications);
+
+
+        if (hasNotifications) {
+            Image image = new Image(getClass().getResourceAsStream("/images/User_fill_notif_3x.png"));
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(40);
+            imageView.setFitWidth(40);
+            profileIcon.setGraphic(imageView);}
+//        } else {
+//            Image image = new Image(getClass().getResourceAsStream("/images/User_fill.png"));
+//            profileIcon.setGraphic(new ImageView(image));
+//        }
+
+    }
+
+
 }
 

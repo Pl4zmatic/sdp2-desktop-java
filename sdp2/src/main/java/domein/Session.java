@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Session {
+
+    private static Session instance;
     private static User currentUser;  // Houdt de ingelogde gebruiker bij
     private static Button activeNavItem;
     private static boolean navbarCollapsed = false;
@@ -23,6 +25,8 @@ public class Session {
 
     // Private constr zodat er geen object van aangemaakt kan worden
     private Session() {}
+
+
 
     // Methode om de huidige gebruiker op te halen
     public static User getCurrentUser() {

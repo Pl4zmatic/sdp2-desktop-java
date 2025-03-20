@@ -149,6 +149,7 @@ public class Machine implements Serializable, SoftDeletable,Cloneable {
 	}
 	@PostLoad
 	public void postLoad(){
+		updateUptime();
 		switch(currentStateString){
 				case "stopped":
 					this.currentState = new StoppedState(this);
