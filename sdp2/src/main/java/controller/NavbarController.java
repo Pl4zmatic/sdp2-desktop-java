@@ -24,7 +24,7 @@ import utils.Rollen;
 
 import java.io.IOException;
 
-public class NavbarController implements Observer{
+
 public class NavbarController implements Observer {
 
     @FXML private VBox rootLayout;
@@ -476,5 +476,5 @@ public class NavbarController implements Observer {
     }
 
 
-}
+
 

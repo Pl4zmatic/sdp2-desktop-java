@@ -19,7 +19,6 @@ public class NotificationService{
     private final UserNotificationDaoJpa userNotificationDaoJpa;
     private static NotificationService instance;
 
-    private List<Observer> observers;
 
     public NotificationService() {
         this.notificationDaoJpa = new NotificationDaoJpa();
