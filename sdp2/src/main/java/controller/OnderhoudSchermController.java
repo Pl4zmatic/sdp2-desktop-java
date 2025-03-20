@@ -7,6 +7,7 @@ import java.util.List;
 
 import domein.Session;
 import domein.machine.Maintenance;
+import domein.machine.stateMachines.maintenance.FinishedState;
 import domein.machine.stateMachines.maintenance.MaintenanceState;
 import domein.machine.stateMachines.maintenance.PlannedState;
 import domein.machine.stateMachines.maintenance.ProgressState;
@@ -19,7 +20,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import service.MaintenanceService;
 import utils.Rollen;
 
@@ -163,8 +166,23 @@ public class OnderhoudSchermController {
 			
 			controller.nextArrow.setOnMouseClicked(event -> {
 	    		System.out.println("Clicked");
-				maintenance.setCurrentState(new ProgressState(maintenance));
-				maintenanceService.editMaintenance(maintenance);
+	    		switch(maintenance.getCurrentStateString()) {
+	    		case "PlannedState"-> {
+	    			maintenance.setCurrentState(new ProgressState(maintenance));
+	    		}
+	    		case "ProgressState" -> {
+	    			maintenance.setCurrentState(new FinishedState(maintenance));
+	    		}
+	    		}
+	    		maintenanceService.editMaintenance(maintenance);
+	    		plannedVBox.getChildren().clear();
+	    		progressVBox.getChildren().clear();
+	    		plannedScrollable.setContent(plannedVBox);
+				progressScrollable.setContent(progressVBox);
+				List<Maintenance> maintenancesList = maintenanceService.getAllMaintenance();
+				fillVBox(maintenancesList);
+				plannedScrollable.setContent(plannedVBox);
+				progressScrollable.setContent(progressVBox);
 	    	});
 			
 			
