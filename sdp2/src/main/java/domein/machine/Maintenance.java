@@ -7,8 +7,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import service.MachineService;
 
 import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,14 +22,14 @@ public class Maintenance {
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int maintenanceId;
+    private long maintenanceId;
 
     @ManyToOne
     @JoinColumn(name = "machine_id", nullable = false)  // Deze kolom linkt Maintenance naar Machine
     private Machine machine;
     private String machineCode;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     @Transient
     private User technician;
     private String nameTechnician;
@@ -38,13 +40,16 @@ public class Maintenance {
     @Transient
     private MaintenanceState currentState;
     
-    public Maintenance(Machine machine, LocalDateTime startDate, LocalDateTime endDate, 
+    @Transient
+    private MachineService machineService;
+    
+    public Maintenance(String machineCode, LocalDate startDate, LocalDate endDate, 
     		String reason, String maintenanceReport, String remarks) {
-    	this.machine = machine;
+    	machineService = new MachineService();
+    	this.machine = machineService.getMachineByCode(machineCode);
     	setStartDate(startDate);
-        setEndDate(endDate);
     	this.technician = machine.getTechnieker();
-    	this.nameTechnician = technician.getFullName();
+    	//this.nameTechnician = technician.getFullName();
         setReason(reason);
         setMaintenanceReport(maintenanceReport);
         setRemarks(remarks);
@@ -53,21 +58,36 @@ public class Maintenance {
     	this.machineCode = machine.getCode();
     }
     
+    public Maintenance(Maintenance m) {
+    	machine = m.machine;
+    	machineCode = m.machineCode;
+    	startDate = m.startDate;
+    	endDate = m.endDate;
+    	technician = m.technician;
+    	nameTechnician = m.nameTechnician;
+    	reason = m.reason;
+    	maintenanceReport = m.maintenanceReport;
+    	remarks = m.remarks;
+    	currentStateString = m.currentStateString;
+    	currentState = m.currentState;
+    }
+    
     public void setCurrentState(MaintenanceState state) {
         this.currentState = state;
+        this.currentStateString = state.toString();
     }
 
     public String getCurrentState(){
         return currentState.toString();
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(LocalDate startDate) {
         checkDateTime(startDate);
 
         this.startDate = startDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(LocalDate endDate) {
         checkDateTime(endDate);
 
         if(endDate.isBefore(getStartDate())) {
@@ -83,7 +103,6 @@ public class Maintenance {
     }
 
     public void setMaintenanceReport(String maintenanceReport) {
-        checkString(maintenanceReport);
         this.maintenanceReport = maintenanceReport;
     }
 
@@ -97,8 +116,8 @@ public class Maintenance {
         }
     }
 
-    private void checkDateTime(LocalDateTime datetime) {
-        if(datetime.isBefore(LocalDateTime.now())) {
+    private void checkDateTime(LocalDate date) {
+        if(date.isBefore(LocalDate.now())) {
             throw new DateTimeException("The datetime is from the past");
         }
     }

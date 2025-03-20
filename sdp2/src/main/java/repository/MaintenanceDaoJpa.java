@@ -42,7 +42,7 @@ public class MaintenanceDaoJpa extends GenericDaoJpa<Maintenance> implements Mai
 	}
 
 	@Override
-	public Maintenance getMainentanceById(Long id) throws EntityNotFoundException {
+	public Maintenance getMaintenanceById(Long id) throws EntityNotFoundException {
 		try {
 			return em.createQuery("""
 					SELECT m
@@ -53,5 +53,10 @@ public class MaintenanceDaoJpa extends GenericDaoJpa<Maintenance> implements Mai
 			return null;
 		}
 		
+	}
+
+	public List<Maintenance> getAll() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

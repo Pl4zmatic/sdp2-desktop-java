@@ -3,11 +3,13 @@ package main;
 import domein.machine.Machine;
 import domein.notification.Notification;
 import domein.site.Site;
+import domein.machine.Maintenance;
 import domein.user.User;
 import repository.MachineDaoJpa;
 import repository.NotificationDao;
 import repository.NotificationDaoJpa;
 import repository.SiteDaoJpa;
+import repository.MaintenanceDaoJpa;
 import repository.UserDaoJpa;
 import service.NotificationService;
 import service.UserService;
@@ -16,6 +18,7 @@ import utils.NotificationType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +61,7 @@ public class populateDb {
         SiteDaoJpa.commitTransaction();
 
         MachineDaoJpa machineDaoJpa = new MachineDaoJpa();
+ /*       MachineDaoJpa machineDaoJpa = new MachineDaoJpa();
 
         MachineDaoJpa.startTransaction();
 
@@ -80,5 +84,12 @@ public class populateDb {
 
         MachineDaoJpa.commitTransaction();
         ns.createNotification(new Notification(NotificationType.MAINTENANCE, "Test message", "Test title"), userList );
+        MachineDaoJpa.commitTransaction();*/
+    	
+    	MaintenanceDaoJpa maintenanceDaoJpa = new MaintenanceDaoJpa();
+    	
+    	maintenanceDaoJpa.startTransaction();
+    	maintenanceDaoJpa.insert(new Maintenance("a-04", LocalDate.now().plusDays(1), null, "test", "test", "probleem nog niet opegelost"));
+    	maintenanceDaoJpa.commitTransaction();
     }
 }
