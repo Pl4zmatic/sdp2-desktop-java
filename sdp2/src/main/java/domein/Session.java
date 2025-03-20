@@ -1,5 +1,6 @@
 package domein;
 
+import controller.NavbarManager;
 import domein.user.User;
 import javafx.scene.control.Button;
 
@@ -7,9 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Session {
+
+    private static Session instance;
     private static User currentUser;  // Houdt de ingelogde gebruiker bij
     private static Button activeNavItem;
-    private static boolean navbarCollapsed = false; // Default state is expanded
+    private static boolean navbarCollapsed = false;
     private static final Map<String, Object> attributes = new HashMap<>();
 
     public static Button getActiveNavItem(){
@@ -23,6 +26,8 @@ public class Session {
     // Private constr zodat er geen object van aangemaakt kan worden
     private Session() {}
 
+
+
     // Methode om de huidige gebruiker op te halen
     public static User getCurrentUser() {
         return currentUser;
@@ -31,6 +36,7 @@ public class Session {
     // Set ingelogde gebruiker als current user
     public static void setCurrentUser(User user) {
         currentUser = user;
+        NavbarManager.reloadNavbar();
     }
 
     // Specifieke methodes voor navbar collapsed state

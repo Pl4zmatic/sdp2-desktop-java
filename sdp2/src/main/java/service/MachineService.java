@@ -32,7 +32,6 @@ public class MachineService {
 
     public boolean update(Machine m){
 
-
             try {
                 Machine existingMachine = machineDao.getMachineByCode(m.getCode());
                 Machine clone = (Machine) existingMachine.clone();

@@ -32,24 +32,53 @@ public class NotificationService implements Subject{
     }
 
 
-    public List<Notification> getAllNotificationsByUser(Long userId) {
-        List<UserNotification> idList = userNotificationDaoJpa.getUserNotificationsByUser(userId);
+    public List<Notification> getAllNotificationsByUser(User user) {
+        List<UserNotification> idList = userNotificationDaoJpa.getUserNotificationsByUser(user);
+        if(idList.isEmpty()){
+            return null;
+        }
         return notificationDaoJpa.getNotificationsByIds(idList.stream().map(UserNotification::getId).collect(Collectors.toList()));
     }
 
-    public boolean createAndAddNotification(Notification n) {
+    public boolean hasNotifications(User user){
+        return userNotificationDaoJpa.hasNotificationsByUser(user);
+    }
+
+    public void createNotification(Notification n, List<User> users) {
+
+
         try {
             NotificationDaoJpa.startTransaction();
+
+            // Insert the notification
             notificationDaoJpa.insert(n);
+
+            for (User user : users) {
+                UserNotification userNotification = new UserNotification(user, n);
+                userNotificationDaoJpa.insert(userNotification);
+            }
+
+            // Commit the transaction after both Notification and UserNotification are inserted
             NotificationDaoJpa.commitTransaction();
-            notifyObservers();
-            return true;
         } catch (Exception e) {
+            // Rollback the transaction if any error occurs
             NotificationDaoJpa.rollbackTransaction();
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error occurred while creating notification and user notifications", e);
         }
     }
 
+
+    public boolean deleteUserNotification(User user, Notification n){
+        UserNotification exisitingUserNotification = userNotificationDaoJpa.getUserNotification(user,n);
+        if (exisitingUserNotification != null) {
+            UserNotificationDaoJpa.startTransaction();
+            userNotificationDaoJpa.delete(exisitingUserNotification);
+            UserNotificationDaoJpa.commitTransaction();
+            return true;
+        } else {
+            throw new EntityNotFoundException("User doesnt have this Notification");
+        }
+    }
 
     public boolean deleteNotification(Notification n) {
         Notification existingNotification = notificationDaoJpa.getNotificationById(n.getId());

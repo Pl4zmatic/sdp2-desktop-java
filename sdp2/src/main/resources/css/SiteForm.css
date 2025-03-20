@@ -1,0 +1,95 @@
+/* SiteForm.css */
+
+.root {
+    -fx-background-color: white;
+}
+
+.formContainer {
+    -fx-background-color: white;
+    -fx-border-color: -lightGray;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.headerContainer {
+    -fx-border-color: transparent transparent -lightGray transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.headerText {
+    -fx-font-family: "Inter";
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -deepBlue;
+}
+
+.fieldLabel {
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+    -fx-text-fill: -deepBlue;
+}
+
+.required {
+    -fx-text-fill: -delawareRed;
+    -fx-font-weight: bold;
+}
+
+.radioButton {
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+    -fx-text-fill: -deepBlue;
+}
+
+.radioButton .radio {
+    -fx-border-color: -lightGray;
+    -fx-border-radius: 100%;
+    -fx-background-color: white;
+}
+
+.radioButton:selected .radio {
+    -fx-border-color: -delawareRed;
+}
+
+.radioButton:selected .dot {
+    -fx-background-color: -delawareRed;
+}
+
+.primaryButton {
+    -fx-background-color: -delawareRed;
+    -fx-text-fill: white;
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 16px;
+}
+
+.primaryButton:hover {
+    -fx-background-color: derive(-delawareRed, -10%);
+}
+
+.cancelButton {
+    -fx-background-color: -gray;
+    -fx-text-fill: white;
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 16px;
+}
+
+.cancelButton:hover {
+    -fx-background-color: derive(-gray, -10%);
+}
+
+.edge-to-edge {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.edge-to-edge > .viewport {
+    -fx-background-color: transparent;
+}
+
+.edge-to-edge .corner {
+    -fx-background-color: transparent;
+}

@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import utils.NotificationType;
 
 @Entity
 @Table(name = "notifications")
@@ -16,21 +17,23 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Notification {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Transient
     private LocalDateTime dateAndTime;
-    private String type;
+
     private String message;
     private String title;
-    private String status;
+    private NotificationType type;
 
     @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserNotification> userNotifications;
-    public Notification(String type, String message, String title, String status) {
+
+    public Notification(NotificationType type, String message, String title) {
         this.dateAndTime = LocalDateTime.now();
         this.type = type;
         this.message = message;
         this.title = title;
-        this.status = status;
+
     }
 }

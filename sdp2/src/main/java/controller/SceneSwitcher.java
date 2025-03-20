@@ -34,6 +34,7 @@ public class SceneSwitcher {
     }
 
     public static void switchScene(String fxmlPath) throws IOException {
+        NavbarManager.reloadNavbar();
         if (stage == null) {
             throw new IllegalStateException("Stage is niet ingesteld. Roep eerst setStage() aan.");
         }

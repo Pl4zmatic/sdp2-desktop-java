@@ -1,6 +1,7 @@
 package domein.machine;
 
 import domein.machine.stateMachines.machine.*;
+import domein.site.Site;
 import domein.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -35,8 +36,9 @@ public class Machine implements Serializable, SoftDeletable,Cloneable {
 	@Column(nullable = false)
 	private boolean deleted = false;
 
-	@Column(nullable = false)
-	private String siteNaam;
+	@ManyToOne
+	@JoinColumn(name = "sitenaam", referencedColumnName = "name")
+	private Site site;
 
 	@Column(unique = true, nullable = false)
 	private String code;
@@ -88,11 +90,11 @@ public class Machine implements Serializable, SoftDeletable,Cloneable {
 	@OneToMany(mappedBy = "machine")
 	private Set<Maintenance> onderhouden;
 
-    public Machine(String siteNaam, String code, String locatie,
+    public Machine(Site site, String code, String locatie,
                    String productInfo,String productieStatus,
                     String techniekerNaam
                    ) {
-        this.siteNaam = siteNaam;
+        this.site = site;
 
 		this.startDate = null;
 
@@ -114,6 +116,10 @@ public class Machine implements Serializable, SoftDeletable,Cloneable {
 			return 0;
 		}
 		return (int) Duration.between(startDate, LocalDateTime.now()).toHours();
+	}
+
+	public String getSiteNaam() {
+		return site.getName();
 	}
 
 	public String getCurrentState() {
@@ -149,6 +155,7 @@ public class Machine implements Serializable, SoftDeletable,Cloneable {
 	}
 	@PostLoad
 	public void postLoad(){
+		updateUptime();
 		switch(currentStateString){
 				case "stopped":
 					this.currentState = new StoppedState(this);
@@ -168,7 +175,7 @@ public class Machine implements Serializable, SoftDeletable,Cloneable {
 	@Override
 	public String toString(){
 
-		return this.currentStateString + "Machine [codenaam=" + this.code + ", siteNaam=" + siteNaam + ", locatie=" + locatie
+		return this.currentStateString + "Machine [codenaam=" + this.code + ", sitenaam=" + site.getName() + ", locatie=" + locatie
 				+ ", productInfo=" + productInfo + ", productieStatus=" + productieStatus + ", uptimeInHours=" + this.getUptime()
 				+ ", techniekerNaam=" + techniekerNaam + ", laatsteOnderhoudDatum=" + laatsteOnderhoudDatum ;
 	}
