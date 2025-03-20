@@ -38,9 +38,9 @@ public class UserNotificationDaoJpa extends GenericDaoJpa<UserNotification> impl
 
         public boolean hasNotificationsByUser(User user){
             try {
-                return em.createQuery("SELECT u from UserNotification u where u.user = :user", UserNotification.class)
+                return !em.createQuery("SELECT u from UserNotification u where u.user = :user", UserNotification.class)
                         .setParameter("user", user)
-                        .getSingleResult() != null;
+                        .getResultList().isEmpty();
             } catch (NoResultException e) {
                 return false;
             }

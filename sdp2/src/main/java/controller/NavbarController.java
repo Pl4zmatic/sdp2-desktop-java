@@ -63,7 +63,7 @@ public class NavbarController implements Observer {
     @FXML private MenuItem logoutItem;
 
     @FXML private Circle notificationCircle;
-    @FXML private Label amountOfNotificationsLabel;
+
 
     private Parent expandedNavbar;
     private Parent collapsedNavbarView;
@@ -73,7 +73,7 @@ public class NavbarController implements Observer {
     @FXML
     public void initialize() {
         notificationService = NotificationService.getInstance();
-
+        NotificationPoller.getInstance().addObserver(this);
         if (rootLayout != null) {
             expandedNavbar = rootLayout;
 
@@ -457,9 +457,14 @@ public class NavbarController implements Observer {
 
     @Override
     public void update(boolean hasNotifications) {
-        System.out.println(hasNotifications);
+        System.out.println(hasNotifications + " poep");
+
 
         notificationCircle.setVisible(hasNotifications);
+        notificationCircle.getParent().layout();
+
+
+        System.out.println(notificationCircle.visibleProperty());
 
 
 //            Image image = new Image(getClass().getResourceAsStream("/images/User_fill_notif_3x.png"));
