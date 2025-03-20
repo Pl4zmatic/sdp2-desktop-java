@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -14,13 +15,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import service.NotificationService;
 import service.NotificationPoller;
 import utils.Observer;
 import utils.Rollen;
 
 import java.io.IOException;
 
+public class NavbarController implements Observer{
 public class NavbarController implements Observer {
 
     @FXML private VBox rootLayout;
@@ -58,11 +62,18 @@ public class NavbarController implements Observer {
     @FXML private ContextMenu logoutMenu;
     @FXML private MenuItem logoutItem;
 
+    @FXML private Circle notificationCircle;
+    @FXML private Label amountOfNotificationsLabel;
+
     private Parent expandedNavbar;
     private Parent collapsedNavbarView;
 
+    private NotificationService notificationService;
+
     @FXML
     public void initialize() {
+        notificationService = NotificationService.getInstance();
+        updateNotifications();
         if (rootLayout != null) {
             expandedNavbar = rootLayout;
 
@@ -438,6 +449,30 @@ public class NavbarController implements Observer {
             text.setText(fullName);
         }
     }
+
+    @Override
+    public void updateNotifications() {
+        User currentUser = Session.getCurrentUser();
+        int amountOfNotifications = notificationService.getAllNotificationsByUser(currentUser.getId()).size();
+        amountOfNotificationsLabel.setVisible(true);
+        notificationCircle.setVisible(true);
+
+        if(amountOfNotifications < 1) {
+            amountOfNotificationsLabel.setVisible(false);
+            notificationCircle.setVisible(false);
+        } else {
+            if(amountOfNotifications > 9) {
+                amountOfNotificationsLabel.setText("9+");
+                amountOfNotificationsLabel.setLayoutX(27);
+            } else {
+                amountOfNotificationsLabel.setText(String.format("%d", amountOfNotifications));
+                amountOfNotificationsLabel.setLayoutX(30);
+            }
+        }
+
+    }
+
+
 
     @Override
     public void update(boolean hasNotifications) {
