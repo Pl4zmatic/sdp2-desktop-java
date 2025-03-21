@@ -2,10 +2,13 @@ package controller;
 
 import java.awt.Component;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import domein.Session;
+import domein.machine.Machine;
 import domein.machine.Maintenance;
 import domein.machine.stateMachines.maintenance.FinishedState;
 import domein.machine.stateMachines.maintenance.MaintenanceState;
@@ -14,21 +17,33 @@ import domein.machine.stateMachines.maintenance.ProgressState;
 import domein.user.User;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.virtualizedfx.enums.ScrollPaneEnums.ScrollBarPolicy;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
+import service.MachineService;
 import service.MaintenanceService;
 import utils.Rollen;
 
 public class OnderhoudSchermController {
 
 	private MaintenanceService maintenanceService;
+	private MachineService machineService;
 	
 	@FXML
 	private BorderPane rootLayout;
@@ -42,10 +57,10 @@ public class OnderhoudSchermController {
     private VBox plannedVBox;
     
 	@FXML
-	private TextField dateField;
+	private ComboBox<String> dateField;
 
 	@FXML
-	private TextField machineField;
+	private ComboBox<Machine> machineField;
 
 	@FXML
 	private TextField notesField;
@@ -70,11 +85,19 @@ public class OnderhoudSchermController {
 
 	@FXML
 	private TextField techniekerField;
+	
+    @FXML
+    private Text techniekerLabel;
 
+    private FilteredList<Machine> filteredMachines;
+    private FilteredList<String> filteredDates;
+    
 	@FXML
 	public void initialize() {
 		
 		maintenanceService = new MaintenanceService();		
+		machineService = new MachineService();
+		
 		rootLayout.setLeft(NavbarManager.getNavbar());
 		
 		List<Maintenance> maintenances = maintenanceService.getAllMaintenance();
@@ -89,8 +112,6 @@ public class OnderhoudSchermController {
 		
 		planButton.setOnAction(event -> {
 			openPlanMenu();
-			machineField.clear();
-			dateField.clear();
 			reasonField.clear();
 			notesField.clear();
 			submitButton.setText("Plan");
@@ -108,10 +129,8 @@ public class OnderhoudSchermController {
 		});
 		
 		fieldVBox.setVisible(false);
-		
-		
-		plannedScrollable.setContent(plannedVBox);
-		progressScrollable.setContent(progressVBox);
+		setupMachineComboBox();
+		setupDateComboBox();
 		
 		plannedScrollable.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);	
 		progressScrollable.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -121,6 +140,7 @@ public class OnderhoudSchermController {
 	private void openPlanMenu() {
 		fieldVBox.setVisible(true);
 		techniekerField.setVisible(false);
+		techniekerLabel.setVisible(false);
 	}
 	
 	private void closeMaintenanceMenu() {
@@ -128,32 +148,30 @@ public class OnderhoudSchermController {
 	}
 	
 	private void planMaintenance() {
-		maintenanceService.planMaintenance(machineField.getText(), dateField.getText().split("/"), null, reasonField.getText(), null, notesField.getText());
-		machineField.clear();
-		dateField.clear();
+		maintenanceService.planMaintenance(machineField.getValue().getCode(), dateField.getValue().split("-"), null, reasonField.getText(), null, notesField.getText());
+		machineField.setPromptText("");
+		dateField.setPromptText("");
 		reasonField.clear();
 		notesField.clear();
-		plannedVBox.getChildren().clear();
-		progressVBox.getChildren().clear();
-		plannedScrollable.setContent(plannedVBox);
-		progressScrollable.setContent(progressVBox);
 		List<Maintenance> maintenancesList = maintenanceService.getAllMaintenance();
 		fillVBox(maintenancesList);
-		plannedScrollable.setContent(plannedVBox);
-		progressScrollable.setContent(progressVBox);
 	}
 	
 	private void updateMaintenance(Maintenance maintenance) {
 		maintenance.setReason(reasonField.getText());
 		maintenance.setRemarks(notesField.getText());
 		maintenanceService.editMaintenance(maintenance);
-		machineField.clear();
-		dateField.clear();
+		machineField.setPromptText("");
+		dateField.setPromptText("");
 		reasonField.clear();
 		notesField.clear();
 	}
 	
 	private void fillVBox(List<Maintenance> maintenances) {
+		plannedVBox.getChildren().clear();
+		progressVBox.getChildren().clear();
+		plannedScrollable.setContent(plannedVBox);
+		progressScrollable.setContent(progressVBox);
 		for(Maintenance maintenance : maintenances) {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass()
 					.getResource("/view/MaintenanceItem.fxml"));
@@ -178,10 +196,11 @@ public class OnderhoudSchermController {
 			}
 			controller.textBox.setOnMouseClicked(event -> {
 				openPlanMenu();
+				techniekerLabel.setVisible(true);
 				techniekerField.setVisible(true);
 				techniekerField.setText(maintenance.getNameTechnician());
-				machineField.setText(maintenance.getMachineCode());
-				dateField.setText(maintenance.getStartDate().toString());
+				machineField.setPromptText(maintenance.getMachineCode());
+				dateField.setPromptText(maintenance.getStartDate().toString());
 				reasonField.setText(maintenance.getReason());
 				notesField.setText(maintenance.getRemarks());
 				submitButton.setText("Edit");
@@ -201,19 +220,226 @@ public class OnderhoudSchermController {
 	    		}
 	    		}
 	    		maintenanceService.editMaintenance(maintenance);
-	    		plannedVBox.getChildren().clear();
-	    		progressVBox.getChildren().clear();
-	    		plannedScrollable.setContent(plannedVBox);
-				progressScrollable.setContent(progressVBox);
+
 				List<Maintenance> maintenancesList = maintenanceService.getAllMaintenance();
 				fillVBox(maintenancesList);
-				plannedScrollable.setContent(plannedVBox);
-				progressScrollable.setContent(progressVBox);
 	    	});
 			
 			
 		}
+		plannedScrollable.setContent(plannedVBox);
+		progressScrollable.setContent(progressVBox);
 	}
+	
+	private void setupMachineComboBox() {
+        List<Machine> allMachines = machineService.getAllMachines().stream()
+                .collect(Collectors.toList());
+
+        if (allMachines.isEmpty()) {
+            machineField.setDisable(true);
+            machineField.setPromptText("No technicians available");
+            return;
+        }
+
+        ObservableList<Machine> machines = FXCollections.observableArrayList(allMachines);
+        
+        filteredMachines = new FilteredList<>(machines, p -> true);
+
+        machineField.setItems(machines);
+
+        machineField.getStyleClass().add("comboBox");
+        machineField.getStyleClass().add("filter-combo");
+
+        machineField.setCellFactory(new Callback<ListView<Machine>, ListCell<Machine>>() {
+            @Override
+            public ListCell<Machine> call(ListView<Machine> param) {
+                return new ListCell<Machine>() {
+                    @Override
+                    protected void updateItem(Machine item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                        } else {
+                            setText(item.getCode());
+                        }
+                    }
+                };
+            }
+        });
+
+        machineField.setConverter(new StringConverter<Machine>() {
+            @Override
+            public String toString(Machine machine) {
+                return machine == null ? "" : machine.getCode();
+            }
+
+            @Override
+            public Machine fromString(String string) {
+                if (string == null || string.isEmpty()) {
+                    return null;
+                }
+                return machines.stream()
+                        .filter(machine -> (machine.getCode()).equalsIgnoreCase(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
+
+        machineField.setEditable(true);
+
+        TextField editor = machineField.getEditor();
+
+        final boolean[] isUpdatingFilter = new boolean[1];
+
+        editor.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (isUpdatingFilter[0]) {
+                return;
+            }
+
+            isUpdatingFilter[0] = true;
+            try {
+                filteredMachines.setPredicate(machine -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true;
+                    }
+
+                    String lowerCaseFilter = newValue.toLowerCase();
+                   
+                    return machine.getCode().toLowerCase().contains(lowerCaseFilter);
+                });
+
+                if (filteredMachines.size() > 0 && !newValue.isEmpty()) {
+                    if (!machineField.isShowing()) {
+                        machineField.show();
+                    }
+                } else if (machineField.isShowing() && filteredMachines.isEmpty()) {
+                    machineField.hide();
+                }
+            } finally {
+                isUpdatingFilter[0] = false;
+            }
+        });
+
+        editor.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.DOWN ||
+                    event.getCode() == KeyCode.UP ||
+                    event.getCode() == KeyCode.ENTER) {
+                return;
+            }
+        });
+
+        machineField.setPromptText("Select or type to search");
+    }
+	
+	 private void setupDateComboBox() {
+	        List<String> allDates = new ArrayList<String>();
+	        allDates.add(LocalDate.now().plusDays(1).toString());
+	        allDates.add(LocalDate.now().plusDays(7).toString());
+	        allDates.add(LocalDate.now().plusDays(14).toString());
+
+	        ObservableList<String> dates = FXCollections.observableArrayList(allDates);
+
+	        filteredDates = new FilteredList<>(dates, p -> true);
+
+	        dateField.setItems(filteredDates);
+
+	        dateField.getStyleClass().add("comboBox");
+	        dateField.getStyleClass().add("filter-combo");
+
+//	        technicianComboBox.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
+//	            @Override
+//	            public ListCell<User> call(ListView<User> param) {
+//	                return new ListCell<User>() {
+//	                    @Override
+//	                    protected void updateItem(User item, boolean empty) {
+//	                        super.updateItem(item, empty);
+//	                        if (item == null || empty) {
+//	                            setText(null);
+//	                        } else {
+//	                            setText(item.getFirstName() + " " + item.getLastName());
+//	                        }
+//	                    }
+//	                };
+//	            }
+//	        });
+//
+//	        technicianComboBox.setConverter(new StringConverter<User>() {
+//	            @Override
+//	            public String toString(User user) {
+//	                return user == null ? "" : user.getFirstName() + " " + user.getLastName();
+//	            }
+//
+//	            @Override
+//	            public User fromString(String string) {
+//	                if (string == null || string.isEmpty()) {
+//	                    return null;
+//	                }
+//	                return technicians.stream()
+//	                        .filter(user -> (user.getFirstName() + " " + user.getLastName()).equalsIgnoreCase(string))
+//	                        .findFirst()
+//	                        .orElse(null);
+//	            }
+//	        });
+
+	        dateField.setEditable(true);
+
+	        TextField editor = dateField.getEditor();
+
+	        final boolean[] isUpdatingFilter = new boolean[1];
+
+	        editor.textProperty().addListener((observable, oldValue, newValue) -> {
+	            if (isUpdatingFilter[0]) {
+	                return;
+	            }
+
+	            isUpdatingFilter[0] = true;
+	            try {
+	                filteredDates.setPredicate(date -> {
+	                    if (newValue == null || newValue.isEmpty()) {
+	                        return true;
+	                    }
+
+	                    String lowerCaseFilter = newValue.toLowerCase();
+	                    return date.toLowerCase().contains(lowerCaseFilter);
+	                });
+
+	                if (filteredDates.size() > 0 && !newValue.isEmpty()) {
+	                    if (!dateField.isShowing()) {
+	                        dateField.show();
+	                    }
+	                } else if (dateField.isShowing() && filteredDates.isEmpty()) {
+	                    dateField.hide();
+	                }
+	            } finally {
+	                isUpdatingFilter[0] = false;
+	            }
+	        });
+
+	        dateField.valueProperty().addListener((obs, oldVal, newVal) -> {
+	            if (isUpdatingFilter[0] || newVal == null) {
+	                return;
+	            }
+
+	            isUpdatingFilter[0] = true;
+	            try {
+	                editor.setText(newVal);
+	                editor.positionCaret(editor.getText().length());
+	                editor.setStyle("-fx-text-fill: -deepBlue; -fx-font-weight: normal;");	               
+	            } finally {
+	                isUpdatingFilter[0] = false;
+	            }
+	        });
+
+	        editor.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+	            if (event.getCode() == KeyCode.DOWN ||
+	                    event.getCode() == KeyCode.UP ||
+	                    event.getCode() == KeyCode.ENTER) {
+	                return;
+	            }
+	        });
+
+	        dateField.setPromptText("Select or type to search");
+	    }
 
 	
 }

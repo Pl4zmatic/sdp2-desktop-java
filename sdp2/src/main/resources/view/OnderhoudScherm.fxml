@@ -3,6 +3,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
@@ -106,7 +107,7 @@
                                           <Font name="System Bold" size="12.0" />
                                        </font>
                                     </Text>
-                                    <TextField fx:id="machineField" prefHeight="35.0" prefWidth="114.0" promptText="*_****" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 4;" VBox.vgrow="NEVER" />
+                                    <ComboBox fx:id="machineField" prefWidth="150.0" />
                                  </children>
                                  <VBox.margin>
                                     <Insets left="15.0" right="15.0" top="10.0" />
@@ -114,7 +115,7 @@
                               </VBox>
                               <VBox prefHeight="43.0" prefWidth="152.0" VBox.vgrow="NEVER">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Technieker *">
+                                    <Text fx:id="techniekerLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Technieker *">
                                        <VBox.margin>
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
@@ -138,7 +139,7 @@
                                           <Font name="System Bold" size="12.0" />
                                        </font>
                                     </Text>
-                                    <TextField fx:id="dateField" prefHeight="35.0" prefWidth="114.0" promptText="dd/mm/yyyy" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 4;" VBox.vgrow="NEVER" />
+                                    <ComboBox fx:id="dateField" prefWidth="150.0" />
                                  </children>
                                  <VBox.margin>
                                     <Insets left="15.0" right="15.0" />
