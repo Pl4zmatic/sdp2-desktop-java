@@ -1,5 +1,7 @@
 package domein.machine.report;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +15,7 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Image {
+public class Image implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column

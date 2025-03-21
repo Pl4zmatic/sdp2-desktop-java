@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,7 +54,7 @@ public class Report {
 
     ImageService imageService = new ImageService();
     for (String path : imagePaths) {
-      Matcher fileNameMatcher = Pattern.compile("(?<!\\/)[^./]*(?<=\\.)").matcher(path);
+      Matcher fileNameMatcher = Pattern.compile("(?![/])[^./]*(?=[.])").matcher(path);
       Matcher extensionMatcher = Pattern.compile("[.].*$").matcher(path);
 
       Image image = new Image();
@@ -66,7 +65,7 @@ public class Report {
       else throw new IllegalArgumentException("No name found for image.");
 
       if(extensionMatcher.find())
-        image.setName(extensionMatcher.group(0));
+        image.setExtension(extensionMatcher.group(0));
       else throw new IllegalArgumentException("No extension found for image.");
 
       images.add(image);
