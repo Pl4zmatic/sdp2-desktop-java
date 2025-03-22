@@ -13,4 +13,9 @@ public class ProgressState extends MaintenanceState {
 		return "Het onderhoud wordt uitgevoerd";
 	}
 
+	@Override
+	public String toString() {
+		return "ProgressState";
+		
+	}
 }

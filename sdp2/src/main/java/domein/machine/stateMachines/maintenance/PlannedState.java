@@ -13,6 +13,10 @@ public class PlannedState extends MaintenanceState {
 		return "Het onderhoud wordt uitgevoerd";
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "PlannedState";
+		
+	}
 
 }

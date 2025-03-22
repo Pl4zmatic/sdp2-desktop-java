@@ -30,7 +30,7 @@ public class MaintenanceTest {
             machine, 
             LocalDateTime.of(2025, 4, 17, 8, 0, 0), 
             LocalDateTime.of(2025, 4, 17, 19, 0, 0), 
-            "John Doe", "Rusted part", "Report", null
+            "John Doe", "Rusted part", "Report"
         );
     }
 
