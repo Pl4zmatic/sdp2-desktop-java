@@ -18,7 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import service.NotificationService;
-import service.NotificationPoller;
+import domein.polling.NotificationPoller;
 import utils.Observer;
 import utils.Rollen;
 
@@ -64,6 +64,8 @@ public class NavbarController implements Observer {
 
     @FXML private Circle notificationCircle;
     @FXML private Label amountOfNotificationsLabel;
+    @FXML private Button notificationBellButton;
+    @FXML private ImageView notificationBellImageView;
 
     private Parent expandedNavbar;
     private Parent collapsedNavbarView;
@@ -137,7 +139,13 @@ public class NavbarController implements Observer {
             if (quickNavNotifications != null) {
                 quickNavNotifications.setOnAction(event -> quickNavToNotifications());
             }
+
+            if(notificationBellButton != null) {
+                notificationBellButton.setOnAction(event -> navToViewNotifications());
+            }
         }
+
+
     }
 
     private void updateQuickNavVisibility() {
@@ -228,6 +236,15 @@ public class NavbarController implements Observer {
     private void quickNavToNotifications() {
         try {
             SceneSwitcher.switchScene("/view/NotificationsManagement.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void navToViewNotifications() {
+        try {
+            SceneSwitcher.switchScene("/view/ShowNotifications.fxml");
         } catch (IOException e) {
             e.printStackTrace();
         }

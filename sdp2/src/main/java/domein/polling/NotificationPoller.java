@@ -1,4 +1,4 @@
-package service;
+package domein.polling;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -7,6 +7,7 @@ import java.util.List;
 
 import domein.Session;
 import domein.notification.Notification;
+import service.ServiceController;
 import utils.Observer;
 import utils.Subject;
 

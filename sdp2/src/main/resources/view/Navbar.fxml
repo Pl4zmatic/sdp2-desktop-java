@@ -205,9 +205,9 @@
             </Button>
             <AnchorPane>
                <children>
-                  <Button fx:id="profileIcon1" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" styleClass="profileIcon" stylesheets="@../css/Navbar.css" textAlignment="CENTER">
+                  <Button fx:id="notificationBellButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#navToViewNotifications" styleClass="profileIcon" stylesheets="@../css/Navbar.css" textAlignment="CENTER">
                      <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="notificationBellImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/notification-bell.png" />
                            </image>
