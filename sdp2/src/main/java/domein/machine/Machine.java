@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import service.UserService;
 import jakarta.persistence.*;
 import lombok.*;
 import utils.SoftDeletable;
@@ -27,7 +28,7 @@ import java.util.Set;
 @ToString
 @Setter
 public class Machine implements Serializable, SoftDeletable,Cloneable {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true, nullable = false)
@@ -92,10 +93,9 @@ public class Machine implements Serializable, SoftDeletable,Cloneable {
 
     public Machine(Site site, String code, String locatie,
                    String productInfo,String productieStatus,
-                    String techniekerNaam
+                    User technieker
                    ) {
         this.site = site;
-
 		this.startDate = null;
 
         this.code = code;
@@ -103,7 +103,8 @@ public class Machine implements Serializable, SoftDeletable,Cloneable {
         this.productInfo = productInfo;
         this.productieStatus = productieStatus;
         this.uptimeInHours = 0;
-        this.techniekerNaam = techniekerNaam;
+        this.technieker = technieker;
+        this.techniekerNaam = technieker.getFullName();
         this.currentState = new StartableState(this);
         this.currentStateString = getCurrentState();
 		this.laatsteOnderhoudDatum = LocalDate.now();

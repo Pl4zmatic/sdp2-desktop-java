@@ -1,10 +1,12 @@
 package repository;
 
+import java.io.Serializable;
+
 import domein.user.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
-public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao {
+public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao{
 
     public UserDaoJpa() {
         super(User.class);

@@ -24,7 +24,7 @@ import java.util.List;
 
 public class populateDb {
     public static void main(String[] args) {
-//        UserDaoJpa userDaoJpa = new UserDaoJpa();
+//    	UserDaoJpa userDaoJpa = new UserDaoJpa();
 //        UserDaoJpa.startTransaction();
 //        userDaoJpa.insert(new User("Admin",
 //                "de Admin",
@@ -51,40 +51,39 @@ public class populateDb {
 //                Rollen.TECHNIEKER
 //        ));
 //        UserDaoJpa.commitTransaction();
-        /*NotificationService ns = new NotificationService();
-        List<User> userList = UserService.getInstance().getAllActiveUsers();
+//        NotificationService ns = new NotificationService();
+//        List<User> userList = UserService.getInstance().getAllActiveUsers();
+//
+//        SiteDaoJpa siteDaoJpa = new SiteDaoJpa();
+//
+//        SiteDaoJpa.startTransaction();
+//        siteDaoJpa.insert(new Site("AntwerpenA", "Antwerpen", "K. De Gieter"));
+//        SiteDaoJpa.commitTransaction();
 
-        SiteDaoJpa siteDaoJpa = new SiteDaoJpa();
-
-        SiteDaoJpa.startTransaction();
-        siteDaoJpa.insert(new Site("AntwerpenA", "Antwerpen", "K. De Gieter"));
-        SiteDaoJpa.commitTransaction();
-
-        MachineDaoJpa machineDaoJpa = new MachineDaoJpa();
- /*       MachineDaoJpa machineDaoJpa = new MachineDaoJpa();
-
-        MachineDaoJpa.startTransaction();
-
-        Site site = siteDaoJpa.findByName("AntwerpenA");
-        machineDaoJpa.insert(new Machine(site, "a-04", "Antwerpen"
-                , "Info over het product"
-                , "groen", "L.DeVlieger"));
-        machineDaoJpa.insert(new Machine(site, "a-03", "Antwerpen"
-                , "Info over het product"
-                , "groen", "L.DeVlieger"));
-        machineDaoJpa.insert(new Machine(site, "a-02", "Antwerpen"
-                , "Info over het product"
-                , "groen", "L.DeVlieger"));
-        machineDaoJpa.insert(new Machine(site, "a-05", "Antwerpen"
-                , "Info over het product"
-                , "groen", "L.DeVlieger"));
-        machineDaoJpa.insert(new Machine(site, "a-01", "Antwerpen"
-                , "Info over het product"
-                , "groen", "L.DeVlieger"));
-
-        MachineDaoJpa.commitTransaction();
-        ns.createNotification(new Notification(NotificationType.MAINTENANCE, "Test message", "Test title"), userList );
-        MachineDaoJpa.commitTransaction();*/
+//        MachineDaoJpa machineDaoJpa = new MachineDaoJpa();
+//
+//        MachineDaoJpa.startTransaction();
+//
+//        Site site = siteDaoJpa.findByName("AntwerpenA");
+//        machineDaoJpa.insert(new Machine(site, "a-04", "Antwerpen"
+//                , "Info over het product"
+//                , "groen", userDaoJpa.getUserByEmail("technieker@mail.com")));
+//        machineDaoJpa.insert(new Machine(site, "a-03", "Antwerpen"
+//                , "Info over het product"
+//                , "groen", userDaoJpa.getUserByEmail("technieker@mail.com")));
+//        machineDaoJpa.insert(new Machine(site, "a-02", "Antwerpen"
+//                , "Info over het product"
+//                , "groen", userDaoJpa.getUserByEmail("technieker@mail.com")));
+//        machineDaoJpa.insert(new Machine(site, "a-05", "Antwerpen"
+//                , "Info over het product"
+//                , "groen",userDaoJpa.getUserByEmail("technieker@mail.com") ));
+//        machineDaoJpa.insert(new Machine(site, "a-01", "Antwerpen"
+//                , "Info over het product"
+//                , "groen", userDaoJpa.getUserByEmail("technieker@mail.com")));
+//
+//        MachineDaoJpa.commitTransaction();
+//        ns.createNotification(new Notification(NotificationType.MAINTENANCE, "Test message", "Test title"), userList );
+//        MachineDaoJpa.commitTransaction();
     	
     	MaintenanceDaoJpa maintenanceDaoJpa = new MaintenanceDaoJpa();
     	

@@ -6,16 +6,17 @@ import repository.UserDaoJpa;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.Rollen;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
-public class UserService {
+public class UserService{
     private final UserDaoJpa userDao;
     private final LogService logService;
     private static UserService instance;
 
-    public UserService() {
+    public UserService(){
         this.userDao = new UserDaoJpa();
         this.logService = LogService.getInstance();
     }
@@ -167,5 +168,14 @@ public class UserService {
             UserDaoJpa.rollbackTransaction();
         }
         return false;
+    }
+    
+    public User getUserByEmail(String email) {
+    	 try {
+             return userDao.getUserByEmail(email);
+         } catch (Exception e) {
+             e.printStackTrace();
+             return null;
+         }
     }
 }

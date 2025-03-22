@@ -72,4 +72,13 @@ public class MaintenanceService {
         }
         return false;
     }
+
+	public List<Maintenance> getMaintenanceByTechnieker(String technieker) {
+		 try {
+             return Collections.unmodifiableList(maintenanceDaoJpa.getMaintenancesByTechnician(technieker));
+         } catch (Exception e) {
+             e.printStackTrace();
+             return Collections.emptyList();
+         }
+	}
 }

@@ -579,7 +579,7 @@ public class MachineFormController {
 
             User selectedTechnician = technicianComboBox.getValue();
             if (selectedTechnician != null) {
-                machine.setTechniekerNaam(selectedTechnician.getFirstName() + " " + selectedTechnician.getLastName());
+                machine.setTechnieker(selectedTechnician);
                 machine.setLaatsteOnderhoudDatum(lastMaintenance.getValue());
             }
 

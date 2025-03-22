@@ -100,14 +100,18 @@ public class OnderhoudSchermController {
 		
 		rootLayout.setLeft(NavbarManager.getNavbar());
 		
-		List<Maintenance> maintenances = maintenanceService.getAllMaintenance();
-		fillVBox(maintenances);
+		
 		
 		User user = Session.getCurrentUser();
 		Rollen userRole = user.getRol();
 		
 		if(userRole == Rollen.TECHNIEKER) {
 			planButton.setVisible(false);
+			List<Maintenance> maintenances = maintenanceService.getMaintenanceByTechnieker(user.getFullName());
+			fillVBox(maintenances);
+		}else {
+			List<Maintenance> maintenances = maintenanceService.getAllMaintenance();
+			fillVBox(maintenances);
 		}
 		
 		planButton.setOnAction(event -> {
@@ -331,7 +335,7 @@ public class OnderhoudSchermController {
         machineField.setPromptText("Select or type to search");
     }
 	
-	 private void setupDateComboBox() {
+	private void setupDateComboBox() {
 	        List<String> allDates = new ArrayList<String>();
 	        allDates.add(LocalDate.now().plusDays(1).toString());
 	        allDates.add(LocalDate.now().plusDays(7).toString());
@@ -345,41 +349,6 @@ public class OnderhoudSchermController {
 
 	        dateField.getStyleClass().add("comboBox");
 	        dateField.getStyleClass().add("filter-combo");
-
-//	        technicianComboBox.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
-//	            @Override
-//	            public ListCell<User> call(ListView<User> param) {
-//	                return new ListCell<User>() {
-//	                    @Override
-//	                    protected void updateItem(User item, boolean empty) {
-//	                        super.updateItem(item, empty);
-//	                        if (item == null || empty) {
-//	                            setText(null);
-//	                        } else {
-//	                            setText(item.getFirstName() + " " + item.getLastName());
-//	                        }
-//	                    }
-//	                };
-//	            }
-//	        });
-//
-//	        technicianComboBox.setConverter(new StringConverter<User>() {
-//	            @Override
-//	            public String toString(User user) {
-//	                return user == null ? "" : user.getFirstName() + " " + user.getLastName();
-//	            }
-//
-//	            @Override
-//	            public User fromString(String string) {
-//	                if (string == null || string.isEmpty()) {
-//	                    return null;
-//	                }
-//	                return technicians.stream()
-//	                        .filter(user -> (user.getFirstName() + " " + user.getLastName()).equalsIgnoreCase(string))
-//	                        .findFirst()
-//	                        .orElse(null);
-//	            }
-//	        });
 
 	        dateField.setEditable(true);
 

@@ -1,6 +1,8 @@
 package repository;
 
 import domein.logging.LogEntry;
+
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 

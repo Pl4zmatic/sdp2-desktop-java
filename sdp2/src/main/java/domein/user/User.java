@@ -1,4 +1,5 @@
 package domein.user;
+import domein.machine.Machine;
 import domein.notification.UserNotification;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,6 +10,7 @@ import utils.SoftDeletable;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -49,7 +51,7 @@ public class User implements Serializable, SoftDeletable {
 
     @Column(nullable = false)
     private boolean deleted = false;
-
+    
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserNotification> userNotifications;
 

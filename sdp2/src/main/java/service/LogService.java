@@ -6,10 +6,11 @@ import domein.machine.Machine;
 import domein.user.User;
 import repository.LogDaoJpa;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-public class LogService {
+public class LogService{
     private final LogDaoJpa logDao;
     private static LogService instance;
 
