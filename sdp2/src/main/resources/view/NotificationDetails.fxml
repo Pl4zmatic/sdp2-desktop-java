@@ -4,36 +4,59 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="308.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NotificationDetailsController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NotificationDetailsController">
    <children>
       <ScrollPane fitToWidth="true" styleClass="edge-to-edge" VBox.vgrow="ALWAYS">
          <content>
             <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox fx:id="contentVBox" maxWidth="500.0" prefWidth="500.0" spacing="15.0" styleClass="formContainer">
+                  <VBox fx:id="contentVBox" maxWidth="685.0" prefHeight="600.0" prefWidth="685.0" spacing="15.0" styleClass="formContainer">
                      <children>
-                        <HBox styleClass="headerContainer">
+                        <HBox prefHeight="0.0" prefWidth="685.0">
                            <children>
-                              <Label fx:id="notificationTitleLabel" prefHeight="70.0" prefWidth="321.0" styleClass="headerText" text="Title" wrapText="true">
+                              <ImageView fx:id="notificationBackArrow" fitHeight="35.0" fitWidth="79.0" onMouseClicked="#navToNotificationList" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/arrow-left-icon-red.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox prefHeight="2.0" prefWidth="450.0" styleClass="headerContainer">
+                           <children>
+                              <Label fx:id="notificationTitleLabel" prefHeight="35.0" prefWidth="315.0" styleClass="headerText" text="Title" wrapText="true">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
                               </Label>
-                              <Region prefHeight="70.0" prefWidth="46.0" />
-                              <Label fx:id="notificationDateLabel" layoutX="61.0" layoutY="15.0" prefHeight="70.0" prefWidth="161.0" styleClass="headerText" text="12/12/2025" wrapText="true">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </Label>
+                              <BorderPane prefHeight="35.0" prefWidth="326.0">
+                                 <right>
+                                    <Label fx:id="notificationDateLabel" prefHeight="35.0" prefWidth="134.0" styleClass="headerText" text="12/12/2025" wrapText="true" BorderPane.alignment="CENTER">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                 </right>
+                              </BorderPane>
                            </children>
                            <padding>
-                              <Insets bottom="15.0" top="5.0" />
+                              <Insets bottom="15.0" />
                            </padding>
+                           <VBox.margin>
+                              <Insets left="25.0" right="25.0" />
+                           </VBox.margin>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
@@ -41,17 +64,20 @@
                                  <font>
                                     <Font size="14.0" />
                                  </font>
+                                 <HBox.margin>
+                                    <Insets left="27.0" right="27.0" />
+                                 </HBox.margin>
                               </Label>
                            </children>
                         </HBox>
                      </children>
                      <padding>
-                        <Insets bottom="20.0" left="25.0" right="25.0" top="20.0" />
+                        <Insets bottom="20.0" top="10.0" />
                      </padding>
                   </VBox>
                </children>
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="5.0" />
                </padding>
             </VBox>
          </content>

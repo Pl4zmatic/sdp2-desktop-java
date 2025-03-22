@@ -1,7 +1,13 @@
 package controller;
 
+import java.io.IOException;
+
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class NotificationDetailsController {
@@ -13,12 +19,24 @@ public class NotificationDetailsController {
     private Label notificationMessageLabel;
     @FXML
     private VBox contentVBox;
+    @FXML
+    private ImageView notificationBackArrow;
 
     public void fillNotificationElement(String title, String date, String message) {
-        contentVBox.setPrefWidth(1000);
+        VBox.setVgrow(contentVBox, Priority.ALWAYS);
         notificationTitleLabel.setText(title);
         notificationDateLabel.setText(date);
         notificationMessageLabel.setText(message);
+        notificationBackArrow.setOnMouseClicked(event -> navToNotificationList());
+    }
+
+    @FXML
+    void navToNotificationList() {
+        try {
+            SceneSwitcher.switchScene("/view/ShowNotifications.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
 }

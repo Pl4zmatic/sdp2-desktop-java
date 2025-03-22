@@ -91,7 +91,6 @@ public class NotificationElement {
             Parent notificationDetailsBox = fxmlLoader.load();
             NotificationDetailsController controller = fxmlLoader.getController();
             controller.fillNotificationElement(notificationTitleLabel.getText(), notificationDateLabel.getText(), message);
-            notificationItemHbox.setPrefWidth(625);
             NotificationViewController parentController = SceneSwitcher.getCurrentController();
             parentController.showNotificationDetails(notificationDetailsBox);
             
