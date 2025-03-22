@@ -12,7 +12,7 @@ import service.ImageService;
 import service.MaintenanceService;
 import service.ReportService;
 
-public class ReportMainTest {
+public class ConsoleAppReport {
   private static Report report;
   private static ReportService reportService;
   private static Maintenance maintenance;
