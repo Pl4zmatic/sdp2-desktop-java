@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.NoResultException;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MachineDaoJpa extends GenericDaoJpa<Machine> implements MachineDao {
@@ -35,5 +36,14 @@ public class MachineDaoJpa extends GenericDaoJpa<Machine> implements MachineDao 
                 .getResultList();
     }
 
-
+    public List<Machine> getMachinesBySiteId(int siteId) {
+        try {
+            return em.createQuery("SELECT m FROM Machine m WHERE m.site.id = :siteId AND m.deleted = false", Machine.class)
+                    .setParameter("siteId", siteId)
+                    .getResultList();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
 }

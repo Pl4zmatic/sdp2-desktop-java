@@ -66,11 +66,11 @@ public class LoginPageController {
         if (currentUser.getRol() == Rollen.ADMINISTRATOR) {
             nextScene = "/view/ManageUsers.fxml";
         } else if (currentUser.getRol() == Rollen.VERANTWOORDELIJKE) {
-            nextScene = "/view/ManageMachines.fxml";
+            nextScene = "/view/SiteSelection.fxml";
         } else if (currentUser.getRol() == Rollen.TECHNIEKER) {
             nextScene = "/view/OnderhoudScherm.fxml";
         } else if (currentUser.getRol() == Rollen.MANAGER) {
-            nextScene = "/view/ManageMachines.fxml";
+            nextScene = "/view/SiteSelection.fxml";
         }
         return nextScene;
     }

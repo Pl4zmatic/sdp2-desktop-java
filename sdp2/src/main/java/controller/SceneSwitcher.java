@@ -33,7 +33,7 @@ public class SceneSwitcher {
         windowHeight = stage.getHeight();
     }
 
-    public static void switchScene(String fxmlPath) throws IOException {
+    public static void switchScene(String fxmlPath) {
         NavbarManager.reloadNavbar();
         if (stage == null) {
             throw new IllegalStateException("Stage is niet ingesteld. Roep eerst setStage() aan.");

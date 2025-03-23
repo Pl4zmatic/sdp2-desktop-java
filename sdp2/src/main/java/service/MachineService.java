@@ -2,6 +2,7 @@ package service;
 
 import domein.Session;
 import domein.machine.Machine;
+import domein.site.Site;
 import domein.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import repository.MachineDaoJpa;
@@ -128,6 +129,23 @@ public class MachineService {
 
     public List<String> getAllLocations(){
         return machineDao.getAllLocations();
+    }
+
+    public List<Machine> getMachinesBySite(int siteId) {
+        try {
+            return Collections.unmodifiableList(machineDao.getMachinesBySiteId(siteId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Machine> getMachinesForCurrentSite() {
+        Site currentSite = Session.getCurrentSite();
+        if (currentSite != null) {
+            return getMachinesBySite(currentSite.getId());
+        }
+        return Collections.emptyList();
     }
 }
 

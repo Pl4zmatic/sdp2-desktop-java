@@ -1,0 +1,84 @@
+@import "ManageSites.css";
+
+/* Plant Cards Container */
+.plant-cards-container {
+    -fx-background-color: -lightGray;
+    -fx-background-radius: 8px;
+    -fx-padding: 20px;
+}
+
+/* Card Scroll Pane */
+.card-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+
+.card-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Plant Card */
+.plant-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 2);
+    -fx-border-radius: 8px;
+    -fx-border-color: -lightGray;
+    -fx-border-width: 1px;
+    -fx-cursor: hand;
+}
+
+.plant-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(239, 70, 60, 0.3), 10, 0, 0, 4);
+    -fx-border-color: -delawareRed;
+}
+
+/* Plant Name */
+.plant-name {
+    -fx-text-fill: -deepBlue;
+    -fx-font-family: "Inter";
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+/* Plant Address */
+.plant-address {
+    -fx-text-fill: -gray;
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+}
+
+/* Plant Info Labels */
+.plant-info-label {
+    -fx-text-fill: -deepBlue;
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.plant-info-value {
+    -fx-text-fill: -deepBlue;
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+}
+
+/* Select Plant Button */
+.select-plant-button {
+    -fx-background-color: -delawareRed;
+    -fx-text-fill: white;
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 12px;
+    -fx-cursor: hand;
+}
+
+.select-plant-button:hover {
+    -fx-background-color: derive(-delawareRed, 10%);
+}
+
+.select-plant-button:pressed {
+    -fx-background-color: derive(-delawareRed, -10%);
+}

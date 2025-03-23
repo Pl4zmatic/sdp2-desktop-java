@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="rootLayout" maxWidth="150.0" prefWidth="150.0" styleClass="parentContainer" stylesheets="@../css/Navbar.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavbarController">
+<VBox fx:id="rootLayout" maxWidth="100.0" prefWidth="100.0" styleClass="parentContainer" stylesheets="@../css/Navbar.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavbarController">
    <children>
       <VBox alignment="TOP_CENTER">
          <children>
@@ -100,7 +100,7 @@
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../images/notifications-icon.png" />
+                                          <Image url="@../images/notification-bell.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>

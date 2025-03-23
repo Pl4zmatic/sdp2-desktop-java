@@ -3,7 +3,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import domein.Session;
 import domein.machine.Machine;
+import domein.site.Site;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -354,11 +356,22 @@ public class ManageMachinesController {
                         machines.clear();
                 }
 
-                if (showDeletedMachines.isSelected()) {
-                        machines = FXCollections.observableArrayList(machineService.getAllMachines());
-                } else {
-                        machines = FXCollections.observableArrayList(machineService.getAllActiveMachines());
-                }
+                Site currentSite = Session.getCurrentSite();
+
+                        if (showDeletedMachines.isSelected()) {
+                                machines = FXCollections.observableArrayList(
+                                        machineService.getAllMachines().stream()
+                                                .filter(machine -> machine.getSite().getId() == currentSite.getId())
+                                                .collect(Collectors.toList())
+                                );
+                        } else {
+                                machines = FXCollections.observableArrayList(
+                                        machineService.getAllActiveMachines().stream()
+                                                .filter(machine -> machine.getSite().getId() == currentSite.getId())
+                                                .collect(Collectors.toList())
+                                );
+                        }
+
 
                 filteredMachines = new FilteredList<>(machines, p -> true);
 

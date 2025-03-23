@@ -181,67 +181,40 @@ public class NavbarController implements Observer {
     // Quick navigation methods
     @FXML
     private void quickNavToUsers() {
-        try {
             SceneSwitcher.switchScene("/view/ManageUsers.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
     private void quickNavToLogs() {
-        try {
             SceneSwitcher.switchScene("/view/UserLogs.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
     private void quickNavToSites() {
-        try {
             SceneSwitcher.switchScene("/view/SitesManagement.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
     private void quickNavToMaintenance() {
-        try {
             SceneSwitcher.switchScene("/view/OnderhoudScherm.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
     private void quickNavToMachines() {
-        try {
             SceneSwitcher.switchScene("/view/ManageMachines.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
     private void quickNavToNotifications() {
-        try {
             SceneSwitcher.switchScene("/view/NotificationsManagement.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void showLogoutMenu() {
         ContextMenu menu = new ContextMenu();
         MenuItem logoutItem = new MenuItem("Logout");
         logoutItem.setOnAction(e -> {
-            try {
+
                 handleLougout();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
         });
         menu.getItems().add(logoutItem);
 
@@ -387,7 +360,7 @@ public class NavbarController implements Observer {
             case "Logs" -> "/view/UserLogs.fxml";
             case "Beheer Sites" -> "/view/ManageSites.fxml";
             case "Onderhoud" -> "/view/OnderhoudScherm.fxml";
-            case "Beheer Machines" -> "/view/ManageMachines.fxml";
+            case "Beheer Machines" -> "/view/SiteSelection.fxml";
             case "Beheer Notificaties" -> "/view/NotificationsManagement.fxml";
             case "Logout" -> "/view/Logout.fxml";
             default -> null;
@@ -429,15 +402,11 @@ public class NavbarController implements Observer {
         });
 
         logoutItem.setOnAction(e -> {
-            try {
                 handleLougout();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
         });
     }
 
-    private void handleLougout() throws IOException {
+    private void handleLougout() {
         Session.setNavbarCollapsed(false);
         Session.clear();
         SceneSwitcher.switchScene("/view/LoginPage.fxml");
