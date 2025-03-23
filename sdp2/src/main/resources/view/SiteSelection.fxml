@@ -6,22 +6,26 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
 
 <BorderPane fx:id="rootLayout" prefHeight="720.0" prefWidth="1000.0" styleClass="root-layout" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SiteSelectionController">
     <center>
         <VBox alignment="CENTER" fillWidth="false" spacing="15.0" styleClass="content-container" BorderPane.alignment="CENTER">
             <children>
-                <HBox fx:id="searchBarContainer" alignment="CENTER_RIGHT" prefHeight="85.0" spacing="20.0" styleClass="search-bar">
+                <HBox fx:id="searchBarContainer" alignment="CENTER" prefHeight="85.0" spacing="20.0" styleClass="search-bar" prefWidth="950.0">
                     <children>
+                        <Region HBox.hgrow="ALWAYS" />
                         <ComboBox fx:id="locationFilterComboBox" prefHeight="40.0" prefWidth="200.0" promptText="Filter on location" styleClass="filter-combo" />
                         <TextField fx:id="searchBar" prefHeight="40.0" prefWidth="300.0" promptText="Search plants..." styleClass="search-field" />
                     </children>
                     <padding>
-                        <Insets bottom="15.0" left="15.0" top="15.0" />
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                     </padding>
                 </HBox>
                 <ScrollPane fitToWidth="true" prefHeight="550.0" styleClass="card-scroll-pane" VBox.vgrow="ALWAYS">

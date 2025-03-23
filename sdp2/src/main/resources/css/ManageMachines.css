@@ -307,3 +307,18 @@
     -fx-background-color: derive(-rancidRed, -10%);
 }
 
+/* Back Button */
+.back-button {
+    -fx-background-color: -deepBlue;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.back-button:hover {
+    -fx-background-color: derive(-deepBlue, 10%);
+}
+
+.back-button:pressed {
+    -fx-background-color: derive(-deepBlue, -10%);
+}
+

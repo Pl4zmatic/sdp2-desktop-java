@@ -13,12 +13,23 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane fx:id="rootLayout" prefHeight="720.0" prefWidth="1200.0" styleClass="root-layout" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ManageMachinesController">
    <center>
       <VBox alignment="CENTER" fillWidth="false" spacing="15.0" styleClass="content-container" BorderPane.alignment="CENTER">
          <children>
             <HBox fx:id="searchBarContainer" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="85.0" spacing="20.0" styleClass="search-bar">
                <children>
+                  <Button fx:id="backButton" styleClass="back-button">
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/arrow-left-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                   <VBox alignment="CENTER" prefHeight="40.0" prefWidth="150.0" styleClass="deleted-users-container">
                      <children>
                         <Label styleClass="deleted-users-label" text="Deleted Machines" />

@@ -82,3 +82,26 @@
 .select-plant-button:pressed {
     -fx-background-color: derive(-delawareRed, -10%);
 }
+
+/* Back Button */
+.back-button {
+    -fx-background-color: -deepBlue;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px;
+    -fx-cursor: hand;
+}
+
+.back-button:hover {
+    -fx-background-color: derive(-deepBlue, 10%);
+}
+
+.back-button:pressed {
+    -fx-background-color: derive(-deepBlue, -10%);
+}
+
+/* Search Bar Container */
+.search-bar {
+    -fx-background-color: transparent;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+}

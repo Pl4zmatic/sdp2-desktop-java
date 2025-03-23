@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -49,6 +50,8 @@ public class ManageMachinesController {
 
         @FXML
         private StackPane rightPanelContainer;
+        @FXML
+        private Button backButton;
 
         private ObservableList<Machine> machines;
         private FilteredList<Machine> filteredMachines;
@@ -65,6 +68,7 @@ public class ManageMachinesController {
                 loadTableContent();
                 setupSearchFilter();
                 setupCallbacks();
+                setupBackButton();
         }
 
         private void setupNavbar() throws IOException {
@@ -409,6 +413,11 @@ public class ManageMachinesController {
         protected void selectMachine(Machine m) {
                 tableView.getSelectionModel().clearSelection();
                 tableView.getSelectionModel().select(m);
+        }
+
+        private void setupBackButton()
+        {
+                backButton.setOnAction(e -> {SceneSwitcher.switchScene("/view/SiteSelection.fxml");});
         }
 
         public void refreshTable() {
