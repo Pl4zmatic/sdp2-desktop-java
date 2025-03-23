@@ -40,7 +40,7 @@
                      <children>
                         <VBox fx:id="subMenuAdministrator">
                            <children>
-                              <Button fx:id="beheerGebruikerItem" styleClass="subMenuItem" text="Beheer Gebruikers">
+                              <Button fx:id="beheerGebruikerItem" styleClass="subMenuItem" text="Manage Users">
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -69,7 +69,7 @@
                      <children>
                         <VBox fx:id="subMenuVerantwoordelijke">
                            <children>
-                              <Button fx:id="beheerSiteItem" styleClass="subMenuItem" text="Beheer Sites">
+                              <Button fx:id="beheerSiteItem" styleClass="subMenuItem" text="Manage Plants">
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -78,7 +78,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="onderhoudItem" styleClass="subMenuItem" text="Onderhoud">
+                              <Button fx:id="onderhoudItem" styleClass="subMenuItem" text="Maintenance">
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -87,7 +87,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="beheerMachineItem" styleClass="subMenuItem" text="Beheer Machines">
+                              <Button fx:id="beheerMachineItem" styleClass="subMenuItem" text="Manage Machines">
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -96,7 +96,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="beheerNotificatieItem" styleClass="subMenuItem" text="Beheer Notificaties">
+                              <Button fx:id="beheerNotificatieItem" styleClass="subMenuItem" text="Manage Notifications">
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -116,7 +116,7 @@
                      <children>
                         <VBox fx:id="subMenuTechnieker">
                            <children>
-                              <Button fx:id="onderhoudTechniekerItem" styleClass="subMenuItem" text="Onderhoud">
+                              <Button fx:id="onderhoudTechniekerItem" styleClass="subMenuItem" text="Maintenance">
                                  <VBox.margin>
                                     <Insets left="30.0" />
                                  </VBox.margin>
@@ -205,16 +205,16 @@
             </Button>
             <AnchorPane>
                <children>
-                  <Button fx:id="profileIcon1" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" styleClass="profileIcon" stylesheets="@../css/Navbar.css" textAlignment="CENTER">
+                  <Button fx:id="notificationBell" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" styleClass="profileIcon" stylesheets="@../css/Navbar.css" textAlignment="CENTER">
                      <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" scaleX="0.8" scaleY="0.8" scaleZ="0.8">
                            <image>
                               <Image url="@../images/notification-bell.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Circle fx:id="notificationCircle" fill="#ff605b" layoutX="33.0" layoutY="12.0" radius="10.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.2" />
+                  <Circle fx:id="notificationCircle" fill="#ff605b" layoutX="33.0" layoutY="12.0" radius="7.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.2" />
                </children>
                <HBox.margin>
                   <Insets right="10.0" />
