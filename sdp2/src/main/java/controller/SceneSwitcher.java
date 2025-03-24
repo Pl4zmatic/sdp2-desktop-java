@@ -17,6 +17,8 @@ public class SceneSwitcher {
     private static double windowWidth;
     private static double windowHeight;
 
+    private static Object currentController;
+
     public static Stage getStage() {
         if (stage == null) {
             throw new IllegalStateException("Stage is niet ingesteld. Roep eerst setStage() aan.");
@@ -49,6 +51,8 @@ public class SceneSwitcher {
             FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(fxmlPath));
             Parent root = loader.load();
 
+            currentController = loader.getController();
+
             if (root instanceof BorderPane) {
                 NavbarManager.reloadNavbar();
             }
@@ -67,6 +71,10 @@ public class SceneSwitcher {
             System.err.println("Kan FXML-bestand niet laden: " + fxmlPath);
             e.printStackTrace();
         }
+    }
+
+    public static <T> T getCurrentController() {
+        return (T) currentController;
     }
 }
 
