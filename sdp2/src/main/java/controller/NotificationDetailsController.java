@@ -32,11 +32,7 @@ public class NotificationDetailsController {
 
     @FXML
     void navToNotificationList() {
-        try {
-            SceneSwitcher.switchScene("/view/ShowNotifications.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SceneSwitcher.switchScene("/view/ShowNotifications.fxml");
     }
     
 }

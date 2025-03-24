@@ -220,11 +220,7 @@ public class NavbarController implements Observer {
 
     @FXML
     private void navToViewNotifications() {
-        try {
-            SceneSwitcher.switchScene("/view/ShowNotifications.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SceneSwitcher.switchScene("/view/ShowNotifications.fxml");
     }
 
     private void showLogoutMenu() {
