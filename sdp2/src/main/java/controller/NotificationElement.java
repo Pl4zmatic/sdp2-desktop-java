@@ -50,8 +50,6 @@ public class NotificationElement {
         
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
-        if(notificationDeleteButton != null) {
-        }
     }
     
     public void fillNotificationElement(Notification notification, VBox parentContainer) {
@@ -61,13 +59,22 @@ public class NotificationElement {
         notificationDateLabel.setText(date);
         notificationStatusLabel.setText("Nieuw");
         notificationTitleLabel.setText(notification.getTitle());
-        if(notification.getType() == NotificationType.MAINTENANCE) {
+        switch (notification.getType()) {
+            case MAINTENANCE:
             notificationTypeImage.setImage(new Image("/images/maintenance-icon-black.png"));
-        } else if(notification.getType() == NotificationType.REMINDER) {
-            notificationTypeImage.setImage(new Image("/images/maintenance-icon.png"));
+                break;
+            case REMINDER:
+                notificationTypeImage.setImage(new Image("/images/maintenance-icon.png"));
+                break;
+            default:
+                notificationTypeImage.setImage(new Image("/images/maintenance-icon-black.png"));
+                break;
         }
         message = notification.getMessage();
-        notificationDeleteButton.setOnAction(event -> parentContainer.getChildren().remove(notificationItemHbox));
+        notificationDeleteButton.setOnAction(event -> {
+            parentContainer.getChildren().remove(notificationItemHbox);
+            
+        });
         notificationItemHbox.setOnMouseClicked(event -> showNotificationDetails());
     }
 
