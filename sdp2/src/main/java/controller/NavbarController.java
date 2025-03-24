@@ -356,12 +356,12 @@ public class NavbarController implements Observer {
         setActiveMenuItem(clickedButton);
 
         String fxmlPath = switch (clickedButton.getText()) {
-            case "Beheer Gebruikers" -> "/view/ManageUsers.fxml";
+            case "Manage Users" -> "/view/ManageUsers.fxml";
             case "Logs" -> "/view/UserLogs.fxml";
-            case "Beheer Sites" -> "/view/ManageSites.fxml";
-            case "Onderhoud" -> "/view/OnderhoudScherm.fxml";
-            case "Beheer Machines" -> "/view/SiteSelection.fxml";
-            case "Beheer Notificaties" -> "/view/NotificationsManagement.fxml";
+            case "Manage Plants" -> "/view/ManageSites.fxml";
+            case "Maintenance" -> "/view/OnderhoudScherm.fxml";
+            case "Manage Machines" -> "/view/SiteSelection.fxml";
+            case "Manage Notifications" -> "/view/NotificationsManagement.fxml";
             case "Logout" -> "/view/Logout.fxml";
             default -> null;
         };
