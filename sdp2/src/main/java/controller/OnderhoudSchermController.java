@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import domein.Session;
 import domein.machine.Machine;
 import domein.machine.Maintenance;
+import domein.machine.stateMachines.machine.StoppedState;
 import domein.machine.stateMachines.maintenance.FinishedState;
 import domein.machine.stateMachines.maintenance.MaintenanceState;
 import domein.machine.stateMachines.maintenance.PlannedState;
@@ -23,6 +24,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -152,23 +154,37 @@ public class OnderhoudSchermController {
 	}
 	
 	private void planMaintenance() {
-		maintenanceService.planMaintenance(machineField.getValue().getCode(), dateField.getValue().split("-"), null, reasonField.getText(), null, notesField.getText());
-		machineField.setPromptText("");
-		dateField.setPromptText("");
-		reasonField.clear();
-		notesField.clear();
-		List<Maintenance> maintenancesList = maintenanceService.getAllMaintenance();
-		fillVBox(maintenancesList);
+		if(checkFields()) {
+			maintenanceService.planMaintenance(machineField.getValue().getCode(), dateField.getValue().split("-"), null, reasonField.getText(), null, notesField.getText());
+			machineField.setPromptText("");
+			dateField.setPromptText("");
+			reasonField.clear();
+			notesField.clear();
+			List<Maintenance> maintenancesList = maintenanceService.getAllMaintenance();
+			fillVBox(maintenancesList);
+		}
 	}
 	
+	private boolean checkFields() {
+		if(machineField.getValue() == null || dateField.getValue() == null || dateField.getValue().isBlank() || dateField.getValue().isEmpty()
+				|| reasonField.getText() == null || reasonField.getText().isBlank() ||
+				reasonField.getText().isEmpty() || reasonField.getText() == "") {
+			showAlert("Fill in required fields", "Required fields have to be filled in in order to plan or edit a maintenance", Alert.AlertType.ERROR);
+			return false;
+		}
+		return true;
+	}
+
 	private void updateMaintenance(Maintenance maintenance) {
-		maintenance.setReason(reasonField.getText());
-		maintenance.setRemarks(notesField.getText());
-		maintenanceService.editMaintenance(maintenance);
-		machineField.setPromptText("");
-		dateField.setPromptText("");
-		reasonField.clear();
-		notesField.clear();
+		if(checkFields()) {
+			maintenance.setReason(reasonField.getText());
+			maintenance.setRemarks(notesField.getText());
+			maintenanceService.editMaintenance(maintenance);
+			machineField.setPromptText("");
+			dateField.setPromptText("");
+			reasonField.clear();
+			notesField.clear();
+		}
 	}
 	
 	private void fillVBox(List<Maintenance> maintenances) {
@@ -207,21 +223,40 @@ public class OnderhoudSchermController {
 				dateField.setPromptText(maintenance.getStartDate().toString());
 				reasonField.setText(maintenance.getReason());
 				notesField.setText(maintenance.getRemarks());
-				submitButton.setText("Edit");
+				cancelButton.setVisible(false);
 				submitButton.setOnAction(eventt -> {
 					updateMaintenance(maintenance);
 				});
+				techniekerField.setEditable(false);
+				if(Session.getCurrentUser().getRol() == Rollen.TECHNIEKER) {
+					
+					machineField.setEditable(false);
+					dateField.setEditable(false);
+					reasonField.setEditable(false);
+					notesField.setEditable(false);
+					submitButton.setVisible(false);
+				}else {
+					submitButton.setText("Edit");
+					submitButton.setVisible(true);
+				}
 			});
 			
 			controller.nextArrow.setOnMouseClicked(event -> {
 	    		System.out.println("Clicked");
-	    		switch(maintenance.getCurrentStateString()) {
-	    		case "PlannedState"-> {
-	    			maintenance.setCurrentState(new ProgressState(maintenance));
+	    		if(maintenance.getMachine().getCurrentState() == "stopped") {
+	    			switch(maintenance.getCurrentStateString()) {
+	    			case "PlannedState"-> {
+	    				maintenance.setCurrentState(new ProgressState(maintenance));
+	    			}
+	    			case "ProgressState" -> {
+	    				maintenance.setCurrentState(new FinishedState(maintenance));
+	    				maintenance.setEndDate(LocalDate.now());
+	    			}
 	    		}
-	    		case "ProgressState" -> {
-	    			maintenance.setCurrentState(new FinishedState(maintenance));
-	    		}
+	    		}else {
+	    			showAlert("Machine not stopped", 
+	    					"Machine has to be in stopped state in order for a maintenance to be done", 
+	    					Alert.AlertType.ERROR);
 	    		}
 	    		maintenanceService.editMaintenance(maintenance);
 
@@ -408,6 +443,14 @@ public class OnderhoudSchermController {
 	        });
 
 	        dateField.setPromptText("Select or type to search");
+	    }
+	
+	 private void showAlert(String title, String message, Alert.AlertType alertType) {
+	        Alert alert = new Alert(alertType);
+	        alert.setTitle(title);
+	        alert.setHeaderText(null);
+	        alert.setContentText(message);
+	        alert.showAndWait();
 	    }
 
 	
