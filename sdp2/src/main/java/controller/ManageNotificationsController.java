@@ -143,7 +143,7 @@ public class ManageNotificationsController {
     loadTableContent();
   }
 
-  private void loadTableContent() {
+  protected void loadTableContent() {
     if (notifications != null) {
       notifications.clear();
     }
@@ -162,13 +162,22 @@ public class ManageNotificationsController {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/NotificationForm.fxml"));
       rootLayout.setRight(loader.load());
+      NotificationFormController controller = loader.getController();
+      controller.setParentController(this);
 
       if (notification != null) {
-        NotificationFormController controller = loader.getController();
         controller.setNotification(notification);
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  protected void selectNotificationInTable(Notification notification) {
+    tableView.getSelectionModel().select(notification);
+  }
+  
+  protected void removeForm() {
+    rootLayout.setRight(null);
   }
 }

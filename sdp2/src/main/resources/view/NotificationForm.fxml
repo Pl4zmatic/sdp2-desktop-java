@@ -94,12 +94,12 @@
                                     </HBox>
                                     <VBox spacing="5.0">
                                        <children>
-                                          <ComboBox fx:id="comboBoxPeople" editable="true" prefWidth="150.0" />
                                           <ScrollPane vbarPolicy="NEVER">
                                              <content>
                                                 <HBox fx:id="hboxSelectedPeople" spacing="5.0" />
                                              </content>
                                           </ScrollPane>
+                                          <ComboBox fx:id="comboBoxPeople" editable="true" prefWidth="150.0" />
                                        </children>
                                     </VBox>
                                  </children>
