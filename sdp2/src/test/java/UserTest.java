@@ -35,7 +35,7 @@ public class UserTest {
 
     @ParameterizedTest
     @NullAndEmptySource
-    @ValueSource(strings = {"", ""})
+    @ValueSource(strings = {" ", ""})
     void testSetFirstNameInvalid(String input) {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> user.setFirstName(input));
         assertTrue(exception.getMessage().contains("has to be filled in"));
@@ -46,6 +46,21 @@ public class UserTest {
     void testSetFirstNameValid(String input) {
         user.setFirstName(input);
         assertEquals(input, user.getFirstName());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {" ", ""})
+    void testSetLastNameInvalid(String input) {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> user.setLastName(input));
+        assertTrue(exception.getMessage().contains("has to be filled in"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Doe", "Smith"})
+    void testSetLastNameValid(String input) {
+        user.setLastName(input);
+        assertEquals(input, user.getLastName());
     }
 
     @ParameterizedTest
@@ -77,11 +92,20 @@ public class UserTest {
         assertEquals(rol, user.getRol());
     }
 
-    @ParameterizedTest
-    @NullSource
-    void testSetRolInvalid(Rollen rol) {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> user.setRol(rol));
+    @Test
+    void testSetRolInvalid() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> user.setRol(null));
         assertEquals("Role has to be filled in", exception.getMessage());
     }
-}
 
+    @Test
+    void testPasswordHashing() {
+        user.setPassword("newpassword");
+        assertTrue(user.getPassword().startsWith("$2a$"));
+    }
+
+    @Test
+    void testGetFullName() {
+        assertEquals("Test De Tester", user.getFullName());
+    }
+}
