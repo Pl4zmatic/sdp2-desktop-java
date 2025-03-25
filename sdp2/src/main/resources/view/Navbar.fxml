@@ -207,14 +207,14 @@
                <children>
                   <Button fx:id="notificationBellButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#navToViewNotifications" styleClass="profileIcon" stylesheets="@../css/Navbar.css" textAlignment="CENTER">
                      <graphic>
-                        <ImageView fx:id="notificationBellImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="notificationBellImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/notification-bell.png" />
+                              <Image url="@../images/Bell_icon.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Circle fx:id="notificationCircle" fill="#ff605b" layoutX="33.0" layoutY="12.0" radius="7.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.2" />
+                  <Circle fx:id="notificationCircle" fill="#ff605b" layoutX="37.0" layoutY="13.0" radius="7.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.2" />
                </children>
                <HBox.margin>
                   <Insets right="10.0" />

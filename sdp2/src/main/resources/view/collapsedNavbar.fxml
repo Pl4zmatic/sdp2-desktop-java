@@ -7,8 +7,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.shape.Circle?>
+
 <VBox fx:id="collapsedNavbar" alignment="TOP_CENTER" maxWidth="40.0" prefWidth="40.0" styleClass="parentContainer" stylesheets="@../css/Navbar.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavbarController">
     <children>
         <!-- Expand button -->
@@ -143,7 +143,7 @@
                     <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../images/notification-bell.png" />
+                                <Image url="@../images/Bell_icon.png" />
                             </image>
                         </ImageView>
                     </graphic>
