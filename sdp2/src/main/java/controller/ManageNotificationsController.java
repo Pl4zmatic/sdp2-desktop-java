@@ -1,11 +1,9 @@
 package controller;
 
 import java.io.IOException;
-
-import domein.machine.Machine;
 import domein.notification.Notification;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,7 +44,7 @@ public class ManageNotificationsController {
   private TableView<Notification> tableView;
 
   @FXML
-  private ComboBox<NotificationType> typeFilterComboBox;
+  private ComboBox<String> typeFilterComboBox;
 
   private NotificationService notificationService;
   private FilteredList<Notification> notifications;
@@ -77,23 +75,31 @@ public class ManageNotificationsController {
 
     addButton.setOnAction((event) -> addOrEditNotification(null));
     typeFilterComboBox.setOnHiding(event -> {
-      typeFilterComboBox.getEditor().setText(typeFilterComboBox.getSelectionModel().getSelectedItem().name());
+      typeFilterComboBox.getEditor().setText(typeFilterComboBox.getSelectionModel().getSelectedItem());
       applyFilters();
     });
     searchBar.textProperty().addListener(event -> applyFilters());
   }
 
   private void setupFilters() {
-    typeFilterComboBox.setItems(FXCollections.observableArrayList(NotificationType.MAINTENANCE, NotificationType.REMINDER));
+    typeFilterComboBox
+        .setItems(FXCollections.observableArrayList("All types", NotificationType.MAINTENANCE.name(),
+            NotificationType.REMINDER.name()));
+    typeFilterComboBox.getSelectionModel().select(0);
   }
 
   private void applyFilters() {
-    NotificationType filteredType = typeFilterComboBox.getSelectionModel().getSelectedItem();
+    NotificationType filteredType = NotificationType
+        .getTypeByString(typeFilterComboBox.getSelectionModel().getSelectedItem());
     String searchString = searchBar.getText();
 
     notifications.setPredicate(notif -> {
-      boolean typeCheck = notif.getType().equals(filteredType);
-      boolean stringCheck = notif.getTitle().toLowerCase().contains(searchString.toLowerCase()) || notif.getMessage().toLowerCase().contains(searchString.toLowerCase());
+      boolean typeCheck, stringCheck;
+      if (filteredType != null)
+        typeCheck = notif.getType().equals(filteredType);
+      else typeCheck = true;
+      stringCheck = notif.getTitle().toLowerCase().contains(searchString.toLowerCase())
+          || notif.getMessage().toLowerCase().contains(searchString.toLowerCase());
       return typeCheck && stringCheck;
     });
   }
@@ -107,6 +113,10 @@ public class ManageNotificationsController {
     titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
     messageColumn.setCellValueFactory(new PropertyValueFactory<>("message"));
     typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+    // styling
+    titleColumn.setPrefWidth(175);
+    messageColumn.setPrefWidth(400);
 
     actionsColumn.setCellFactory(new Callback<TableColumn<Notification, Void>, TableCell<Notification, Void>>() {
       @Override
@@ -167,7 +177,7 @@ public class ManageNotificationsController {
 
   protected void loadTableContent() {
     if (notifications != null) {
-      notifications.clear();
+      notifications.getSource().clear();
     }
     notifications = new FilteredList<>(FXCollections.observableArrayList(notificationService.getAllNotifications()));
 
@@ -198,7 +208,7 @@ public class ManageNotificationsController {
   protected void selectNotificationInTable(Notification notification) {
     tableView.getSelectionModel().select(notification);
   }
-  
+
   protected void removeForm() {
     rootLayout.setRight(null);
   }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -94,12 +95,16 @@
                                     </HBox>
                                     <VBox spacing="5.0">
                                        <children>
-                                          <ScrollPane vbarPolicy="NEVER">
+                                          <ScrollPane styleClass="user-scroll-pane" VBox.vgrow="ALWAYS">
                                              <content>
                                                 <HBox fx:id="hboxSelectedPeople" spacing="5.0" />
                                              </content>
                                           </ScrollPane>
-                                          <ComboBox fx:id="comboBoxPeople" editable="true" prefWidth="150.0" />
+                                          <ComboBox fx:id="comboBoxPeople" editable="true" prefWidth="200.0">
+                                             <styleClass>
+                                                <String fx:value="comboBox" />
+                                                <String fx:value="filter-combo" />
+                                             </styleClass></ComboBox>
                                        </children>
                                     </VBox>
                                  </children>
@@ -131,5 +136,6 @@
    <stylesheets>
       <URL value="@../css/globals.css" />
       <URL value="@../css/form.css" />
+      <URL value="@../css/NotificationForm.css" />
    </stylesheets>
 </BorderPane>

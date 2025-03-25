@@ -8,6 +8,7 @@ import java.util.List;
 
 import domein.notification.Notification;
 import domein.user.User;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -20,12 +21,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -97,6 +100,10 @@ public class NotificationFormController {
     this.allActiveUsers = new ArrayList<>(userService.getAllActiveUsers());
     setupComboBox();
     setupCallbacks();
+    Platform.runLater(() -> {
+      comboBoxPeople.hide();
+      title.requestFocus();
+    });
   }
 
   private void setupCallbacks() {
@@ -107,7 +114,7 @@ public class NotificationFormController {
     cancel.setOnAction(event -> parentController.removeForm());
 
     // combo box
-    comboBoxPeople.getEditor().textProperty().addListener((obs, oldValue, newValue) -> filterComboBoxByName(newValue));
+    comboBoxPeople.getEditor().textProperty().addListener(event -> filterComboBoxByName(comboBoxPeople.getEditor().getText()));
     comboBoxPeople.setOnHidden(event -> {
       if (comboBoxPeople.getSelectionModel().getSelectedItem() instanceof User) {
         selectUser(comboBoxPeople.getSelectionModel().getSelectedItem());
@@ -148,6 +155,7 @@ public class NotificationFormController {
     if (!filteredUsers.isEmpty())
       comboBoxPeople.setItems(filteredUsers);
 
+    comboBoxPeople.hide();
     comboBoxPeople.show();
   }
 
@@ -173,14 +181,17 @@ public class NotificationFormController {
       ImageView closeImage = new ImageView(new Image(getClass().getResourceAsStream("/images/close.png")));
       // styling
       {
+        hbox.getStyleClass().add("selected-person");
         hbox.setMaxWidth(125);
         hbox.setAlignment(Pos.CENTER_LEFT);
 
+        button.getStyleClass().add("button");
         buttonImage.setFitWidth(20);
         buttonImage.setFitHeight(20);
         button.setPadding(new Insets(0));
         button.setGraphic(buttonImage);
 
+        closeButton.getStyleClass().add("button");
         closeImage.setFitWidth(20);
         closeImage.setFitHeight(20);
         closeButton.setPadding(new Insets(0));
@@ -191,6 +202,7 @@ public class NotificationFormController {
       hbox.setUserData(user);
 
       // callback
+      button.setOnAction((event) -> unselectUser((User) hbox.getUserData()));
       closeButton.setOnAction((event) -> unselectUser((User) hbox.getUserData()));
 
       hbox.getChildren().add(button);
