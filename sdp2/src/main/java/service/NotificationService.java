@@ -1,5 +1,6 @@
 package service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -94,6 +95,26 @@ public class NotificationService{
         }
     }
 
+    public List<Notification> getAllNotifications() {
+        return Collections.unmodifiableList(notificationDaoJpa.getAllNotifications());
+    }
 
+    public void updateNotification(Notification notification) {
+        try {
+            NotificationDaoJpa.startTransaction();
+            notificationDaoJpa.update(notification);
+            NotificationDaoJpa.commitTransaction();
+        } catch (Exception e) {
+            System.err.println("\n\nUpdate notification failed.\n");
+            e.printStackTrace();
+        }
+    }
 
+    public List<User> getAllUsersByNotification(Notification notification) {
+        List<UserNotification> idList = userNotificationDaoJpa.getUserNotificationsByNotification(notification);
+        if(idList.isEmpty()){
+            return null;
+        }
+        return idList.stream().map((obj) -> obj.getUser()).toList();
+    }
 }

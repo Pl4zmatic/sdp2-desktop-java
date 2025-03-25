@@ -11,11 +11,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ImageService {
 
+  private static ImageService instance;
+
+  public static ImageService getInstance() {
+    if (instance == null) {
+      instance = new ImageService();
+    }
+
+    return instance;
+  }
+
   public byte[] getImageBytesFromPath(String path) {
     try {
       return Files.readAllBytes(Path.of(path));
     } catch (Exception e) {
-      System.out.printf("%s\n%s%s\n%s\n", "=".repeat(20), "Getting image file failed, from path: ", path, "=".repeat(20));
+      System.out.printf("%s\n%s%s\n%s\n", "=".repeat(20), "Getting image file failed, from path: ", path,
+          "=".repeat(20));
       e.printStackTrace();
     }
 
@@ -25,7 +36,7 @@ public class ImageService {
   public void download(String destination, Image image) {
     String filePath = String.format("%s%s%s", destination, image.getName(), image.getExtension());
     try {
-      FileOutputStream outStream  = new FileOutputStream(filePath);
+      FileOutputStream outStream = new FileOutputStream(filePath);
       outStream.write(image.getData());
       outStream.close();
     } catch (IOException e) {

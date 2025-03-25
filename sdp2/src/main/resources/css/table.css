@@ -1,0 +1,239 @@
+/* Root Layout */
+.root-layout {
+  -fx-background-color: white;
+}
+
+/* Content Container */
+.content-container {
+  -fx-background-color: transparent;
+  -fx-background-radius: 10px;
+  -fx-effect: dropshadow(gaussian, rgba(31, 40, 46, 0.1), 10, 0, 0, 5);
+}
+
+/* Search Bar */
+.search-bar {
+  -fx-background-color: transparent;
+  -fx-background-radius: 8px;
+  -fx-border-radius: 8px;
+  -fx-alignment: center-right;
+  -fx-pref-width: 1050px;
+}
+
+/* Search Field */
+.search-field {
+  -fx-background-color: white;
+  -fx-background-radius: 6px;
+  -fx-border-color: -lightGray;
+  -fx-border-radius: 6px;
+  -fx-border-width: 1px;
+  -fx-font-size: 14px;
+  -fx-font-family: "Inter";
+  -fx-prompt-text-fill: -lightGray;
+  -fx-text-fill: -deepBlue;
+}
+
+/* Add Machine Button */
+.add-button {
+  -fx-background-color: -delawareRed;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-background-radius: 6px;
+  -fx-cursor: hand;
+  -fx-font-family: "Inter";
+}
+
+.add-button:hover {
+  -fx-background-color: derive(-rancidRed, 10%);
+}
+
+.add-button:pressed {
+  -fx-background-color: derive(-rancidRed, -10%);
+}
+
+/* Standard TableView styling */
+.table {
+    -fx-background-color: -lightGray;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-pref-width: 1050px; /* Updated to match the new total width */
+}
+
+/* Table header styling */
+.table .column-header-background, .table .filler {
+    -fx-background-color: -lightGray;
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+.table .column-header {
+    -fx-background-color: -lightGray;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: -deepBlue;
+    -fx-font-family: "Inter";
+    -fx-padding: 10px 15px;
+    -fx-alignment: CENTER-LEFT; /* Explicitly set to left alignment */
+}
+
+.table .column-header .label {
+    -fx-text-fill: -deepBlue;
+    -fx-font-weight: bold;
+    -fx-font-family: "Inter";
+    -fx-alignment: CENTER-LEFT; /* Explicitly set to left alignment */
+}
+
+/* Table cell styling */
+.table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: -lightGray;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0;
+    -fx-min-height: 50px;
+    -fx-pref-height: 50px;
+}
+
+.table .table-row-cell:hover {
+    -fx-background-color: -lightGray;
+}
+
+.table .table-row-cell:selected {
+    -fx-background-color: rgba(147, 112, 219, 0.2);
+}
+
+.table .table-cell {
+    -fx-alignment: center-left;
+    -fx-padding: 10px 15px;
+    -fx-text-fill: -deepBlue;
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+    -fx-border-width: 0;
+}
+
+/* Style voor de Edit/Delete knoppen in de tabel */
+.edit-button,
+.delete-button {
+    -fx-font-family: "Inter";
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-min-width: 70px;
+    -fx-min-height: 30px;
+    -fx-pref-height: 30px;
+    -fx-max-height: 30px;
+    -fx-pref-width: -1;
+    -fx-max-width: Infinity;
+    -fx-alignment: CENTER;
+    -fx-content-display: CENTER;
+}
+
+.edit-button {
+    -fx-background-color: -deepBlue;
+    -fx-text-fill: white;
+}
+
+.edit-button:hover {
+    -fx-background-color: derive(-deepBlue, 10%);
+}
+
+.delete-button {
+    -fx-background-color: -rancidRed;
+    -fx-text-fill: white;
+}
+
+.delete-button:hover {
+    -fx-background-color: derive(-rancidRed, 10%);
+}
+
+/* Container voor de actieknoppen */
+.actions-container {
+    -fx-spacing: 10;
+    -fx-alignment: CENTER;
+    -fx-padding: 5px 0;
+    -fx-min-width: 160px;
+    -fx-pref-width: 160px;
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+}
+
+/* Filter ComboBox Styling */
+.filter-combobox {
+  -fx-background-color: white;
+  -fx-background-radius: 6px;
+  -fx-border-color: -lightGray;
+  -fx-border-radius: 6px;
+  -fx-border-width: 1px;
+  -fx-font-size: 14px;
+  -fx-font-family: "Inter";
+  -fx-prompt-text-fill: -lightGray;
+  -fx-text-fill: -deepBlue;
+}
+
+.filter-combobox:focused {
+  -fx-border-color: -rancidRed;
+  -fx-border-width: 1px;
+}
+
+/* Filter Popup Styling */
+.filter-popup-container {
+  -fx-background-color: white;
+  -fx-background-radius: 8px;
+  -fx-border-radius: 8px;
+}
+
+.filter-popup-title {
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -deepBlue;
+  -fx-font-family: "Inter";
+  -fx-padding: 0 0 5 0;
+}
+
+.filter-popup-separator {
+  -fx-background-color: -lightGray;
+  -fx-opacity: 0.5;
+}
+
+/* Filter Checkbox Styling */
+.filter-checkbox {
+  -fx-font-size: 14px;
+  -fx-text-fill: -deepBlue;
+  -fx-font-family: "Inter";
+  -fx-padding: 5 0;
+  -fx-cursor: hand;
+}
+
+.filter-checkbox .box {
+  -fx-background-color: white;
+  -fx-border-color: -lightGray;
+  -fx-border-radius: 3px;
+}
+
+.filter-checkbox:selected .box {
+  -fx-background-color: -rancidRed;
+  -fx-border-color: -rancidRed;
+}
+
+.filter-checkbox:selected .mark {
+  -fx-background-color: white;
+}
+
+/* Filter Apply Button */
+.filter-apply-button {
+  -fx-background-color: -delawareRed;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-background-radius: 6px;
+  -fx-cursor: hand;
+  -fx-font-family: "Inter";
+  -fx-padding: 8px 12px;
+}
+
+.filter-apply-button:hover {
+  -fx-background-color: derive(-rancidRed, 10%);
+}
+
+.filter-apply-button:pressed {
+  -fx-background-color: derive(-rancidRed, -10%);
+}

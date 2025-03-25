@@ -9,6 +9,16 @@ import repository.ReportDaoJpa;
 public class ReportService {
   private ReportDaoJpa reportDaoJpa;
 
+  private static ReportService instance;
+
+  public static ReportService getInstance() {
+    if (instance == null) {
+      instance = new ReportService();
+    }
+
+    return instance;
+  }
+
   public ReportService() {
     this.reportDaoJpa = new ReportDaoJpa();
   }
