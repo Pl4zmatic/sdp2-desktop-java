@@ -3,7 +3,7 @@ package controller;
 import domein.Session;
 import domein.user.User;
 
-import service.NotificationPoller;
+import domein.polling.NotificationPoller;
 import service.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;

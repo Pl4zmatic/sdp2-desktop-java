@@ -1,0 +1,10 @@
+.headerText {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -deepBlue;
+}
+
+.headerContainer {
+    -fx-border-width: 0 0 2;
+    -fx-border-color: -delawareRed;
+}
