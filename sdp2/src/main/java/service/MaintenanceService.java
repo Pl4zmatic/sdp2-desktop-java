@@ -7,6 +7,7 @@ import java.util.List;
 
 import domein.machine.Machine;
 import domein.machine.Maintenance;
+import domein.machine.report.Report;
 import domein.user.User;
 import repository.MachineDaoJpa;
 import repository.MaintenanceDaoJpa;
@@ -30,7 +31,7 @@ public class MaintenanceService {
     }
     
     public boolean planMaintenance(String machineCode, String[] startDate, LocalDate endDate, 
-    		String reason, String maintenanceReport, String remarks) {
+    		String reason, Report maintenanceReport, String remarks) {
     	try {
     		Maintenance newMaintenance = new Maintenance(machineCode, LocalDate.of(Integer.parseInt(startDate[0]), Integer.parseInt(startDate[1]), Integer.parseInt(startDate[2])), endDate, reason, maintenanceReport, remarks);
     		MaintenanceDaoJpa.startTransaction();
@@ -81,4 +82,8 @@ public class MaintenanceService {
              return Collections.emptyList();
          }
 	}
+
+    public Maintenance getMaintenanceById(long id) {
+        return maintenanceDaoJpa.get(id);
+    }
 }

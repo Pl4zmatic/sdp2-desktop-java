@@ -4,6 +4,7 @@ import domein.machine.Machine;
 import domein.notification.Notification;
 import domein.site.Site;
 import domein.machine.Maintenance;
+import domein.machine.report.Report;
 import domein.user.User;
 import repository.MachineDaoJpa;
 import repository.NotificationDao;
@@ -88,7 +89,7 @@ public class populateDb {
     	MaintenanceDaoJpa maintenanceDaoJpa = new MaintenanceDaoJpa();
     	
     	MaintenanceDaoJpa.startTransaction();
-    	maintenanceDaoJpa.insert(new Maintenance("a-04", LocalDate.now().plusDays(1), null, "test", "test", "probleem nog niet opegelost"));
+    	maintenanceDaoJpa.insert(new Maintenance("a-04", LocalDate.now().plusDays(1), null, "test", new Report(), "probleem nog niet opegelost"));
     	MaintenanceDaoJpa.commitTransaction();
     }
 }

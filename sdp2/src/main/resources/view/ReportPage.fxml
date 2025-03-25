@@ -3,17 +3,18 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane styleClass="root" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportPageController">
+<BorderPane styleClass="root" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportPageController">
    <center>
       <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
          <children>
@@ -35,73 +36,35 @@
                                     <Insets bottom="15.0" top="5.0" />
                                  </padding>
                               </HBox>
-                              <VBox prefHeight="145.0" prefWidth="450.0" spacing="6.0">
+                              <VBox prefWidth="450.0" spacing="6.0" />
+                              <Button fx:id="viewImagesButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="170.0" styleClass="primaryButton" text="Bekijk afbeelding" />
+                              <HBox prefWidth="450.0" spacing="15.0">
                                  <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="64.0" prefWidth="450.0" spacing="5.0">
-                                       <children>
-                                          <VBox prefHeight="58.0" prefWidth="230.0">
-                                             <children>
-                                                <Label prefHeight="20.0" prefWidth="365.0" styleClass="fieldLabel" text="Machine" />
-                                                <TextField prefHeight="38.0" prefWidth="258.0" styleClass="inputField">
-                                                   <VBox.margin>
-                                                      <Insets top="5.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                             </children>
-                                          </VBox>
-                                          <VBox prefHeight="58.0" prefWidth="230.0">
-                                             <children>
-                                                <Label prefHeight="20.0" prefWidth="341.0" styleClass="fieldLabel" text="Datum" />
-                                                <DatePicker prefHeight="38.0" prefWidth="235.0" styleClass="datePicker">
-                                                   <VBox.margin>
-                                                      <Insets top="5.0" />
-                                                   </VBox.margin>
-                                                </DatePicker>
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="96.0" prefWidth="450.0" spacing="5.0">
-                                       <children>
-                                          <VBox prefHeight="58.0" prefWidth="230.0">
-                                             <children>
-                                                <Label prefHeight="0.0" prefWidth="223.0" styleClass="fieldLabel" text="Voornaam">
-                                                   <VBox.margin>
-                                                      <Insets />
-                                                   </VBox.margin>
-                                                </Label>
-                                                <TextField prefHeight="38.0" prefWidth="223.0">
-                                                   <VBox.margin>
-                                                      <Insets top="5.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                             </children>
-                                          </VBox>
-                                          <VBox prefHeight="58.0" prefWidth="230.0">
-                                             <children>
-                                                <Label prefHeight="20.0" prefWidth="365.0" styleClass="fieldLabel" text="Naam" />
-                                                <TextField prefHeight="38.0" prefWidth="258.0" styleClass="inputField">
-                                                   <VBox.margin>
-                                                      <Insets top="5.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </HBox>
+                                    <Region prefWidth="30.0" />
+                                    <ChoiceBox fx:id="choiceboxShowImage" prefHeight="33.0" prefWidth="169.0" />
+                                    <Region prefHeight="33.0" prefWidth="7.0" />
+                                    <Button fx:id="addImagesButton" mnemonicParsing="false" prefWidth="170.0" styleClass="primaryButton" text="Afbeelding Toevoegen" />
+                                    <Region prefHeight="33.0" prefWidth="18.0" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <VBox>
+                                 <children>
+                                    <ImageView fx:id="viewSelectedImage" fitHeight="150.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true" />
                                  </children>
                               </VBox>
-                              <VBox spacing="6.0">
+                              <VBox prefHeight="405.0" prefWidth="450.0" spacing="6.0">
                                  <children>
-                                    <HBox alignment="CENTER_LEFT" spacing="5.0" />
                                     <Label styleClass="fieldLabel" text="Procedure" />
-                                    <TextArea prefHeight="572.0" prefWidth="450.0" />
+                                    <TextArea fx:id="procedureTextarea" prefHeight="497.0" prefWidth="450.0" />
                                  </children>
                               </VBox>
                               <HBox alignment="CENTER_RIGHT" spacing="15.0">
                                  <children>
-                                    <Button mnemonicParsing="false" styleClass="cancelButton" text="Annuleer" />
-                                    <Button mnemonicParsing="false" styleClass="primaryButton" text="Voeg Toe" />
+                                    <Button fx:id="cancelButton" mnemonicParsing="false" styleClass="cancelButton" text="Annuleer" />
+                                    <Button fx:id="addButton" mnemonicParsing="false" styleClass="primaryButton" text="Voeg Toe" />
                                  </children>
                                  <VBox.margin>
                                     <Insets top="15.0" />

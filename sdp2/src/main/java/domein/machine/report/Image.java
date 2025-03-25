@@ -1,6 +1,8 @@
 package domein.machine.report;
 
 import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,5 +40,13 @@ public class Image implements Serializable {
     setData(data);
     setName(name);
     setExtension(extension);
+  }
+
+  public String getNameFile() {
+    Matcher fileNameMatcher = Pattern.compile("[^/\\\\]+$").matcher(name);
+    if(fileNameMatcher.find()) {
+      return fileNameMatcher.group(0);
+    }
+    return null;
   }
 }

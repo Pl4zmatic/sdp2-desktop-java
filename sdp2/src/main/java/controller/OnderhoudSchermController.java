@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import domein.Session;
 import domein.machine.Machine;
 import domein.machine.Maintenance;
+import domein.machine.report.Report;
 import domein.machine.stateMachines.machine.StoppedState;
 import domein.machine.stateMachines.maintenance.FinishedState;
 import domein.machine.stateMachines.maintenance.MaintenanceState;
@@ -25,6 +26,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -40,6 +42,7 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import service.MachineService;
 import service.MaintenanceService;
+import service.ReportService;
 import utils.Rollen;
 
 public class OnderhoudSchermController {
@@ -91,14 +94,24 @@ public class OnderhoudSchermController {
     @FXML
     private Text techniekerLabel;
 
+	@FXML
+	private Button addReportButton;
+
+	@FXML
+	private Button editAndViewReportButton;
+
     private FilteredList<Machine> filteredMachines;
     private FilteredList<String> filteredDates;
+
+	private ReportService reportService;
+	private ReportPageController reportPageController;
     
 	@FXML
 	public void initialize() {
-		
-		maintenanceService = new MaintenanceService();		
+		reportService = new ReportService();
+		maintenanceService = new MaintenanceService();
 		machineService = new MachineService();
+		reportPageController = new ReportPageController();
 		
 		rootLayout.setLeft(NavbarManager.getNavbar());
 		
@@ -110,8 +123,17 @@ public class OnderhoudSchermController {
 		if(userRole == Rollen.TECHNIEKER) {
 			planButton.setVisible(false);
 			List<Maintenance> maintenances = maintenanceService.getMaintenanceByTechnieker(user.getFullName());
+
+			addReportButton.setVisible(true);
+			addReportButton.setManaged(true);
+			editAndViewReportButton.setVisible(false);
+			editAndViewReportButton.setVisible(false);
 			fillVBox(maintenances);
-		}else {
+		} else {
+			addReportButton.setVisible(false);
+			addReportButton.setManaged(false);
+			editAndViewReportButton.setVisible(false);
+			editAndViewReportButton.setVisible(false);
 			List<Maintenance> maintenances = maintenanceService.getAllMaintenance();
 			fillVBox(maintenances);
 		}
@@ -133,6 +155,8 @@ public class OnderhoudSchermController {
 		submitButton.setOnAction(event -> {
 			planMaintenance();
 		});
+
+		addReportButton.setOnAction(event -> navToAddReportPage());
 		
 		fieldVBox.setVisible(false);
 		setupMachineComboBox();
@@ -144,6 +168,7 @@ public class OnderhoudSchermController {
 	}
 	
 	private void openPlanMenu() {
+
 		fieldVBox.setVisible(true);
 		techniekerField.setVisible(false);
 		techniekerLabel.setVisible(false);
@@ -155,7 +180,7 @@ public class OnderhoudSchermController {
 	
 	private void planMaintenance() {
 		if(checkFields()) {
-			maintenanceService.planMaintenance(machineField.getValue().getCode(), dateField.getValue().split("-"), null, reasonField.getText(), null, notesField.getText());
+			maintenanceService.planMaintenance(machineField.getValue().getCode(), dateField.getValue().split("-"), null, reasonField.getText(), Session.getCurrentReport(), notesField.getText());
 			machineField.setPromptText("");
 			dateField.setPromptText("");
 			reasonField.clear();
@@ -163,6 +188,11 @@ public class OnderhoudSchermController {
 			List<Maintenance> maintenancesList = maintenanceService.getAllMaintenance();
 			fillVBox(maintenancesList);
 		}
+	}
+
+	private void navToAddReportPage() {
+		reportPageController.setOnderhoudSchermController(this);
+		SceneSwitcher.switchScene("/view/ReportPage.fxml");
 	}
 	
 	private boolean checkFields() {
@@ -451,7 +481,12 @@ public class OnderhoudSchermController {
 	        alert.setHeaderText(null);
 	        alert.setContentText(message);
 	        alert.showAndWait();
-	    }
+	}
 
-	
+	public void updateButtons() {
+		//addReportButton.setVisible(false);
+        //addReportButton.setManaged(false);
+        //editAndViewReportButton.setVisible(true);
+        //editAndViewReportButton.setManaged(true);
+	}	
 }

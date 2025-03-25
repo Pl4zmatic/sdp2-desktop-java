@@ -46,7 +46,7 @@ public class ReportService {
     }
   }
 
-  public Report getReportById(int id) {
+  public Report getReportById(long id) {
     try {
       return reportDaoJpa.get(id);
     } catch (Exception e) {

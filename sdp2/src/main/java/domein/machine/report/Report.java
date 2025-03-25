@@ -12,13 +12,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import service.ImageService;
 
 @Entity
-@NoArgsConstructor
+//@NoArgsConstructor
 @Getter
 public class Report {
   @Id
@@ -31,21 +32,38 @@ public class Report {
 
   @Setter
   @Column(nullable = false)
-  private List<String> steps;
+  private String steps;
 
   @Setter
-  @Column(length = 500, nullable = true)
-  private String notes;
-
-  @Setter
-  @OneToOne
   private Maintenance maintenance;
 
-  public Report(List<String> imagePaths, List<String> steps, String notes, Maintenance maintenance) {
+  public Report(List<String> imagePaths, String steps, Maintenance maintenance) {
+    if (images == null)
+      images = new ArrayList<>();
     setImagesFromStrings(imagePaths);
     setMaintenance(maintenance);
-    setNotes(notes);
     setSteps(steps);
+  }
+
+  public Report(String steps, Maintenance maintenance) {
+    if (images == null)
+      images = new ArrayList<>();
+    setMaintenance(maintenance);
+    setSteps(steps);
+  }
+
+  public Report(String steps) {
+    if (images == null)
+      images = new ArrayList<>();
+    setSteps(steps);
+  }
+
+  public Report() {
+    maintenance = new Maintenance();
+    if(images == null) {
+      images = new ArrayList<>();
+    }
+    this.steps = "Stap 1";
   }
 
   public void setImagesFromStrings(List<String> imagePaths) {
@@ -72,9 +90,29 @@ public class Report {
     }
   }
 
+  public void addImageFromPath(String imagePath) {
+
+    ImageService imageService = new ImageService();
+    Matcher fileNameMatcher = Pattern.compile("(?![/])[^./]*(?=[.])").matcher(imagePath);
+    Matcher extensionMatcher = Pattern.compile("[.].*$").matcher(imagePath);
+
+      Image image = new Image();
+      image.setData(imageService.getImageBytesFromPath(imagePath));
+
+      if(fileNameMatcher.find())
+        image.setName(fileNameMatcher.group(0));
+      else throw new IllegalArgumentException("No name found for image.");
+
+      if(extensionMatcher.find())
+        image.setExtension(extensionMatcher.group(0));
+      else throw new IllegalArgumentException("No extension found for image.");
+
+      images.add(image);
+  } 
+
   @Override
   public String toString() {
-    return String.format("|" + "%-18s|".repeat(5), String.valueOf(rapportId), String.valueOf(images.size()), steps,
-        notes, String.valueOf(maintenance.getMaintenanceId()));
+    return String.format("|" + "%-18s|".repeat(4), String.valueOf(rapportId), String.valueOf(images.size()), steps,
+        String.valueOf(maintenance.getMaintenanceId()));
   }
 }

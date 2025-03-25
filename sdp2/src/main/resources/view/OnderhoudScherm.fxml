@@ -3,6 +3,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
@@ -13,7 +14,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane fx:id="rootLayout" maxHeight="10000.0" maxWidth="10000.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OnderhoudSchermController">
+<BorderPane fx:id="rootLayout" maxHeight="10000.0" maxWidth="10000.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OnderhoudSchermController">
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #f5f5f5;" BorderPane.alignment="CENTER">
          <children>
@@ -180,6 +181,15 @@
                                           <Insets />
                                        </VBox.margin>
                                     </TextField>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="15.0" right="15.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <Button fx:id="addReportButton" mnemonicParsing="false" text="Rapport toevoegen" textFill="WHITE" />
+                                    <Button fx:id="editAndViewReportButton" mnemonicParsing="false" text="Rapport editten" textFill="WHITE" />
                                  </children>
                                  <VBox.margin>
                                     <Insets left="15.0" right="15.0" />

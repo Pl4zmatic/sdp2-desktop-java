@@ -1,6 +1,8 @@
 package domein;
 
 import controller.NavbarManager;
+import domein.machine.Maintenance;
+import domein.machine.report.Report;
 import domein.site.Site;
 import domein.user.User;
 import javafx.scene.control.Button;
@@ -16,6 +18,7 @@ public class Session {
     private static boolean navbarCollapsed = false;
     private static final Map<String, Object> attributes = new HashMap<>();
     private static Site currentSite;
+    private static Report currentReport;
 
     public static Button getActiveNavItem(){
         return activeNavItem;
@@ -34,10 +37,18 @@ public class Session {
     public static Site getCurrentSite() {
         return currentSite;
     }
+
     public static void setCurrentSite(Site site) {
         currentSite = site;
     }
 
+    public static void setCurrentReport(Report report) {
+        currentReport = report;
+    }
+
+    public static Report getCurrentReport() {
+        return currentReport;
+    }
 
     // Set ingelogde gebruiker als current user
     public static void setCurrentUser(User user) {
