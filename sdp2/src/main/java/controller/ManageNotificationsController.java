@@ -23,6 +23,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import service.NotificationService;
+import utils.NotificationType;
 
 public class ManageNotificationsController {
 
@@ -45,10 +46,10 @@ public class ManageNotificationsController {
   private TableView<Notification> tableView;
 
   @FXML
-  private ComboBox<?> typeFilterComboBox;
+  private ComboBox<NotificationType> typeFilterComboBox;
 
   private NotificationService notificationService;
-  private ObservableList<Notification> notifications;
+  private FilteredList<Notification> notifications;
 
   @FXML
   private void initialize() throws IOException {
@@ -57,6 +58,7 @@ public class ManageNotificationsController {
     setupNavbar();
     setupTable();
     setupCallbacks();
+    setupFilters();
   }
 
   private void setupNavbar() throws IOException {
@@ -74,6 +76,26 @@ public class ManageNotificationsController {
     });
 
     addButton.setOnAction((event) -> addOrEditNotification(null));
+    typeFilterComboBox.setOnHiding(event -> {
+      typeFilterComboBox.getEditor().setText(typeFilterComboBox.getSelectionModel().getSelectedItem().name());
+      applyFilters();
+    });
+    searchBar.textProperty().addListener(event -> applyFilters());
+  }
+
+  private void setupFilters() {
+    typeFilterComboBox.setItems(FXCollections.observableArrayList(NotificationType.MAINTENANCE, NotificationType.REMINDER));
+  }
+
+  private void applyFilters() {
+    NotificationType filteredType = typeFilterComboBox.getSelectionModel().getSelectedItem();
+    String searchString = searchBar.getText();
+
+    notifications.setPredicate(notif -> {
+      boolean typeCheck = notif.getType().equals(filteredType);
+      boolean stringCheck = notif.getTitle().toLowerCase().contains(searchString.toLowerCase()) || notif.getMessage().toLowerCase().contains(searchString.toLowerCase());
+      return typeCheck && stringCheck;
+    });
   }
 
   private void setupTable() {
@@ -147,7 +169,7 @@ public class ManageNotificationsController {
     if (notifications != null) {
       notifications.clear();
     }
-    notifications = FXCollections.observableArrayList(notificationService.getAllNotifications());
+    notifications = new FilteredList<>(FXCollections.observableArrayList(notificationService.getAllNotifications()));
 
     tableView.getItems().clear();
     tableView.setItems(notifications);
