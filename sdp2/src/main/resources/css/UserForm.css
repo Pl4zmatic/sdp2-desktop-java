@@ -52,7 +52,7 @@
 }
 
 .primaryButton {
-    -fx-background-color: -delawareRed;
+    -fx-background-color: gray;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 4px;
@@ -62,7 +62,7 @@
 }
 
 .cancelButton {
-    -fx-background-color: -gray;
+    -fx-background-color: -delawareRed;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 4px;
@@ -85,11 +85,11 @@
 }
 
 .primaryButton:hover {
-    -fx-background-color: derive(-delawareRed, -10%);
+    -fx-background-color: derive(-gray, -10%);
 }
 
 .cancelButton:hover {
-    -fx-background-color: derive(-gray, -10%);
+    -fx-background-color: derive(-delawareRed, -10%);
 }
 
 .secondaryButton:hover {
