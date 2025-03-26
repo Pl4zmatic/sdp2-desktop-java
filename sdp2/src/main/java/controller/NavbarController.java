@@ -373,7 +373,7 @@ public class NavbarController implements Observer {
             case "Manage Users" -> "/view/ManageUsers.fxml";
             case "Logs" -> "/view/UserLogs.fxml";
             case "Manage Plants" -> "/view/ManageSites.fxml";
-            case "Maintenance" -> "/view/OnderhoudScherm.fxml";
+            case "Maintenance" -> "/view/SiteSelection2.fxml";
             case "Manage Machines" -> "/view/SiteSelection.fxml";
             case "Manage Notifications" -> "/view/ShowNotifications.fxml";
             case "Logout" -> "/view/Logout.fxml";

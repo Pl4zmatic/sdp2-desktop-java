@@ -118,10 +118,10 @@ public class OnderhoudSchermController {
 
 		if (userRole == Rollen.TECHNIEKER) {
 			planButton.setVisible(false);
-			List<Maintenance> maintenances = maintenanceService.getMaintenanceByTechnieker(user.getFullName());
+			List<Maintenance> maintenances = maintenanceService.getMaintenanceByTechnieker();
 			fillVBox(maintenances);
 		} else {
-			List<Maintenance> maintenances = maintenanceService.getAllMaintenance();
+			List<Maintenance> maintenances = maintenanceService.getMaintenanceForCurrentSite();
 			fillVBox(maintenances);
 		}
 
@@ -153,7 +153,6 @@ public class OnderhoudSchermController {
 
 		plannedScrollable.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 		progressScrollable.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-
 	}
 
 	private void setupCompletedVBox() {

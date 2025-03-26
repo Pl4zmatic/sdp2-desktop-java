@@ -4,9 +4,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import domein.Session;
 import domein.machine.Machine;
 import domein.machine.Maintenance;
+import domein.site.Site;
 import domein.user.User;
 import repository.MachineDaoJpa;
 import repository.MaintenanceDaoJpa;
@@ -55,6 +59,7 @@ public class MaintenanceService {
          }
     }
     
+    
     public boolean editMaintenance(Maintenance updatedMaintenance) {
         try {
             Maintenance existingMaintenance = maintenanceDaoJpa.getMaintenanceById(updatedMaintenance.getMaintenanceId());
@@ -72,13 +77,20 @@ public class MaintenanceService {
         }
         return false;
     }
-
-	public List<Maintenance> getMaintenanceByTechnieker(String technieker) {
+	public List<Maintenance> getMaintenanceByTechnieker() {
 		 try {
-             return Collections.unmodifiableList(maintenanceDaoJpa.getMaintenancesByTechnician(technieker));
-         } catch (Exception e) {
-             e.printStackTrace();
-             return Collections.emptyList();
-         }
+            return Collections.unmodifiableList(getMaintenanceForCurrentSite().stream().filter(m -> m.getNameTechnician().equals(Session.getCurrentUser().getFullName())).collect(Collectors.toList()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
 	}
+	
+	public List<Maintenance> getMaintenanceForCurrentSite() {
+        Site currentSite = Session.getCurrentSite();
+        if (currentSite != null) {
+            return machineService.getMachinesForCurrentSite().stream().flatMap(m -> m.getOnderhouden().stream()).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
 }
