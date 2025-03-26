@@ -172,7 +172,7 @@ public class SiteSelectionController {
         return card;
     }
 
-    private void selectPlant(Site plant) {
+    protected void selectPlant(Site plant) {
         Session.setCurrentSite(plant);
         SceneSwitcher.switchScene("/view/ManageMachines.fxml");
     }

@@ -47,6 +47,7 @@ public class NavbarController implements Observer {
     @FXML private VBox administratorMenu;
     @FXML private VBox verantwoordelijkeMenu;
     @FXML private VBox techniekerMenu;
+    @FXML private VBox managerMenu;
 
     @FXML private Button beheerGebruikerItem;
     @FXML private Button logItem;
@@ -55,6 +56,11 @@ public class NavbarController implements Observer {
     @FXML private Button beheerMachineItem;
     @FXML private Button beheerNotificatieItem;
     @FXML private Button onderhoudTechniekerItem;
+
+    @FXML private Button overviewPlantsItem;
+    @FXML private Button managePlantsItem;
+    @FXML private Button manageMachineItem;
+    @FXML private Button manageNotificationItem;
 
     @FXML private Text profileLastName;
     @FXML private Text profileFirstName;
@@ -102,6 +108,10 @@ public class NavbarController implements Observer {
                         });
                     }
                 }
+
+                if (overviewPlantsItem != null) {
+                    overviewPlantsItem.setOnAction(event -> navToOverviewPlants());
+                }
             }
         }
 
@@ -122,7 +132,6 @@ public class NavbarController implements Observer {
                 });
             }
 
-            // Set up quick nav buttons
             if (quickNavUsers != null) {
                 quickNavUsers.setOnAction(event -> quickNavToUsers());
             }
@@ -146,8 +155,6 @@ public class NavbarController implements Observer {
                 notificationBellButton.setOnAction(event -> navToViewNotifications());
             }
         }
-
-
     }
 
     private void updateQuickNavVisibility() {
@@ -177,7 +184,6 @@ public class NavbarController implements Observer {
                 quickNavManager.setVisible(true);
                 quickNavManager.setManaged(true);
 
-                // Hide all buttons except maintenance for technician
                 if (quickNavSites != null) quickNavSites.setVisible(false);
                 if (quickNavSites != null) quickNavSites.setManaged(false);
                 if (quickNavMachines != null) quickNavMachines.setVisible(false);
@@ -188,35 +194,34 @@ public class NavbarController implements Observer {
         }
     }
 
-    // Quick navigation methods
     @FXML
     private void quickNavToUsers() {
-            SceneSwitcher.switchScene("/view/ManageUsers.fxml");
+        SceneSwitcher.switchScene("/view/ManageUsers.fxml");
     }
 
     @FXML
     private void quickNavToLogs() {
-            SceneSwitcher.switchScene("/view/UserLogs.fxml");
+        SceneSwitcher.switchScene("/view/UserLogs.fxml");
     }
 
     @FXML
     private void quickNavToSites() {
-            SceneSwitcher.switchScene("/view/SitesManagement.fxml");
+        SceneSwitcher.switchScene("/view/SitesManagement.fxml");
     }
 
     @FXML
     private void quickNavToMaintenance() {
-            SceneSwitcher.switchScene("/view/OnderhoudScherm.fxml");
+        SceneSwitcher.switchScene("/view/OnderhoudScherm.fxml");
     }
 
     @FXML
     private void quickNavToMachines() {
-            SceneSwitcher.switchScene("/view/ManageMachines.fxml");
+        SceneSwitcher.switchScene("/view/ManageMachines.fxml");
     }
 
     @FXML
     private void quickNavToNotifications() {
-            SceneSwitcher.switchScene("/view/NotificationsManagement.fxml");
+        SceneSwitcher.switchScene("/view/NotificationsManagement.fxml");
     }
 
     @FXML
@@ -224,12 +229,16 @@ public class NavbarController implements Observer {
         SceneSwitcher.switchScene("/view/ShowNotifications.fxml");
     }
 
+    @FXML
+    private void navToOverviewPlants() {
+        SceneSwitcher.switchScene("/view/SiteSelectionPlantOverview.fxml");
+    }
+
     private void showLogoutMenu() {
         ContextMenu menu = new ContextMenu();
         MenuItem logoutItem = new MenuItem("Logout");
         logoutItem.setOnAction(e -> {
-
-                handleLougout();
+            handleLougout();
         });
         menu.getItems().add(logoutItem);
 
@@ -298,7 +307,7 @@ public class NavbarController implements Observer {
                 Tooltip.install(quickNavProfile, tooltip);
             }
         } else {
-            if (administratorMenu != null && verantwoordelijkeMenu != null && techniekerMenu != null) {
+            if (administratorMenu != null && verantwoordelijkeMenu != null && techniekerMenu != null && managerMenu != null) {
                 switch (userRole) {
                     case ADMINISTRATOR -> {
                         administratorMenu.setManaged(true);
@@ -307,6 +316,8 @@ public class NavbarController implements Observer {
                         verantwoordelijkeMenu.setVisible(false);
                         techniekerMenu.setManaged(false);
                         techniekerMenu.setVisible(false);
+                        managerMenu.setManaged(false);
+                        managerMenu.setVisible(false);
 
                         setActiveMenuItem(beheerGebruikerItem);
                     }
@@ -317,6 +328,8 @@ public class NavbarController implements Observer {
                         verantwoordelijkeMenu.setVisible(true);
                         techniekerMenu.setManaged(false);
                         techniekerMenu.setVisible(false);
+                        managerMenu.setManaged(false);
+                        managerMenu.setVisible(false);
 
                         setActiveMenuItem(beheerMachineItem);
                     }
@@ -327,28 +340,30 @@ public class NavbarController implements Observer {
                         verantwoordelijkeMenu.setVisible(false);
                         techniekerMenu.setManaged(true);
                         techniekerMenu.setVisible(true);
+                        managerMenu.setManaged(false);
+                        managerMenu.setVisible(false);
 
                         setActiveMenuItem(onderhoudTechniekerItem);
                     }
                     case MANAGER -> {
                         administratorMenu.setManaged(false);
                         administratorMenu.setVisible(false);
-                        verantwoordelijkeMenu.setManaged(true);
-                        verantwoordelijkeMenu.setVisible(true);
+                        verantwoordelijkeMenu.setManaged(false);
+                        verantwoordelijkeMenu.setVisible(false);
                         techniekerMenu.setManaged(false);
                         techniekerMenu.setVisible(false);
+                        managerMenu.setManaged(true);
+                        managerMenu.setVisible(true);
 
-                        setActiveMenuItem(beheerMachineItem);
+                        setActiveMenuItem(overviewPlantsItem);
                     }
                 }
 
-                // Set profile text if available
                 if (profileLastName != null && profileFirstName != null) {
                     setTextToUsername(profileLastName, currentUser.getLastName());
                     setTextToUsername(profileFirstName, currentUser.getFirstName());
                 }
 
-                // Setup profile menu if available
                 if (profileIcon != null && logoutMenu != null && logoutItem != null) {
                     setupProfileMenu();
                 }
@@ -377,6 +392,7 @@ public class NavbarController implements Observer {
             case "Maintenance" -> "/view/SiteSelection2.fxml";
             case "Manage Machines" -> "/view/SiteSelection.fxml";
             case "Manage Notifications" -> "/view/ManageNotifications.fxml";
+            case "Overview Plants" -> "/view/OverviewPlants.fxml";
             case "Logout" -> "/view/Logout.fxml";
             default -> null;
         };
@@ -395,6 +411,10 @@ public class NavbarController implements Observer {
                 beheerMachineItem,
                 beheerNotificatieItem,
                 onderhoudTechniekerItem,
+                overviewPlantsItem,
+                managePlantsItem,
+                manageMachineItem,
+                manageNotificationItem
         };
     }
 
@@ -417,7 +437,7 @@ public class NavbarController implements Observer {
         });
 
         logoutItem.setOnAction(e -> {
-                handleLougout();
+            handleLougout();
         });
     }
 
@@ -435,23 +455,9 @@ public class NavbarController implements Observer {
         }
     }
 
-
-
-
-
-
     @Override
     public void update(boolean hasNotifications) {
         System.out.println(hasNotifications + " poep");
-
         notificationCircle.setVisible(hasNotifications);
-
-
-        }
-//
-
     }
-
-
-
-
+}

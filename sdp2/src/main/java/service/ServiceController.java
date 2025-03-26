@@ -306,21 +306,16 @@ public class ServiceController {
         userService.resetPassword(user, password);
         logService.logPasswordReset(user);
     }
-    //</editor-fold>
 
+    public void stopMachine(Machine m) {
+        machineService.stopMachine(m);
+    }
 
+    public void setMachineInMaintenance(Machine m) {
+        machineService.setMachineInMaintenance(m);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public void setMachineInStartable(Machine m) {
+        machineService.setMachineInStartable(m);
+    }
 }

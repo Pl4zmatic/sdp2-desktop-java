@@ -134,6 +134,50 @@
                         <Insets top="15.0" />
                      </VBox.margin>
                   </VBox>
+                  <VBox fx:id="managerMenu">
+                     <children>
+                        <VBox fx:id="subMenuManager">
+                           <children>
+                              <Button fx:id="overviewPlantsItem" styleClass="subMenuItem" text="Overview Plants">
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/building-icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="managePlantsItem" styleClass="subMenuItem" text="Manage Plants">
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/sites-icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="manageMachineItem" styleClass="subMenuItem" text="Manage Machines">
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/machines-icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="manageNotificationItem" styleClass="subMenuItem" text="Manage Notifications">
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/Bell_icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
                </children>
             </VBox>
             <Button fx:id="collapseButton" styleClass="toggle-button">
