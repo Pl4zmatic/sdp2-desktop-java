@@ -442,7 +442,7 @@ public class NavbarController implements Observer {
 
     @Override
     public void update(boolean hasNotifications) {
-        System.out.println(hasNotifications + " poep");
+
 
         notificationCircle.setVisible(hasNotifications);
 

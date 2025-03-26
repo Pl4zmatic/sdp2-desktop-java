@@ -56,7 +56,10 @@ public class NotificationViewController {
         sc = ServiceController.getInstance();
 		rootLayout.setLeft(NavbarManager.getNavbar());
 		//List<Notification> notifications = notificationService.getAllNotificationsByUser(Session.getCurrentUser());
+
         List<Notification> notifications = sc.getAllNotificationsByUser(Session.getCurrentUser());
+
+        notifications.forEach(o -> System.out.println(o.toString()));
 
 
 		showAllNotifications(notifications);

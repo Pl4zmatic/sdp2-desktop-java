@@ -1,5 +1,6 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ public class NotificationService{
     public List<Notification> getAllNotificationsByUser(User user) {
         List<UserNotification> idList = userNotificationDaoJpa.getUserNotificationsByUser(user);
         if(idList.isEmpty()){
-            return null;
+            return new ArrayList<>();
         }
         return notificationDaoJpa.getNotificationsByIds(idList.stream().map(UserNotification::getId).collect(Collectors.toList()));
     }
@@ -55,8 +56,11 @@ public class NotificationService{
             notificationDaoJpa.insert(n);
 
             for (User user : users) {
+
+
                 UserNotification userNotification = new UserNotification(user, n);
                 userNotificationDaoJpa.insert(userNotification);
+
             }
 
             // Commit the transaction after both Notification and UserNotification are inserted

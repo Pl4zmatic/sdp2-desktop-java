@@ -57,8 +57,9 @@ public class Machine implements Serializable, SoftDeletable,Cloneable {
 
 	@Column(name = "technieker_naam", nullable = true)
 	private String techniekerNaam;
-	
-	@Transient
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "technieker_id", referencedColumnName = "id", nullable = true)
 	private User technieker;
 
 	@Column(name = "laatste_onderhoud_datum", nullable = true)

@@ -8,6 +8,7 @@ import domein.machine.report.Report;
 import domein.notification.Notification;
 import domein.site.Site;
 import domein.user.User;
+import repository.UserDaoJpa;
 import utils.NotificationType;
 import utils.Rollen;
 
@@ -150,6 +151,7 @@ public class ServiceController {
         maintenanceService.planMaintenance(machine, startDate, endDate, reason, maintenanceReport, remarks);
         List<User> users = new ArrayList<>();
         users.add(machine.getTechnieker());
+
         createNotification(new Notification(NotificationType.MAINTENANCE
                 , "Machine : " + machine.getCode() + " will be undergoing maintenance on "
                         + startDate, "Maintenance on one of your machines")

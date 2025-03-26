@@ -23,6 +23,9 @@ public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao{
         }
     }
 
+
+    
+
     public String getHashedPasswordByEmail(String email) {
         try {
             return em.createQuery("SELECT u.password FROM User u WHERE u.email = :email", String.class)
