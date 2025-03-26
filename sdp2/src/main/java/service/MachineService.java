@@ -131,9 +131,9 @@ public class MachineService {
         return machineDao.getAllLocations();
     }
 
-    public List<Machine> getMachinesBySite(int siteId) {
+    public List<Machine> getMachinesBySite(String siteNaam) {
         try {
-            return Collections.unmodifiableList(machineDao.getMachinesBySiteId(siteId));
+            return Collections.unmodifiableList(machineDao.getMachinesBySiteId(siteNaam));
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
@@ -143,7 +143,7 @@ public class MachineService {
     public List<Machine> getMachinesForCurrentSite() {
         Site currentSite = Session.getCurrentSite();
         if (currentSite != null) {
-            return getMachinesBySite(currentSite.getId());
+            return getMachinesBySite(currentSite.getName());
         }
         return Collections.emptyList();
     }

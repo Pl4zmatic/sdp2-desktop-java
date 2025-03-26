@@ -36,10 +36,10 @@ public class MachineDaoJpa extends GenericDaoJpa<Machine> implements MachineDao 
                 .getResultList();
     }
 
-    public List<Machine> getMachinesBySiteId(int siteId) {
+    public List<Machine> getMachinesBySiteId(String siteNaam) {
         try {
-            return em.createQuery("SELECT m FROM Machine m WHERE m.site.id = :siteId AND m.deleted = false", Machine.class)
-                    .setParameter("siteId", siteId)
+            return em.createQuery("SELECT m FROM Machine m WHERE m.site.name = :sitenaam AND m.deleted = false", Machine.class)
+                    .setParameter("sitenaam", siteNaam)
                     .getResultList();
         } catch (Exception ex) {
             ex.printStackTrace();

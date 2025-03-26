@@ -115,8 +115,8 @@ public class OnderhoudSchermController {
 	@FXML
 	private Text techniekerLabel;
 
-	private FilteredList<Machine> filteredMachines;
-	private FilteredList<String> filteredDates;
+//	private FilteredList<Machine> filteredMachines;
+//	private FilteredList<String> filteredDates;
 
 	@FXML
 	public void initialize() {
@@ -135,7 +135,7 @@ public class OnderhoudSchermController {
 
 		if (userRole == Rollen.TECHNIEKER) {
 			planButton.setVisible(false);
-			List<Maintenance> maintenances = maintenanceService.getMaintenanceByTechnieker(user.getFullName());
+			List<Maintenance> maintenances = maintenanceService.getMaintenanceByTechnieker();
 
 			addReportButton.setVisible(true);
 			addReportButton.setManaged(true);

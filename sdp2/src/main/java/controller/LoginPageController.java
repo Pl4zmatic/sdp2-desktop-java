@@ -68,7 +68,7 @@ public class LoginPageController {
         } else if (currentUser.getRol() == Rollen.VERANTWOORDELIJKE) {
             nextScene = "/view/SiteSelection.fxml";
         } else if (currentUser.getRol() == Rollen.TECHNIEKER) {
-            nextScene = "/view/OnderhoudScherm.fxml";
+            nextScene = "/view/SiteSelection2.fxml";
         } else if (currentUser.getRol() == Rollen.MANAGER) {
             nextScene = "/view/SiteSelection.fxml";
         }
