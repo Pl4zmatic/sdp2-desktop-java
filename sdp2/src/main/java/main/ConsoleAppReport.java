@@ -48,7 +48,7 @@ public class ConsoleAppReport {
     System.out.println("Choose a maintenance with id: ");
     int maintenanceId = inputScanner.nextInt();
 
-    maintenance = maintenanceService.getMaintenanceById(maintenanceId);
+    //maintenance = maintenanceService.getMaintenanceById(maintenanceId);
   }
 
   private static void printMenu() {
