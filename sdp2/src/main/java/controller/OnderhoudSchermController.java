@@ -149,6 +149,7 @@ public class OnderhoudSchermController {
 			addReportButton.setManaged(false);
 			editAndViewReportButton.setVisible(false);
 			editAndViewReportButton.setVisible(false);
+			List<Maintenance> maintenances = maintenanceService.getMaintenanceForCurrentSite();
 			fillVBox(maintenances);
 		}
 
