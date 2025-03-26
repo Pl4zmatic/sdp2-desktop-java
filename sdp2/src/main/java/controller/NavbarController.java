@@ -85,6 +85,7 @@ public class NavbarController implements Observer {
 
     @FXML
     public void initialize() {
+        this.notificationCircle.setVisible(false);
         sc = ServiceController.getInstance();
         NotificationPoller.getInstance().addObserver(this);
         if (rootLayout != null) {
@@ -521,7 +522,7 @@ public class NavbarController implements Observer {
 
     @Override
     public void update(boolean hasNotifications) {
-        System.out.println(hasNotifications + " yes");
+
         notificationCircle.setVisible(hasNotifications);
     }
 }
