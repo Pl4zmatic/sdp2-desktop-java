@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserTest {
+class UserTest {
 
     private User user;
 
