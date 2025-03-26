@@ -79,6 +79,9 @@ public class OnderhoudSchermController {
 	private ScrollPane progressScrollable;
 
 	@FXML
+	private Text plannedTitle;
+	   
+	@FXML
 	private TextField reasonField;
 
 	@FXML
@@ -171,12 +174,14 @@ public class OnderhoudSchermController {
 	}
 
 	private void setupCompletedVBox() {
+		plannedTitle.setText("Completed");
 		fullProgressVBox.setVisible(false);
         VBox.setVgrow(fullProgressVBox, Priority.NEVER);
         fullProgressVBox.setManaged(false);
 		planButton.setText("Go back");
         planButton.setOnAction(eventt -> {
         	planButton.setText("Plan Maintenance");
+        	plannedTitle.setText("Planned");
         	initialize();
         });
         List<Maintenance> maintenances = sc.getAllMaintenances();
