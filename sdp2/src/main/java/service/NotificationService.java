@@ -1,5 +1,6 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -130,7 +131,7 @@ public class NotificationService {
     public List<User> getAllUsersByNotification(Notification notification) {
         List<UserNotification> idList = userNotificationDaoJpa.getUserNotificationsByNotification(notification);
         if (idList.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         return idList.stream().map((obj) -> obj.getUser()).toList();
     }

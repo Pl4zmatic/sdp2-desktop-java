@@ -86,9 +86,24 @@ public class NotificationFormController {
 
   public void setNotification(Notification notification) {
     this.notification = notification;
-    selectedUserList = new ArrayList<>(notificationService.getAllUsersByNotification(this.notification));
-    allActiveUsers.removeAll(selectedUserList);
-    comboBoxPeople.setItems(FXCollections.observableArrayList(allActiveUsers));
+
+    if (notification == null) {
+      selectedUserList = new ArrayList<>();
+      comboBoxPeople.setItems(FXCollections.observableArrayList(allActiveUsers));
+      return;
+    }
+
+    List<User> usersForNotification = notificationService.getAllUsersByNotification(this.notification);
+
+    selectedUserList = new ArrayList<>(usersForNotification != null ? usersForNotification : new ArrayList<>());
+
+    List<User> usersToRemove = new ArrayList<>(selectedUserList);
+    allActiveUsers.removeAll(usersToRemove);
+
+    if (!allActiveUsers.isEmpty()) {
+      comboBoxPeople.setItems(FXCollections.observableArrayList(allActiveUsers));
+    }
+
     loadContentSelectedPeople();
     setControls();
   }
@@ -101,7 +116,9 @@ public class NotificationFormController {
     setupComboBox();
     setupCallbacks();
     Platform.runLater(() -> {
-      comboBoxPeople.hide();
+      if (!allActiveUsers.isEmpty()) {
+        comboBoxPeople.hide();
+      }
       title.requestFocus();
     });
   }
@@ -116,8 +133,9 @@ public class NotificationFormController {
     // combo box
     comboBoxPeople.getEditor().textProperty().addListener(event -> filterComboBoxByName(comboBoxPeople.getEditor().getText()));
     comboBoxPeople.setOnHidden(event -> {
-      if (comboBoxPeople.getSelectionModel().getSelectedItem() instanceof User) {
-        selectUser(comboBoxPeople.getSelectionModel().getSelectedItem());
+      User selectedUser = comboBoxPeople.getSelectionModel().getSelectedItem();
+      if (selectedUser != null) {
+        selectUser(selectedUser);
         loadContentSelectedPeople();
       }
     });
@@ -143,23 +161,30 @@ public class NotificationFormController {
   }
 
   private void filterComboBoxByName(String filter) {
-    ObservableList<User> ObservableUsers = FXCollections.observableArrayList(allActiveUsers);
-    FilteredList<User> filteredUsers = new FilteredList<>(ObservableUsers, item -> true);
+    if (allActiveUsers.isEmpty()) {
+      return;
+    }
+
+    ObservableList<User> observableUsers = FXCollections.observableArrayList(allActiveUsers);
+    FilteredList<User> filteredUsers = new FilteredList<>(observableUsers, item -> true);
     filteredUsers.setPredicate((user) -> {
-      if (filter.isBlank() || filter.isEmpty())
+      if (filter == null || filter.isBlank() || filter.isEmpty())
         return true;
       return user.getFirstName().toLowerCase().contains(filter.toLowerCase())
-          || user.getLastName().toLowerCase().contains(filter.toLowerCase());
+              || user.getLastName().toLowerCase().contains(filter.toLowerCase());
     });
 
-    if (!filteredUsers.isEmpty())
+    if (!filteredUsers.isEmpty()) {
       comboBoxPeople.setItems(filteredUsers);
 
-    comboBoxPeople.hide();
-    comboBoxPeople.show();
+      comboBoxPeople.hide();
+      comboBoxPeople.show();
+    }
   }
 
   private void selectUser(User user) {
+    if (user == null) return;
+
     this.allActiveUsers.remove(user);
     this.selectedUserList.add(user);
     comboBoxPeople.setItems(FXCollections.observableArrayList(allActiveUsers));
