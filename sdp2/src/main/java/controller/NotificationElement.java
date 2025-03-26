@@ -56,8 +56,8 @@ public class NotificationElement {
     public void fillNotificationElement(Notification notification, VBox parentContainer) {
         sc = ServiceController.getInstance();
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String date = notification.getDateAndTime().format(dateFormat);
-        notificationDateLabel.setText(date);
+        //String date = notification.getDateAndTime().format(dateFormat);
+        //notificationDateLabel.setText(date);
         notificationStatusLabel.setText("Nieuw");
         notificationTitleLabel.setText(notification.getTitle());
         switch (notification.getType()) {
