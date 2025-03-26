@@ -11,3 +11,4 @@ public class SiteSelectionOverviewController extends SiteSelectionController {
         SceneSwitcher.switchScene("/view/OverviewPlants.fxml");
     }
 }
+

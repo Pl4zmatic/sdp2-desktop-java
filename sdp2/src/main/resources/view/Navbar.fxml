@@ -69,6 +69,14 @@
                      <children>
                         <VBox fx:id="subMenuVerantwoordelijke">
                            <children>
+                              <Button fx:id="verantwoordelijkeOverviewPlantsItem" styleClass="subMenuItem" text="Overview Plants">                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/building-icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
                               <Button fx:id="beheerSiteItem" styleClass="subMenuItem" text="Manage Plants">
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">

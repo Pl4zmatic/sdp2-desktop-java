@@ -77,4 +77,23 @@ public class SiteService {
             throw new EntityNotFoundException("Site with code " + code + " not found");
         }
     }
+
+    public Site getSiteByVerantwoordelijke(String naam) {
+        try {
+            SiteDaoJpa.startTransaction();
+            List<Site> allSites = siteDao.findAll();
+            SiteDaoJpa.commitTransaction();
+
+            for (Site site : allSites) {
+                if (site.getVerantwoordelijke() != null &&
+                        site.getVerantwoordelijke().equals(naam)) {
+                    return site;
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            SiteDaoJpa.rollbackTransaction();
+            throw new RuntimeException("Error finding site for verantwoordelijke: " + naam, e);
+        }
+    }
 }

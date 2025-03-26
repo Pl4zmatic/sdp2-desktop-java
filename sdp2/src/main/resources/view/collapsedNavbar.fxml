@@ -66,6 +66,18 @@
         </VBox>
 
         <VBox fx:id="quickNavManager" alignment="CENTER" spacing="15.0">
+            <Button fx:id="quickNavOverviewPlants" styleClass="icon-button">
+                <graphic>
+                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/building-icon.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+                <tooltip>
+                    <Tooltip text="Overview Plants" />
+                </tooltip>
+            </Button>
             <!-- Sites icon -->
             <Button fx:id="quickNavSites" onAction="#quickNavToSites" styleClass="icon-button">
                 <graphic>
@@ -77,23 +89,6 @@
                 </graphic>
                 <tooltip>
                     <Tooltip text="Beheer Sites" />
-                </tooltip>
-            <cursor>
-               <Cursor fx:constant="HAND" />
-            </cursor>
-            </Button>
-
-            <!-- Maintenance icon -->
-            <Button fx:id="quickNavMaintenance" onAction="#quickNavToMaintenance" styleClass="icon-button">
-                <graphic>
-                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                            <Image url="@../images/maintenance-icon.png" />
-                        </image>
-                    </ImageView>
-                </graphic>
-                <tooltip>
-                    <Tooltip text="Onderhoud" />
                 </tooltip>
             <cursor>
                <Cursor fx:constant="HAND" />

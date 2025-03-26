@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import domein.Session;
 import domein.site.Site;
+import domein.user.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -18,6 +19,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import service.ServiceController;
 import service.SiteService;
+import utils.Rollen;
 
 public class SiteSelectionController {
     @FXML
@@ -34,7 +36,7 @@ public class SiteSelectionController {
 
     private ObservableList<Site> plants;
     private FilteredList<Site> filteredPlants;
-   private ServiceController sc;
+    private ServiceController sc;
 
     @FXML
     private void initialize() throws IOException {
@@ -52,6 +54,7 @@ public class SiteSelectionController {
     private void setupLocationFilter() {
         List<String> cities = sc.getAllSites().stream()
                 .filter(site -> !site.getDeleted())
+                .filter(this::userHasAccessToSite)
                 .map(site -> {
                     String address = site.getAddress();
                     if (address != null && address.contains(",")) {
@@ -98,7 +101,9 @@ public class SiteSelectionController {
 
                 boolean isActive = !site.getDeleted();
 
-                return matchesLocation && matchesSearch && isActive;
+                boolean hasAccess = userHasAccessToSite(site);
+
+                return matchesLocation && matchesSearch && isActive && hasAccess;
             });
 
             updatePlantCards();
@@ -110,10 +115,34 @@ public class SiteSelectionController {
             plants.clear();
         }
 
-        plants = FXCollections.observableArrayList(sc.getAllSites());
+        List<Site> allSites = sc.getAllSites();
+
+        List<Site> accessibleSites = allSites.stream()
+                .filter(this::userHasAccessToSite)
+                .collect(Collectors.toList());
+
+        plants = FXCollections.observableArrayList(accessibleSites);
         filteredPlants = new FilteredList<>(plants, site -> !site.getDeleted());
 
         updatePlantCards();
+    }
+
+    private boolean userHasAccessToSite(Site site) {
+        User currentUser = Session.getCurrentUser();
+        if (currentUser == null) return false;
+
+        if (currentUser.getRol() == Rollen.MANAGER ||
+                currentUser.getRol() == Rollen.ADMINISTRATOR) {
+            return true;
+        }
+
+        if (currentUser.getRol() == Rollen.VERANTWOORDELIJKE) {
+            String fullName = currentUser.getFirstName() + " " + currentUser.getLastName();
+            return site.getVerantwoordelijke() != null &&
+                    site.getVerantwoordelijke().equals(fullName);
+        }
+
+        return false;
     }
 
     private void updatePlantCards() {
@@ -177,3 +206,4 @@ public class SiteSelectionController {
         SceneSwitcher.switchScene("/view/ManageMachines.fxml");
     }
 }
+

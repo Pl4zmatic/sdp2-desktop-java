@@ -250,6 +250,8 @@ public class ServiceController {
         return siteService.getAllSites();
     }
 
+    public Site getSiteByVerantwoordelijke(String naam) {return siteService.getSiteByVerantwoordelijke(naam);}
+
     public boolean addSite(Site site) {
         return siteService.addSite(site);
     }
