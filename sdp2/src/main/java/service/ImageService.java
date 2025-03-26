@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.ResponseCache;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -27,9 +28,11 @@ public class ImageService {
   private ImageDaoJpa imageDaoJpa;
 
   private static ImageService instance;
-
+  private  ReportService rs;
   private ImageService() {
+
     this.imageDaoJpa = new ImageDaoJpa();
+    this.rs = ReportService.getInstance();
   }
 
   public static ImageService getInstance() {
@@ -80,11 +83,11 @@ public class ImageService {
   }
 
   public List<Image> getAllImagesByReportId(int id) {
-    return reportService.getReportById(id).getImages();
+    return rs.getReportById(id).getImages();
   }
 
   public void addImage() {
-    reportService.addReport(new Report());
+    rs.addReport(new Report());
   }
 
 }

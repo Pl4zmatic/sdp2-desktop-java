@@ -152,12 +152,22 @@ public class ServiceController {
                 , users);
     }
 
+    public List<Maintenance> getMaintenanceForCurrentSite() {
+        return maintenanceService.getMaintenanceForCurrentSite();
+    }
+
     public List<Maintenance> getAllMaintenances() {
         return maintenanceService.getAllMaintenance();
     }
 
     public void editMaintenance(Maintenance maintenance) {
         maintenanceService.editMaintenance(maintenance);
+        List<User> users = new ArrayList<>();
+        users.add(maintenance.getMachine().getTechnieker());
+        createNotification(new Notification(NotificationType.MAINTENANCE
+                        , "Maintenance on Machine : " + maintenance.getMachine().getCode() + "has changed", "Maintenance changed")
+                , users);
+
     }
 
     public List<Maintenance> getMaintenanceByTechnieker(){
@@ -278,9 +288,7 @@ public class ServiceController {
     }
     //</editor-fold>
 
-	public List<Maintenance> getMaintenanceForCurrentSite() {
-		return maintenanceService.getMaintenanceForCurrentSite();
-	}
+
 
 
 

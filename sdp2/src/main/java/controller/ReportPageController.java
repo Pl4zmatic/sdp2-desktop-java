@@ -37,6 +37,7 @@ import javafx.stage.Window;
 import lombok.Getter;
 import service.ImageService;
 import service.ReportService;
+import service.ServiceController;
 
 public class ReportPageController {
     @FXML
@@ -65,16 +66,14 @@ public class ReportPageController {
 
     @Getter private Report report;
     @Getter private List<Image> reportImages;
-    private ReportService reportService;
-    private ImageService imageService;
+    private ServiceController sc;
     private OnderhoudSchermController onderhoudSchermController;
 
     @FXML
     private void initialize() {
 
         reportImages = new ArrayList<>();
-        imageService = new ImageService();
-        reportService = new ReportService();
+        this.sc = ServiceController.getInstance();
         onderhoudSchermController = new OnderhoudSchermController();
         try {
             rootLayout.setLeft(NavbarManager.getNavbar());
@@ -120,7 +119,7 @@ public class ReportPageController {
           report = new Report(procedureTextarea.getText(), maintenance);
         }
 
-        reportService.addReport(report);
+        sc.addReport(report);
         Session.setCurrentReport(report);
         onderhoudSchermController.updateButtons();
         SceneSwitcher.switchScene("/view/OnderhoudScherm.fxml");
@@ -170,12 +169,12 @@ public class ReportPageController {
     if (selectedFile != null) {
       String path = selectedFile.toPath().toString();
 
-      ImageService imageService = new ImageService();
+
       Matcher fileNameMatcher = Pattern.compile("(?![/])[^./]*(?=[.])").matcher(path);
       Matcher extensionMatcher = Pattern.compile("[.].*$").matcher(path);
 
       Image image = new Image();
-      image.setData(imageService.getImageBytesFromPath(path));
+      image.setData(sc.getImageBytesFromPath(path));
 
       if(fileNameMatcher.find())
         image.setName(fileNameMatcher.group(0));
@@ -195,7 +194,7 @@ public class ReportPageController {
     choiceboxShowImage.getSelectionModel().selectFirst();
     for(Image image: reportImages) {
       if(!choiceboxShowImage.getItems().contains(image.getName())) {
-        choiceboxShowImage.getItems().add(imageService.getImageNameFromPath(image.getName()));
+        choiceboxShowImage.getItems().add(sc.getImageNameFromPath(image.getName()));
       }
     }
   }

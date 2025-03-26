@@ -48,6 +48,7 @@ public class Report {
     setMaintenance(maintenance);
     setSteps(steps);
     sc = ServiceController.getInstance();
+
   }
 
   public Report(String steps, Maintenance maintenance) {
@@ -96,12 +97,12 @@ public class Report {
 
   public void addImageFromPath(String imagePath) {
 
-    ImageService imageService = new ImageService();
+
     Matcher fileNameMatcher = Pattern.compile("(?![/])[^./]*(?=[.])").matcher(imagePath);
     Matcher extensionMatcher = Pattern.compile("[.].*$").matcher(imagePath);
 
       Image image = new Image();
-      image.setData(imageService.getImageBytesFromPath(imagePath));
+      image.setData(sc.getImageBytesFromPath(imagePath));
 
       if(fileNameMatcher.find())
         image.setName(fileNameMatcher.group(0));
