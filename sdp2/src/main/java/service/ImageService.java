@@ -50,6 +50,7 @@ public class ImageService {
   public void download(String destination, Image image) {
     String filePath = String.format("%s%s%s", destination, image.getName(), image.getExtension());
     try {
+
       FileOutputStream outStream  = new FileOutputStream(filePath);
       outStream.write(image.getData());
       outStream.close();
@@ -59,7 +60,7 @@ public class ImageService {
     }
   }
 
-  public List<Image> getAllImagesByReportId(long id) {
+  public List<Image> getAllImagesByReportId(int id) {
     return reportService.getReportById(id).getImages();
   }
 

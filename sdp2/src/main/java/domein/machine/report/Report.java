@@ -108,11 +108,15 @@ public class Report {
       else throw new IllegalArgumentException("No extension found for image.");
 
       images.add(image);
-  } 
+  }
 
   @Override
   public String toString() {
-    return String.format("|" + "%-18s|".repeat(4), String.valueOf(rapportId), String.valueOf(images.size()), steps,
-        String.valueOf(maintenance.getMaintenanceId()));
+    return String.format("|%-18d|%-18d|%-18s|%-18d|",
+            rapportId,
+            (images != null ? images.size() : 0),
+            (steps != null ? steps : "N/A"),
+            (maintenance != null ? maintenance.getMaintenanceId() : 0)
+    );
   }
 }
