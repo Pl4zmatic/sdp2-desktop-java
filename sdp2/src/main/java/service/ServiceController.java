@@ -8,21 +8,23 @@ import domein.machine.report.Report;
 import domein.notification.Notification;
 import domein.site.Site;
 import domein.user.User;
+import utils.NotificationType;
 import utils.Rollen;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServiceController {
 
-    private ImageService imageService;
-    private LogService logService;
-    private MachineService machineService;
-    private MaintenanceService maintenanceService;
-    private NotificationService notificationService;
-    private ReportService reportService;
-    private SiteService siteService;
-    private UserService userService;
+    private final ImageService imageService;
+    private final LogService logService;
+    private final MachineService machineService;
+    private final MaintenanceService maintenanceService;
+    private final NotificationService notificationService;
+    private final ReportService reportService;
+    private final SiteService siteService;
+    private final UserService userService;
 
     private static ServiceController instance;
 
@@ -142,6 +144,12 @@ public class ServiceController {
 
     public void planMaintenance(Machine machine, String[] startDate, LocalDate endDate, String reason, String maintenanceReport, String remarks) {
         maintenanceService.planMaintenance(machine, startDate, endDate, reason, maintenanceReport, remarks);
+        List<User> users = new ArrayList<>();
+        users.add(machine.getTechnieker());
+        createNotification(new Notification(NotificationType.MAINTENANCE
+                , "Machine : " + machine.getCode() + " will be undergoing maintenance on "
+                        + startDate, "Maintenance on one of your machines")
+                , users);
     }
 
     public List<Maintenance> getAllMaintenances() {

@@ -20,11 +20,11 @@ import repository.UserDaoJpa;
 public class MaintenanceService {
 	private final MaintenanceDaoJpa maintenanceDaoJpa;
     private static MaintenanceService instance;
-
+    private final MachineService machineService;
     
     public MaintenanceService() {
     	this.maintenanceDaoJpa = new MaintenanceDaoJpa();
-
+        this.machineService = MachineService.getInstance();
     }
     
     public static MaintenanceService getInstance() {
