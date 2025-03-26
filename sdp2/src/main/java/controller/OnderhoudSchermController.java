@@ -184,7 +184,7 @@ public class OnderhoudSchermController {
         	plannedTitle.setText("Planned");
         	initialize();
         });
-        List<Maintenance> maintenances = sc.getAllMaintenances();
+        List<Maintenance> maintenances = sc.getMaintenanceForCurrentSite();
         fillCompletedVBox(maintenances.stream().filter(m -> m.getCurrentStateString().equals("FinishedState")).collect(Collectors.toList()));
 
 	}
