@@ -132,8 +132,8 @@ public class ServiceController {
     public List<String> getAllLocations() {
         return machineService.getAllLocations();
     }
-    public List<Machine> getMachinesBySite(int SiteId){
-        return machineService.getMachinesBySite(SiteId);
+    public List<Machine> getMachinesBySite(String siteNaam){
+        return machineService.getMachinesBySite(siteNaam);
     }
     //</editor-fold>
 
@@ -152,8 +152,8 @@ public class ServiceController {
         maintenanceService.editMaintenance(maintenance);
     }
 
-    public List<Maintenance> getMaintenanceByTechnieker(String techieker){
-        return maintenanceService.getMaintenanceByTechnieker(techieker);
+    public List<Maintenance> getMaintenanceByTechnieker(){
+        return maintenanceService.getMaintenanceByTechnieker();
     }
     //</editor-fold>
 
@@ -269,6 +269,10 @@ public class ServiceController {
         logService.logPasswordReset(user);
     }
     //</editor-fold>
+
+	public List<Maintenance> getMaintenanceForCurrentSite() {
+		return maintenanceService.getMaintenanceForCurrentSite();
+	}
 
 
 

@@ -137,19 +137,18 @@ public class OnderhoudSchermController {
 
 		if (userRole == Rollen.TECHNIEKER) {
 			planButton.setVisible(false);
-			List<Maintenance> maintenances = sc.getMaintenanceByTechnieker(user.getFullName());
+			List<Maintenance> maintenances = sc.getMaintenanceByTechnieker();
 			addReportButton.setVisible(true);
 			addReportButton.setManaged(true);
 			editAndViewReportButton.setVisible(false);
 			editAndViewReportButton.setVisible(false);
 			fillVBox(maintenances);
 		} else {
-			List<Maintenance> maintenances = sc.getAllMaintenances();
 			addReportButton.setVisible(false);
 			addReportButton.setManaged(false);
 			editAndViewReportButton.setVisible(false);
 			editAndViewReportButton.setVisible(false);
-			List<Maintenance> maintenances = maintenanceService.getMaintenanceForCurrentSite();
+			List<Maintenance> maintenances = sc.getMaintenanceForCurrentSite();
 			fillVBox(maintenances);
 		}
 
