@@ -17,6 +17,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import service.NotificationService;
+import service.ServiceController;
 import utils.NotificationType;
 
 public class NotificationViewController {
@@ -46,51 +47,19 @@ public class NotificationViewController {
     private VBox buttonAndNotificationVbox;
 
 
+    private ServiceController sc;
+
 	private NotificationElement notificationElement;
 
     @FXML
 	public void initialize() {
-
+        sc = ServiceController.getInstance();
 		rootLayout.setLeft(NavbarManager.getNavbar());
 		//List<Notification> notifications = notificationService.getAllNotificationsByUser(Session.getCurrentUser());
-        List<Notification> notifications = new ArrayList<>();
-        notifications.add(new Notification(
-                NotificationType.MAINTENANCE,
-                "Er staat onderhoud gepland voor 25 maart.",
-                "Onderhoud Aankondiging"
-        ));
+        List<Notification> notifications = sc.getAllNotificationsByUser(Session.getCurrentUser());
 
-        notifications.add(new Notification(
-                NotificationType.REMINDER,
-                "Er is een probleem met de server, controleer de status.",
-                "Server Waarschuwing"
-        ));
 
-        notifications.add(new Notification(
-                NotificationType.MAINTENANCE,
-                "Nieuwe updates zijn beschikbaar voor de applicatie.",
-                "Update Beschikbaar"
-        ));
-
-        notifications.add(new Notification(
-                NotificationType.MAINTENANCE,
-                "Nieuwe updates zijn beschikbaar voor de applicatie.",
-                "Update Beschikbaar"
-        ));
-
-        notifications.add(new Notification(
-                NotificationType.MAINTENANCE,
-                "Nieuwe updates zijn beschikbaar voor de applicatie.",
-                "Update Beschikbaar"
-        ));
-
-        notifications.add(new Notification(
-                NotificationType.MAINTENANCE,
-                "Nieuwe updates zijn beschikbaar voor de applicatie.",
-                "Update Beschikbaar"
-        ));
-
-		showFiveNotifications(notifications);
+		showAllNotifications(notifications);
 
 
 		notificationScrollable.setContent(buttonAndNotificationVbox);

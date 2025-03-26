@@ -85,11 +85,6 @@ public class populateDb {
 //        MachineDaoJpa.commitTransaction();
 //        ns.createNotification(new Notification(NotificationType.MAINTENANCE, "Test message", "Test title"), userList );
 //        MachineDaoJpa.commitTransaction();
-    	
-    	MaintenanceDaoJpa maintenanceDaoJpa = new MaintenanceDaoJpa();
-    	
-    	MaintenanceDaoJpa.startTransaction();
-    	maintenanceDaoJpa.insert(new Maintenance("a-04", LocalDate.now().plusDays(1), null, "test", new Report(), "probleem nog niet opegelost"));
-    	MaintenanceDaoJpa.commitTransaction();
+
     }
 }

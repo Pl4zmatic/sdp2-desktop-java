@@ -58,6 +58,10 @@ public class ServiceController {
     public void downloadImage(String destination, Image image) {
         imageService.download(destination, image);
     }
+
+    public String getImageNameFromPath(String path) {
+        return imageService.getImageNameFromPath(path);
+    }
     //</editor-fold>
 
     //<editor-fold desc="LOG">
@@ -142,7 +146,7 @@ public class ServiceController {
     //<editor-fold desc="MAINTENANCE">
     // MAINTENANCE SERVICE
 
-    public void planMaintenance(Machine machine, String[] startDate, LocalDate endDate, String reason, String maintenanceReport, String remarks) {
+    public void planMaintenance(Machine machine, String[] startDate, LocalDate endDate, String reason, Report maintenanceReport, String remarks) {
         maintenanceService.planMaintenance(machine, startDate, endDate, reason, maintenanceReport, remarks);
         List<User> users = new ArrayList<>();
         users.add(machine.getTechnieker());
@@ -154,6 +158,10 @@ public class ServiceController {
 
     public List<Maintenance> getMaintenanceForCurrentSite() {
         return maintenanceService.getMaintenanceForCurrentSite();
+    }
+
+    public Maintenance getMaintenanceById(int id) {
+        return maintenanceService.getMaintenanceById(id);
     }
 
     public List<Maintenance> getAllMaintenances() {

@@ -47,7 +47,7 @@ public class Maintenance {
 
     
     public Maintenance(Machine machine, LocalDate startDate, LocalDate endDate,
-    		String reason, String maintenanceReport, String remarks) {
+    		String reason, Report maintenanceReport, String remarks) {
         this.machine = machine;
     	setStartDate(startDate);
     	this.technician = machine.getTechnieker();

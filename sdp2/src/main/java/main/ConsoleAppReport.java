@@ -47,9 +47,9 @@ public class ConsoleAppReport {
     printDbTable(sc.getAllMaintenances());
 
     System.out.println("Choose a maintenance with id: ");
-    long maintenanceId = inputScanner.nextLong();
+    int maintenanceId = inputScanner.nextInt();
     
-    maintenance = maintenanceService.getMaintenanceById(maintenanceId);
+    maintenance = sc.getMaintenanceById(maintenanceId);
   }
   
   private static void printMenu() {
