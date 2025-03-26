@@ -77,15 +77,6 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="beheerSiteItem" styleClass="subMenuItem" text="Manage Plants">
-                                 <graphic>
-                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/sites-icon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
                               <Button fx:id="onderhoudItem" styleClass="subMenuItem" text="Maintenance">
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">

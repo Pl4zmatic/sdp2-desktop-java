@@ -36,6 +36,7 @@ public class NavbarController implements Observer {
 
     @FXML private VBox quickNavAdmin;
     @FXML private VBox quickNavManager;
+    @FXML private VBox quickNavVerantwoordelijke;
 
     @FXML private Button quickNavUsers;
     @FXML private Button quickNavLogs;
@@ -191,17 +192,36 @@ public class NavbarController implements Observer {
                 quickNavManager.setVisible(false);
                 quickNavManager.setManaged(false);
             }
-            case VERANTWOORDELIJKE, MANAGER -> {
+            case MANAGER -> {
                 quickNavAdmin.setVisible(false);
                 quickNavAdmin.setManaged(false);
                 quickNavManager.setVisible(true);
                 quickNavManager.setManaged(true);
+                quickNavVerantwoordelijke.setManaged(false);
+                quickNavVerantwoordelijke.setVisible(false);
 
                 // Make sure Overview Plants is visible for both roles in collapsed navbar
                 if (quickNavOverviewPlants != null) {
                     quickNavOverviewPlants.setVisible(true);
                     quickNavOverviewPlants.setManaged(true);
                 }
+
+            }
+
+            case VERANTWOORDELIJKE -> {
+                quickNavAdmin.setVisible(false);
+                quickNavAdmin.setManaged(false);
+                quickNavManager.setVisible(false);
+                quickNavManager.setManaged(false);
+                quickNavVerantwoordelijke.setManaged(true);
+                quickNavVerantwoordelijke.setVisible(true);
+
+                // Make sure Overview Plants is visible for both roles in collapsed navbar
+                if (quickNavOverviewPlants != null) {
+                    quickNavOverviewPlants.setVisible(true);
+                    quickNavOverviewPlants.setManaged(true);
+                }
+
             }
             case TECHNIEKER -> {
                 quickNavAdmin.setVisible(false);
@@ -233,7 +253,7 @@ public class NavbarController implements Observer {
 
     @FXML
     private void quickNavToSites() {
-        SceneSwitcher.switchScene("/view/SitesManagement.fxml");
+        SceneSwitcher.switchScene("/view/ManageSites.fxml");
     }
 
     @FXML
@@ -248,7 +268,7 @@ public class NavbarController implements Observer {
 
     @FXML
     private void quickNavToNotifications() {
-        SceneSwitcher.switchScene("/view/NotificationsManagement.fxml");
+        SceneSwitcher.switchScene("/view/ManageNotifications.fxml");
     }
 
     @FXML

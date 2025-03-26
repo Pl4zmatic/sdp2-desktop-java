@@ -66,7 +66,7 @@
         </VBox>
 
         <VBox fx:id="quickNavManager" alignment="CENTER" spacing="15.0">
-            <Button fx:id="quickNavOverviewPlants" styleClass="icon-button">
+            <Button fx:id="quickNavOverviewPlants" onAction="#navToOverviewPlants" styleClass="icon-button">
                 <graphic>
                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                         <image>
@@ -129,12 +129,73 @@
             </cursor>
             </Button>
         </VBox>
+      <VBox fx:id="quickNavVerantwoordelijke" alignment="CENTER" spacing="15.0">
+         <children>
+            <Button fx:id="quickNavOverviewPlants1" onAction="#navToOverviewPlantsForVerantwoordelijke" styleClass="icon-button">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/building-icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Overview Plants" />
+               </tooltip>
+            </Button>
+            <Button fx:id="quickNavMaintenance" onAction="#quickNavToMaintenance" styleClass="icon-button">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/maintenance-icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Beheer Machines" />
+               </tooltip>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="quickNavMachines1" onAction="#quickNavToMachines" styleClass="icon-button">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/machines-icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Beheer Machines" />
+               </tooltip>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="quickNavNotifications1" onAction="#quickNavToNotifications" styleClass="icon-button">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Bell_icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Beheer Notificaties" />
+               </tooltip>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </VBox>
 
         <!-- Profile icon at bottom -->
         <VBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
 
 
-                <Button fx:id="profileIcon1" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" styleClass="profileIcon" stylesheets="@../css/Navbar.css" textAlignment="CENTER">
+                <Button fx:id="profileIcon1" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#navToViewNotifications" styleClass="profileIcon" stylesheets="@../css/Navbar.css" textAlignment="CENTER">
                     <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                             <image>
