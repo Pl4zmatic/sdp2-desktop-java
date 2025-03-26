@@ -68,19 +68,19 @@ public class populateDb {
         Site site = siteDaoJpa.findByName("AntwerpenA");
         machineDaoJpa.insert(new Machine(site, "a-04", "Antwerpen"
                 , "Info over het product"
-                , "groen", userDaoJpa.getUserByEmail("technieker@mail.com")));
+                , "active", userDaoJpa.getUserByEmail("technieker@mail.com")));
         machineDaoJpa.insert(new Machine(site, "a-03", "Antwerpen"
                 , "Info over het product"
-                , "groen", userDaoJpa.getUserByEmail("technieker@mail.com")));
+                , "active", userDaoJpa.getUserByEmail("technieker@mail.com")));
         machineDaoJpa.insert(new Machine(site, "a-02", "Antwerpen"
                 , "Info over het product"
-                , "groen", userDaoJpa.getUserByEmail("technieker@mail.com")));
+                , "active", userDaoJpa.getUserByEmail("technieker@mail.com")));
         machineDaoJpa.insert(new Machine(site, "a-05", "Antwerpen"
                 , "Info over het product"
-                , "groen",userDaoJpa.getUserByEmail("technieker@mail.com") ));
+                , "active",userDaoJpa.getUserByEmail("technieker@mail.com") ));
         machineDaoJpa.insert(new Machine(site, "a-01", "Antwerpen"
                 , "Info over het product"
-                , "groen", userDaoJpa.getUserByEmail("technieker@mail.com")));
+                , "active", userDaoJpa.getUserByEmail("technieker@mail.com")));
 
         MachineDaoJpa.commitTransaction();
        // ns.createNotification(new Notification(NotificationType.MAINTENANCE, "Test message", "Test title"), userList );
