@@ -19,12 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserFormController {
-    @FXML private BorderPane rootLayout;
     @FXML private TextField firstNameField;
     @FXML private TextField lastNameField;
     @FXML private DatePicker birthDatePicker;
     @FXML private TextField emailField;
-    @FXML private TextField adressField;
+    @FXML private TextField streetField;
+    @FXML private TextField houseNumberField;
+    @FXML private TextField postalCodeField;
+    @FXML private TextField cityField;
     @FXML private PasswordField passwordField;
     @FXML private TextField phoneNumberField;
     @FXML private ComboBox<Rollen> roleField;
@@ -41,15 +43,11 @@ public class UserFormController {
     private User currentUser;
     private boolean isEditMode;
 
-    // New: Callback for after saving
     private Runnable onSaveCallback;
-    // New: Handler for close button
     private EventHandler<ActionEvent> closeHandler;
 
     @FXML
     public void initialize() {
-        // Remove the navbar setup since we're in a side panel
-        // rootLayout.setLeft(NavbarManager.getNavbar());
 
         ObservableList<Rollen> roles = FXCollections.observableArrayList(Rollen.values());
         roleField.setItems(roles);
@@ -66,15 +64,12 @@ public class UserFormController {
         });
         resetPasswordButton.getStyleClass().add("red-button");
 
-        // Add listener to role field to update validation requirements
         roleField.valueProperty().addListener((obs, oldVal, newVal) -> {
-            // Update visual cues for phone number field based on role
             updatePhoneNumberRequirement();
         });
     }
 
     private void updatePhoneNumberRequirement() {
-        // If role is Technieker, add visual indication that phone number is required
         if (roleField.getValue() == Rollen.TECHNIEKER) {
             if (!phoneNumberField.getStyleClass().contains("required-field")) {
                 phoneNumberField.getStyleClass().add("required-field");
@@ -87,7 +82,7 @@ public class UserFormController {
     @FXML
     private void handleSaveUser() {
         if (!validateForm()) {
-            return; // Stop if validation fails
+            return;
         }
 
         String firstName = firstNameField.getText();
@@ -95,7 +90,10 @@ public class UserFormController {
         LocalDate birthDate = birthDatePicker.getValue();
         String email = emailField.getText();
         String password = passwordField.getText();
-        String adres = adressField.getText();
+
+        String adres = streetField.getText() + " " + houseNumberField.getText() + ", " +
+                postalCodeField.getText() + " " + cityField.getText();
+
         String phoneNumber = phoneNumberField.getText();
         Rollen role = roleField.getValue();
         boolean isActive = activeButton.isSelected();
@@ -113,16 +111,15 @@ public class UserFormController {
 
             success = sc.editUser(currentUser);
         } else {
-            User newUser = new User(firstName, lastName, birthDate,email, password, adres, phoneNumber, role);
+            User newUser = new User(firstName, lastName, birthDate, email, password, adres, phoneNumber, role);
             newUser.setDeleted(!isActive);
-            success = sc.userRegister(firstName, lastName, birthDate,email, password, adres, phoneNumber, role);
+            success = sc.userRegister(firstName, lastName, birthDate, email, password, adres, phoneNumber, role);
         }
 
         if (success) {
             String message = isEditMode ? "User successfully updated!" : "User successfully created!";
             showAlert("Success", message, Alert.AlertType.INFORMATION);
 
-            // Call the callback instead of switching scenes
             if (onSaveCallback != null) {
                 onSaveCallback.run();
             }
@@ -134,7 +131,6 @@ public class UserFormController {
     private boolean validateForm() {
         List<String> errors = new ArrayList<>();
 
-        // Check mandatory fields
         if (firstNameField.getText().trim().isEmpty()) {
             errors.add("First name is required");
             firstNameField.getStyleClass().add("error-field");
@@ -173,11 +169,32 @@ public class UserFormController {
             }
         }
 
-        if (adressField.getText().trim().isEmpty()) {
-            errors.add("Address is required");
-            adressField.getStyleClass().add("error-field");
+        if (streetField.getText().trim().isEmpty()) {
+            errors.add("Street is required");
+            streetField.getStyleClass().add("error-field");
         } else {
-            adressField.getStyleClass().removeAll("error-field");
+            streetField.getStyleClass().removeAll("error-field");
+        }
+
+        if (houseNumberField.getText().trim().isEmpty()) {
+            errors.add("House number is required");
+            houseNumberField.getStyleClass().add("error-field");
+        } else {
+            houseNumberField.getStyleClass().removeAll("error-field");
+        }
+
+        if (postalCodeField.getText().trim().isEmpty()) {
+            errors.add("Postal code is required");
+            postalCodeField.getStyleClass().add("error-field");
+        } else {
+            postalCodeField.getStyleClass().removeAll("error-field");
+        }
+
+        if (cityField.getText().trim().isEmpty()) {
+            errors.add("City is required");
+            cityField.getStyleClass().add("error-field");
+        } else {
+            cityField.getStyleClass().removeAll("error-field");
         }
 
         if (!isEditMode && passwordField.getText().trim().isEmpty()) {
@@ -222,7 +239,6 @@ public class UserFormController {
         alert.showAndWait();
     }
 
-    // Modified: Use the close handler instead of switching scenes
     @FXML
     private void handleCancel() {
         if (closeHandler != null) {
@@ -245,7 +261,27 @@ public class UserFormController {
         lastNameField.setText(user.getLastName());
         birthDatePicker.setValue(user.getBirthDate());
         emailField.setText(user.getEmail());
-        adressField.setText(user.getAdres());
+
+        String address = user.getAdres();
+        if (address != null && !address.isEmpty()) {
+            String[] parts = address.split(",");
+            String streetPart = parts[0].trim();
+            String cityPart = parts.length > 1 ? parts[1].trim() : "";
+
+            int lastSpaceIndex = streetPart.lastIndexOf(" ");
+            if (lastSpaceIndex > 0) {
+                streetField.setText(streetPart.substring(0, lastSpaceIndex));
+                houseNumberField.setText(streetPart.substring(lastSpaceIndex + 1));
+            } else {
+                streetField.setText(streetPart);
+                houseNumberField.setText("");
+            }
+
+            String[] cityParts = cityPart.split(" ", 2);
+            postalCodeField.setText(cityParts.length > 0 ? cityParts[0] : "");
+            cityField.setText(cityParts.length > 1 ? cityParts[1] : "");
+        }
+
         phoneNumberField.setText(user.getGsmNummer());
         roleField.setValue(user.getRol());
         if (user.getDeleted()) {
@@ -289,13 +325,11 @@ public class UserFormController {
         sc.resetPassword(user, newPw);
         showAlert("Success!", "The password has been successfully reset.", Alert.AlertType.INFORMATION);
 
-        // Call the callback instead of switching scenes
         if (onSaveCallback != null) {
             onSaveCallback.run();
         }
     }
 
-    // New: Method to add a close button handler
     public void addCloseButton(EventHandler<ActionEvent> closeHandler) {
         this.closeHandler = closeHandler;
 
@@ -308,7 +342,22 @@ public class UserFormController {
         }
     }
 
-    // New: Method to set a callback for after saving
+    public void clearForm() {
+        firstNameField.clear();
+        lastNameField.clear();
+        birthDatePicker.setValue(null);
+        emailField.clear();
+        // Clear address fields
+        streetField.clear();
+        houseNumberField.clear();
+        postalCodeField.clear();
+        cityField.clear();
+        passwordField.clear();
+        phoneNumberField.clear();
+        roleField.getSelectionModel().clearSelection();
+        activeButton.setSelected(true);
+    }
+
     public void setOnSaveCallback(Runnable callback) {
         this.onSaveCallback = callback;
     }
