@@ -204,6 +204,18 @@ public class ServiceController {
     public void deleteNotification(Notification n) {
         notificationService.deleteNotification(n);
     }
+
+    public List<Notification> getAllNotifications(){
+        return notificationService.getAllNotifications();
+    }
+
+    public List<User> getAllUsersByNotification(Notification notification) {
+        return notificationService.getAllUsersByNotification(notification);
+    }
+
+    public void updateNotification(Notification notification, List<User> users) {
+        notificationService.updateNotification(notification, users);
+    }
     //</editor-fold>
 
     //<editor-fold desc="REPORT">

@@ -251,6 +251,7 @@ public class MachineFormController {
 
         technicianComboBox.setPromptText("Select or type to search");
     }
+    
     private void setupSiteComboBox() {
         List<Site> allSites = sc.getAllSites().stream()
                 .filter(site -> !site.getDeleted())
@@ -398,16 +399,16 @@ public class MachineFormController {
 
     private void setupCallbacks() {
         machineCode.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> editMachineCodeCallback());
-        machineCode.focusedProperty().addListener((event) -> checkTextField(machineCode, "Code is vereist."));
+        machineCode.focusedProperty().addListener((event) -> checkTextField(machineCode, "Code is mandatory."));
 
-        siteComboBox.focusedProperty().addListener((event) -> checkSiteComboBox("Site is vereist."));
+        siteComboBox.focusedProperty().addListener((event) -> checkSiteComboBox("Site is mandatory."));
 
-        machineLoc.focusedProperty().addListener((event) -> checkTextField(machineLoc, "Locatie is vereist."));
-        productInfo.focusedProperty().addListener((event) -> checkTextField(productInfo, "Product info is vereist."));
+        machineLoc.focusedProperty().addListener((event) -> checkTextField(machineLoc, "Locatie is mandatory."));
+        productInfo.focusedProperty().addListener((event) -> checkTextField(productInfo, "Product info is mandatory."));
 
-        technicianComboBox.focusedProperty().addListener((event) -> checkTechnicianComboBox("Technieker is vereist."));
+        technicianComboBox.focusedProperty().addListener((event) -> checkTechnicianComboBox("Technieker is mandatory."));
 
-        lastMaintenance.setOnAction((event) -> errorInDateFieldLastMaintenance("Datum is vereist."));
+        lastMaintenance.setOnAction((event) -> errorInDateFieldLastMaintenance("Datum is mandatory."));
 
         save.setOnAction((event) -> saveMachine());
     }

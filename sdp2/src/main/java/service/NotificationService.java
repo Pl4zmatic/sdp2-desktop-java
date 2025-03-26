@@ -1,5 +1,7 @@
 package service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,11 +16,10 @@ import repository.UserNotificationDao;
 import repository.UserNotificationDaoJpa;
 import utils.Subject;
 
-public class NotificationService{
+public class NotificationService {
     private final NotificationDaoJpa notificationDaoJpa;
     private final UserNotificationDaoJpa userNotificationDaoJpa;
     private static NotificationService instance;
-
 
     public NotificationService() {
         this.notificationDaoJpa = new NotificationDaoJpa();
@@ -26,27 +27,26 @@ public class NotificationService{
     }
 
     public static NotificationService getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new NotificationService();
         }
         return instance;
     }
 
-
     public List<Notification> getAllNotificationsByUser(User user) {
         List<UserNotification> idList = userNotificationDaoJpa.getUserNotificationsByUser(user);
-        if(idList.isEmpty()){
+        if (idList.isEmpty()) {
             return null;
         }
-        return notificationDaoJpa.getNotificationsByIds(idList.stream().map(UserNotification::getId).collect(Collectors.toList()));
+        return notificationDaoJpa
+                .getNotificationsByIds(idList.stream().map(UserNotification::getId).collect(Collectors.toList()));
     }
 
-    public boolean hasNotifications(User user){
+    public boolean hasNotifications(User user) {
         return userNotificationDaoJpa.hasNotificationsByUser(user);
     }
 
     public void createNotification(Notification n, List<User> users) {
-
 
         try {
             NotificationDaoJpa.startTransaction();
@@ -59,7 +59,8 @@ public class NotificationService{
                 userNotificationDaoJpa.insert(userNotification);
             }
 
-            // Commit the transaction after both Notification and UserNotification are inserted
+            // Commit the transaction after both Notification and UserNotification are
+            // inserted
             NotificationDaoJpa.commitTransaction();
         } catch (Exception e) {
             // Rollback the transaction if any error occurs
@@ -68,9 +69,8 @@ public class NotificationService{
         }
     }
 
-
-    public boolean deleteUserNotification(User user, Notification n){
-        UserNotification exisitingUserNotification = userNotificationDaoJpa.getUserNotification(user,n);
+    public boolean deleteUserNotification(User user, Notification n) {
+        UserNotification exisitingUserNotification = userNotificationDaoJpa.getUserNotification(user, n);
         if (exisitingUserNotification != null) {
             UserNotificationDaoJpa.startTransaction();
             userNotificationDaoJpa.delete(exisitingUserNotification);
@@ -84,7 +84,7 @@ public class NotificationService{
     public boolean deleteNotification(Notification n) {
         Notification existingNotification = notificationDaoJpa.getNotificationById(n.getId());
 
-        if(existingNotification != null) {
+        if (existingNotification != null) {
             NotificationDaoJpa.startTransaction();
             notificationDaoJpa.delete(existingNotification);
             NotificationDaoJpa.commitTransaction();
@@ -94,6 +94,45 @@ public class NotificationService{
         }
     }
 
+    public List<Notification> getAllNotifications() {
+        return Collections.unmodifiableList(notificationDaoJpa.getAllNotifications());
+    }
 
+    public void updateNotification(Notification notification, List<User> userList) {
+        try {
+            // remove userNotifications
+            List<User> allUsersWithNotification = userNotificationDaoJpa
+                    .getUserNotificationsByNotification(notification).stream().map(userNotif -> userNotif.getUser())
+                    .toList();
+            for (User user : allUsersWithNotification) {
+                if (!userList.contains(user)) {
+                    this.deleteUserNotification(user, notification);
+                }
+            }
 
+            NotificationDaoJpa.startTransaction();
+            notificationDaoJpa.update(notification);
+
+            // adding userNotifications
+            for (User user : userList) {
+                if (userNotificationDaoJpa.getUserNotification(user, notification) == null) {
+                    UserNotification userNotification = new UserNotification(user, notification);
+                    userNotificationDaoJpa.insert(userNotification);
+                }
+            }
+
+            NotificationDaoJpa.commitTransaction();
+        } catch (Exception e) {
+            System.err.println("\n\nUpdate notification failed.\n");
+            e.printStackTrace();
+        }
+    }
+
+    public List<User> getAllUsersByNotification(Notification notification) {
+        List<UserNotification> idList = userNotificationDaoJpa.getUserNotificationsByNotification(notification);
+        if (idList.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return idList.stream().map((obj) -> obj.getUser()).toList();
+    }
 }

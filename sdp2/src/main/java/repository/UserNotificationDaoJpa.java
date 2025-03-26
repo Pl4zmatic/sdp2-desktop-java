@@ -8,9 +8,6 @@ import jakarta.persistence.NoResultException;
 import java.util.List;
 
 public class UserNotificationDaoJpa extends GenericDaoJpa<UserNotification> implements UserNotificationDao {
-
-
-
         public UserNotificationDaoJpa() {
             super(UserNotification.class);
         }
@@ -43,6 +40,16 @@ public class UserNotificationDaoJpa extends GenericDaoJpa<UserNotification> impl
                         .getResultList().isEmpty();
             } catch (NoResultException e) {
                 return false;
+            }
+        }
+
+        public List<UserNotification> getUserNotificationsByNotification(Notification notification) {
+            try {
+                return em.createQuery("SELECT u FROM UserNotification u WHERE u.notification = :notification", UserNotification.class)
+                        .setParameter("notification", notification)
+                        .getResultList();
+            } catch (NoResultException ex) {
+                return null;
             }
         }
 }
