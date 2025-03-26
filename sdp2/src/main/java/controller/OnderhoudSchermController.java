@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.Component;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,15 +9,10 @@ import java.util.stream.Collectors;
 import domein.Session;
 import domein.machine.Machine;
 import domein.machine.Maintenance;
-import domein.machine.report.Report;
-import domein.machine.stateMachines.machine.StoppedState;
 import domein.machine.stateMachines.maintenance.FinishedState;
-import domein.machine.stateMachines.maintenance.MaintenanceState;
-import domein.machine.stateMachines.maintenance.PlannedState;
 import domein.machine.stateMachines.maintenance.ProgressState;
 import domein.user.User;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.virtualizedfx.enums.ScrollPaneEnums.ScrollBarPolicy;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -35,15 +29,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import service.MachineService;
-import service.MaintenanceService;
 import service.ServiceController;
 import utils.Rollen;
 
@@ -109,14 +99,10 @@ public class OnderhoudSchermController {
     private FilteredList<Machine> filteredMachines;
     private FilteredList<String> filteredDates;
 
-	private ReportService reportService;
 	private ReportPageController reportPageController;
     
 	@FXML
 	private Text techniekerLabel;
-
-//	private FilteredList<Machine> filteredMachines;
-//	private FilteredList<String> filteredDates;
 
 	@FXML
 	public void initialize() {
@@ -189,7 +175,10 @@ public class OnderhoudSchermController {
         VBox.setVgrow(fullProgressVBox, Priority.NEVER);
         fullProgressVBox.setManaged(false);
 		planButton.setText("Go back");
-        planButton.setOnAction(eventt -> initialize());
+        planButton.setOnAction(eventt -> {
+        	planButton.setText("Plan Maintenance");
+        	initialize();
+        });
         List<Maintenance> maintenances = sc.getAllMaintenances();
         fillCompletedVBox(maintenances.stream().filter(m -> m.getCurrentStateString().equals("FinishedState")).collect(Collectors.toList()));
 
@@ -214,7 +203,7 @@ public class OnderhoudSchermController {
 			dateField.setPromptText("");
 			reasonField.clear();
 			notesField.clear();
-			List<Maintenance> maintenancesList = sc.getAllMaintenances();
+			List<Maintenance> maintenancesList = sc.getMaintenanceForCurrentSite();
 			fillVBox(maintenancesList);
 		}
 	}
@@ -347,8 +336,7 @@ public class OnderhoudSchermController {
 			});
 
 			controller.nextArrow.setOnMouseClicked(event -> {
-				System.out.println("Clicked");
-				if (maintenance.getMachine().getCurrentState() == "stopped") {
+				if (maintenance.getMachine().getCurrentState().equals("stopped")) {
 					switch (maintenance.getCurrentStateString()) {
 					case "PlannedState" -> {
 						maintenance.setCurrentState(new ProgressState(maintenance));
