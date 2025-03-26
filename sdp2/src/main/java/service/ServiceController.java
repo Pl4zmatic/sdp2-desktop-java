@@ -206,6 +206,18 @@ public class ServiceController {
     public void deleteNotification(Notification n) {
         notificationService.deleteNotification(n);
     }
+
+    public List<Notification> getAllNotifications(){
+        return notificationService.getAllNotifications();
+    }
+
+    public List<User> getAllUsersByNotification(Notification notification) {
+        return notificationService.getAllUsersByNotification(notification);
+    }
+
+    public void updateNotification(Notification notification, List<User> users) {
+        notificationService.updateNotification(notification, users);
+    }
     //</editor-fold>
 
     //<editor-fold desc="REPORT">
@@ -239,6 +251,8 @@ public class ServiceController {
     public List<Site> getAllSites() {
         return siteService.getAllSites();
     }
+
+    public Site getSiteByVerantwoordelijke(String naam) {return siteService.getSiteByVerantwoordelijke(naam);}
 
     public boolean addSite(Site site) {
         return siteService.addSite(site);
@@ -296,21 +310,16 @@ public class ServiceController {
         userService.resetPassword(user, password);
         logService.logPasswordReset(user);
     }
-    //</editor-fold>
 
+    public void stopMachine(Machine m) {
+        machineService.stopMachine(m);
+    }
 
+    public void setMachineInMaintenance(Machine m) {
+        machineService.setMachineInMaintenance(m);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public void setMachineInStartable(Machine m) {
+        machineService.setMachineInStartable(m);
+    }
 }

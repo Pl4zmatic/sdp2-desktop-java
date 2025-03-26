@@ -24,17 +24,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import lombok.Getter;
 import lombok.Setter;
-import service.MachineService;
 import service.ServiceController;
-import service.SiteService;
-import service.UserService;
 import utils.Rollen;
 
 public class MachineFormController {
@@ -65,8 +60,11 @@ public class MachineFormController {
     private TextField machineCode;
     @FXML
     private ComboBox<Site> siteComboBox;
+
     @FXML
-    private TextField machineLoc;
+    private ComboBox<String> machineLocComboBox;
+    private FilteredList<String> filteredLocations;
+
     @FXML
     private ComboBox<User> technicianComboBox;
     @FXML
@@ -123,12 +121,102 @@ public class MachineFormController {
         setupCallbacks();
         setupScrollPane();
         setupSiteComboBox();
+        setupLocationComboBox();
         setupTechnicianComboBox();
         isEditingFlag = false;
 
         if (formTitle != null) {
             formTitle.setText("Machine Form");
         }
+
+        failing.setSelected(true);
+    }
+
+    private void setupLocationComboBox() {
+        List<String> allLocations = getLocationsInGent();
+
+        if (allLocations.isEmpty()) {
+            machineLocComboBox.setDisable(true);
+            machineLocComboBox.setPromptText("No locations available in Gent");
+            return;
+        }
+
+        ObservableList<String> locations = FXCollections.observableArrayList(allLocations);
+        filteredLocations = new FilteredList<>(locations, p -> true);
+        machineLocComboBox.setItems(filteredLocations);
+
+        machineLocComboBox.getStyleClass().add("comboBox");
+        machineLocComboBox.getStyleClass().add("filter-combo");
+
+        machineLocComboBox.setEditable(true);
+        TextField editor = machineLocComboBox.getEditor();
+
+        final boolean[] isUpdatingFilter = new boolean[1];
+
+        editor.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (isUpdatingFilter[0]) {
+                return;
+            }
+
+            isUpdatingFilter[0] = true;
+            try {
+                filteredLocations.setPredicate(location -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true;
+                    }
+
+                    String lowerCaseFilter = newValue.toLowerCase();
+                    return location.toLowerCase().contains(lowerCaseFilter);
+                });
+
+                if (filteredLocations.size() > 0 && !newValue.isEmpty()) {
+                    if (!machineLocComboBox.isShowing()) {
+                        machineLocComboBox.show();
+                    }
+                } else if (machineLocComboBox.isShowing() && filteredLocations.isEmpty()) {
+                    machineLocComboBox.hide();
+                }
+            } finally {
+                isUpdatingFilter[0] = false;
+            }
+        });
+
+        machineLocComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (isUpdatingFilter[0] || newVal == null) {
+                return;
+            }
+
+            isUpdatingFilter[0] = true;
+            try {
+                editor.setText(newVal);
+                editor.positionCaret(editor.getText().length());
+                editor.setStyle("-fx-text-fill: -deepBlue; -fx-font-weight: normal;");
+            } finally {
+                isUpdatingFilter[0] = false;
+            }
+        });
+
+        editor.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.DOWN ||
+                    event.getCode() == KeyCode.UP ||
+                    event.getCode() == KeyCode.ENTER) {
+                return;
+            }
+        });
+
+        machineLocComboBox.setPromptText("Select or type to search");
+
+        if (!filteredLocations.isEmpty()) {
+            machineLocComboBox.setValue(filteredLocations.get(0));
+        }
+    }
+
+    private List<String> getLocationsInGent() {
+        return sc.getAllSites().stream()
+                .filter(site -> !site.getDeleted())
+                .filter(site -> site.getAddress() != null && site.getAddress().toLowerCase().contains("gent"))
+                .map(Site::getAddress)
+                .collect(Collectors.toList());
     }
 
     private void setupTechnicianComboBox() {
@@ -251,6 +339,7 @@ public class MachineFormController {
 
         technicianComboBox.setPromptText("Select or type to search");
     }
+
     private void setupSiteComboBox() {
         List<Site> allSites = sc.getAllSites().stream()
                 .filter(site -> !site.getDeleted())
@@ -263,9 +352,7 @@ public class MachineFormController {
         }
 
         ObservableList<Site> sites = FXCollections.observableArrayList(allSites);
-
         filteredSites = new FilteredList<>(sites, p -> true);
-
         siteComboBox.setItems(filteredSites);
 
         siteComboBox.getStyleClass().add("comboBox");
@@ -373,6 +460,10 @@ public class MachineFormController {
                 }
             }
         }
+
+        if (!filteredSites.isEmpty()) {
+            siteComboBox.setValue(filteredSites.get(0));
+        }
     }
 
     public void setupSaveOption() {
@@ -381,12 +472,18 @@ public class MachineFormController {
             isEditingFlag = true;
             machineCodeContainer.setDisable(true);
             formTitle.setText("Edit Machine");
+
+            healthy.setDisable(false);
+            maintenance.setDisable(false);
+            failing.setDisable(false);
         }
         else {
             save.setText("Add");
             isEditingFlag = false;
             machineCodeContainer.setDisable(false);
             formTitle.setText("Add Machine");
+
+            failing.setSelected(true);
         }
     }
 
@@ -398,18 +495,28 @@ public class MachineFormController {
 
     private void setupCallbacks() {
         machineCode.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> editMachineCodeCallback());
-        machineCode.focusedProperty().addListener((event) -> checkTextField(machineCode, "Code is vereist."));
+        machineCode.focusedProperty().addListener((event) -> checkTextField(machineCode, "Code is mandatory."));
 
-        siteComboBox.focusedProperty().addListener((event) -> checkSiteComboBox("Site is vereist."));
+        siteComboBox.focusedProperty().addListener((event) -> checkSiteComboBox("Site is mandatory."));
 
-        machineLoc.focusedProperty().addListener((event) -> checkTextField(machineLoc, "Locatie is vereist."));
-        productInfo.focusedProperty().addListener((event) -> checkTextField(productInfo, "Product info is vereist."));
+        machineLocComboBox.focusedProperty().addListener((event) -> checkLocationComboBox("Locatie is mandatory."));
 
-        technicianComboBox.focusedProperty().addListener((event) -> checkTechnicianComboBox("Technieker is vereist."));
+        productInfo.focusedProperty().addListener((event) -> checkTextField(productInfo, "Product info is mandatory."));
 
-        lastMaintenance.setOnAction((event) -> errorInDateFieldLastMaintenance("Datum is vereist."));
+        technicianComboBox.focusedProperty().addListener((event) -> checkTechnicianComboBox("Technieker is mandatory."));
+
+        lastMaintenance.setOnAction((event) -> errorInDateFieldLastMaintenance("Datum is mandatory."));
 
         save.setOnAction((event) -> saveMachine());
+    }
+
+    private void checkLocationComboBox(String error) {
+        errors.remove(error);
+        if (machineLocComboBox.getValue() == null && !machineLocComboBox.isFocused()) {
+            machineLocComboBox.setPromptText(error);
+            machineLocComboBox.setStyle("-fx-prompt-text-fill: -bgRed;");
+            errors.add(error);
+        }
     }
 
     private void checkTechnicianComboBox(String error) {
@@ -534,7 +641,9 @@ public class MachineFormController {
 
         checkTextField(machineCode, "Code is mandatory.");
         checkSiteComboBox("Plant is mandatory.");
-        checkTextField(machineLoc, "Location is mandatory.");
+
+        checkLocationComboBox("Location is mandatory.");
+
         checkTextField(productInfo, "Product info is mandatory.");
         checkToggleGroup(productionStatus, "Production status is mandatory.");
         checkToggleGroup(status, "Status is mandatory.");
@@ -570,7 +679,7 @@ public class MachineFormController {
                 return;
             }
 
-            machine.setLocatie(machineLoc.getText());
+            machine.setLocatie(machineLocComboBox.getValue());
             machine.setProductInfo(productInfo.getText());
             machine.setUptimeInHours(Integer.parseInt(hours.getText()));
 
@@ -592,7 +701,15 @@ public class MachineFormController {
             }
             machine.updateCurrentState();
 
-            machine.setProductieStatus(((RadioButton) productionStatus.getSelectedToggle()).getText());
+            // Save the exact production status values expected by the system
+            RadioButton selectedProductionStatus = (RadioButton) productionStatus.getSelectedToggle();
+            if (selectedProductionStatus.equals(healthy)) {
+                machine.setProductieStatus("Active");
+            } else if (selectedProductionStatus.equals(maintenance)) {
+                machine.setProductieStatus("Maintenance Required");
+            } else if (selectedProductionStatus.equals(failing)) {
+                machine.setProductieStatus("Inactive");
+            }
 
             try {
                 boolean isDeleted = ((RadioButton) status.getSelectedToggle()).equals(inactive);
@@ -612,7 +729,6 @@ public class MachineFormController {
                 String message = isEditingFlag ? "Machine successfully updated!" : "Machine successfully created!";
                 new Alert(AlertType.INFORMATION, message, ButtonType.OK).showAndWait();
 
-                // Roep de callback aan in plaats van naar een ander scherm te gaan
                 if (onSaveCallback != null) {
                     onSaveCallback.run();
                 }
@@ -626,7 +742,9 @@ public class MachineFormController {
         if (machine != null) {
             machineCode.setText(machine.getCode());
             siteComboBox.setValue(machine.getSite());
-            machineLoc.setText(machine.getLocatie());
+
+            machineLocComboBox.setValue(machine.getLocatie());
+
             productInfo.setText(machine.getProductInfo());
 
             String technicianName = machine.getTechniekerNaam();
@@ -648,6 +766,7 @@ public class MachineFormController {
             nextMaintenance.setValue(machine.getDatumToekomstigeOnderhoud());
             hours.setText(String.format("%d", machine.getUptimeInHours()));
 
+
             if (days.getText().isEmpty()) days.setText("00");
             if (minutes.getText().isEmpty()) minutes.setText("00");
 
@@ -659,17 +778,23 @@ public class MachineFormController {
                 inactive.setSelected(true);
             }
 
-            switch (machine.getProductieStatus().toLowerCase()) {
-                case "gezond":
+            System.out.println(machine.getProductieStatus().toLowerCase());
+
+            switch (machine.getProductieStatus().toLowerCase()){
+                case "active":
+                    System.out.println("setting toggle to healthyy");
                     productionStatus.selectToggle(healthy);
                     break;
-                case "nood aan onderhoud":
+                case "maintenance required":
+                    System.out.println("setting toggle to mainte");
                     productionStatus.selectToggle(maintenance);
                     break;
-                case "falend":
+                case "inactive":
+                    System.out.println("setting toggle to failing");
                     productionStatus.selectToggle(failing);
                     break;
             }
+
             boolean isDeleted = machine.getDeleted();
             if (isDeleted) {
                 inactive.setSelected(true);
@@ -682,7 +807,7 @@ public class MachineFormController {
             System.out.println("IS AANGEROEPEN");
             machineCode.setText("");
             siteComboBox.setValue(null);
-            machineLoc.setText("");
+            machineLocComboBox.setValue(null);
             productInfo.setText("");
             technicianComboBox.setValue(null);
             lastMaintenance.setValue(LocalDate.now());
@@ -692,7 +817,7 @@ public class MachineFormController {
             minutes.setText("00");
 
             active.setSelected(true);
-            healthy.setSelected(true);
+            failing.setSelected(true);
         }
     }
 
@@ -708,3 +833,4 @@ public class MachineFormController {
         this.onSaveCallback = callback;
     }
 }
+

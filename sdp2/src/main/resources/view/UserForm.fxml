@@ -102,15 +102,49 @@
                                     <Insets bottom="2.0" top="-5.0" />
                                  </VBox.margin>
                               </HBox>
+                              <!-- Replaced single address field with separate fields -->
                               <VBox spacing="6.0">
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="5.0">
                                        <children>
-                                          <Label styleClass="fieldLabel" text="Adress" />
+                                          <Label styleClass="fieldLabel" text="Street" />
                                           <Label styleClass="required" text="*" />
                                        </children>
                                     </HBox>
-                                    <TextField fx:id="adressField" promptText="e.g. Kerkstraat 45, Gent" styleClass="inputField" />
+                                    <TextField fx:id="streetField" styleClass="inputField" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="6.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                       <children>
+                                          <Label styleClass="fieldLabel" text="House Number" />
+                                          <Label styleClass="required" text="*" />
+                                       </children>
+                                    </HBox>
+                                    <TextField fx:id="houseNumberField" styleClass="inputField" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="6.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                       <children>
+                                          <Label styleClass="fieldLabel" text="Postal Code" />
+                                          <Label styleClass="required" text="*" />
+                                       </children>
+                                    </HBox>
+                                    <TextField fx:id="postalCodeField" styleClass="inputField" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="6.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                       <children>
+                                          <Label styleClass="fieldLabel" text="City" />
+                                          <Label styleClass="required" text="*" />
+                                       </children>
+                                    </HBox>
+                                    <TextField fx:id="cityField" styleClass="inputField" />
                                  </children>
                               </VBox>
                               <VBox spacing="6.0">
@@ -184,3 +218,4 @@
       <URL value="@../css/UserForm.css" />
    </stylesheets>
 </BorderPane>
+

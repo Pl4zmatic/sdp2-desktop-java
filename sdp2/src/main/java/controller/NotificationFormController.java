@@ -1,0 +1,321 @@
+package controller;
+
+import utils.NotificationType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import domein.notification.Notification;
+import domein.user.User;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.util.Callback;
+import lombok.Setter;
+import service.ServiceController;
+import service.UserService;
+
+public class NotificationFormController {
+
+  //parent
+  @Setter
+  private ManageNotificationsController parentController;
+
+  // layout
+  @FXML
+  private BorderPane rootLayout;
+  @FXML
+  private Label formTitle;
+  @FXML
+  private VBox contentVBox;
+
+  // text fields
+  @FXML
+  private TextField title;
+  @FXML
+  private TextArea messageTextArea;
+
+  // types
+  @FXML
+  private RadioButton maintenance;
+  @FXML
+  private RadioButton reminder;
+  @FXML
+  private ToggleGroup toggleGroupType;
+
+  // people selection
+  @FXML
+  private HBox hboxSelectedPeople;
+  @FXML
+  private ComboBox<User> comboBoxPeople;
+
+  // buttons
+  @FXML
+  private Button cancel;
+  @FXML
+  private Button save;
+
+  // class vars
+  private Notification notification;
+  private ServiceController serviceController;
+  private UserService userService;
+  private List<User> selectedUserList = new ArrayList<>();
+  private List<User> allActiveUsers = new ArrayList<>();
+
+  public void setNotification(Notification notification) {
+    this.notification = notification;
+
+    if (notification == null) {
+      selectedUserList = new ArrayList<>();
+      comboBoxPeople.setItems(FXCollections.observableArrayList(allActiveUsers));
+      return;
+    }
+
+    List<User> usersForNotification = serviceController.getAllUsersByNotification(this.notification);
+
+    selectedUserList = new ArrayList<>(usersForNotification != null ? usersForNotification : new ArrayList<>());
+
+    List<User> usersToRemove = new ArrayList<>(selectedUserList);
+    allActiveUsers.removeAll(usersToRemove);
+
+    if (!allActiveUsers.isEmpty()) {
+      comboBoxPeople.setItems(FXCollections.observableArrayList(allActiveUsers));
+    }
+
+    loadContentSelectedPeople();
+    setControls();
+  }
+
+  @FXML
+  private void initialize() {
+    this.serviceController = ServiceController.getInstance();
+    this.userService = UserService.getInstance();
+    this.allActiveUsers = new ArrayList<>(userService.getAllActiveUsers());
+    setupComboBox();
+    setupCallbacks();
+    Platform.runLater(() -> {
+      if (!allActiveUsers.isEmpty()) {
+        comboBoxPeople.hide();
+      }
+      title.requestFocus();
+    });
+  }
+
+  private void setupCallbacks() {
+    title.focusedProperty().addListener((event) -> checkTextField(title, "Title is mandatory."));
+    messageTextArea.focusedProperty().addListener((event) -> checkTextField(messageTextArea, "Message is mandatory."));
+    toggleGroupType.selectedToggleProperty().addListener((event) -> checkToggleGroup(toggleGroupType));
+    save.setOnAction((event) -> addOrSave());
+    cancel.setOnAction(event -> parentController.removeForm());
+
+    // combo box
+    comboBoxPeople.getEditor().textProperty().addListener(event -> filterComboBoxByName(comboBoxPeople.getEditor().getText()));
+    comboBoxPeople.setOnHidden(event -> {
+      User selectedUser = comboBoxPeople.getSelectionModel().getSelectedItem();
+      if (selectedUser != null) {
+        selectUser(selectedUser);
+        loadContentSelectedPeople();
+      }
+    });
+  }
+
+  private void setupComboBox() {
+    ObservableList<User> observableUsers = FXCollections.observableArrayList(allActiveUsers);
+    comboBoxPeople.setItems(observableUsers);
+
+    comboBoxPeople.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
+      @Override
+      public ListCell<User> call(ListView<User> listView) {
+        return new ListCell<User>() {
+          @Override
+          protected void updateItem(User item, boolean empty) {
+            super.updateItem(item, empty);
+            if (item != null && !empty)
+              setText(item.getFullName());
+          }
+        };
+      }
+    });
+  }
+
+  private void filterComboBoxByName(String filter) {
+    if (allActiveUsers.isEmpty()) {
+      return;
+    }
+
+    ObservableList<User> observableUsers = FXCollections.observableArrayList(allActiveUsers);
+    FilteredList<User> filteredUsers = new FilteredList<>(observableUsers, item -> true);
+    filteredUsers.setPredicate((user) -> {
+      if (filter == null || filter.isBlank() || filter.isEmpty())
+        return true;
+      return user.getFirstName().toLowerCase().contains(filter.toLowerCase())
+              || user.getLastName().toLowerCase().contains(filter.toLowerCase());
+    });
+
+    if (!filteredUsers.isEmpty()) {
+      comboBoxPeople.setItems(filteredUsers);
+
+      comboBoxPeople.hide();
+      comboBoxPeople.show();
+    }
+  }
+
+  private void selectUser(User user) {
+    if (user == null) return;
+
+    this.allActiveUsers.remove(user);
+    this.selectedUserList.add(user);
+    comboBoxPeople.setItems(FXCollections.observableArrayList(allActiveUsers));
+    comboBoxPeople.show();
+  }
+
+  private void loadContentSelectedPeople() {
+    hboxSelectedPeople.getChildren().clear();
+    for (User user : selectedUserList) {
+
+      // userContainer
+      HBox hbox = new HBox(0);
+
+      // buttons
+      Button button = new Button(user.getFullName());
+      ImageView buttonImage = new ImageView(new Image(getClass().getResourceAsStream("/images/User_fill.png")));
+
+      Button closeButton = new Button();
+      ImageView closeImage = new ImageView(new Image(getClass().getResourceAsStream("/images/close.png")));
+      // styling
+      {
+        hbox.getStyleClass().add("selected-person");
+        hbox.setMaxWidth(125);
+        hbox.setAlignment(Pos.CENTER_LEFT);
+
+        button.getStyleClass().add("button");
+        buttonImage.setFitWidth(20);
+        buttonImage.setFitHeight(20);
+        button.setPadding(new Insets(0));
+        button.setGraphic(buttonImage);
+
+        closeButton.getStyleClass().add("button");
+        closeImage.setFitWidth(20);
+        closeImage.setFitHeight(20);
+        closeButton.setPadding(new Insets(0));
+        closeButton.setGraphic(closeImage);
+      }
+
+      // hou user object bij
+      hbox.setUserData(user);
+
+      // callback
+      button.setOnAction((event) -> unselectUser((User) hbox.getUserData()));
+      closeButton.setOnAction((event) -> unselectUser((User) hbox.getUserData()));
+
+      hbox.getChildren().add(button);
+      hbox.getChildren().add(closeButton);
+
+      hboxSelectedPeople.getChildren().add(hbox);
+    }
+  }
+
+  private void unselectUser(User user) {
+    selectedUserList.remove(user);
+    allActiveUsers.add(user);
+    comboBoxPeople.setItems(FXCollections.observableArrayList(allActiveUsers));
+    loadContentSelectedPeople();
+  }
+
+  private void setControls() {
+    title.setText(notification.getTitle());
+    messageTextArea.setText(notification.getMessage());
+
+    switch (notification.getType()) {
+      case NotificationType.MAINTENANCE:
+        toggleGroupType.selectToggle(maintenance);
+        break;
+
+      case NotificationType.REMINDER:
+        toggleGroupType.selectToggle(reminder);
+        break;
+    }
+
+    if (this.notification == null)
+      save.setText("Add");
+    else
+      save.setText("Save");
+  }
+
+  private <T extends TextInputControl> boolean checkTextField(T source, String error) {
+    if ((source.getText().isBlank() || source.getText().isEmpty()) && !source.isFocused()) {
+      source.setPromptText(error);
+      return true;
+    }
+
+    return false;
+  }
+
+  private boolean checkToggleGroup(ToggleGroup t) {
+    if (t.getSelectedToggle() == null) {
+      reminder.setStyle("-fx-text-fill: -bgRed; -fx-font-weight: bold;");
+      maintenance.setStyle("-fx-text-fill: -bgRed; -fx-font-weight: bold;");
+      return true;
+    }
+
+    reminder.setStyle("-fx-text-fill: -deepBlue");
+    maintenance.setStyle("-fx-text-fill: -deepBlue");
+    return false;
+  }
+
+  private boolean checkAll() {
+    if (Arrays.asList(
+        checkTextField(title, "Title is mandatory."),
+        checkTextField(messageTextArea, "Message is mandatory."),
+        checkToggleGroup(toggleGroupType)).contains(true)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private void setNotification() {
+    if (notification == null)
+      this.notification = new Notification();
+
+    notification.setTitle(title.getText());
+    notification.setMessage(messageTextArea.getText());
+    notification.setType(toggleGroupType.getSelectedToggle().equals(reminder) ? NotificationType.REMINDER
+        : NotificationType.MAINTENANCE);
+  }
+
+  private void addOrSave() {
+    if (!checkAll()) {
+      if (notification != null) {
+        setNotification();
+        serviceController.updateNotification(notification, this.selectedUserList);
+      } else {
+        setNotification();
+        serviceController.createNotification(notification, this.selectedUserList);
+      }
+      parentController.loadTableContent();
+      parentController.selectNotificationInTable(notification);
+      parentController.removeForm();
+    }
+  }
+}

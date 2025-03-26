@@ -1,0 +1,140 @@
+.root-layout {
+    -fx-background-color: #f5f5f5;
+}
+
+.page-title {
+    -fx-text-fill: -deepBlue;
+    -fx-font-weight: bold;
+}
+
+.site-name {
+    -fx-text-fill: -deepBlue;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.search-bar {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: -lightGray;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 1);
+}
+
+.card-scroll-pane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.card-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.machine-cards-container {
+    -fx-background-color: -lightGray;
+    -fx-background-radius: 8px;
+    -fx-padding: 20px;
+}
+
+.machine-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: -lightGray;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 1);
+    -fx-padding: 15px;
+    -fx-pref-width: 280px;
+    -fx-pref-height: 200px;
+}
+
+.machine-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(239, 70, 60, 0.3), 8, 0, 0, 2);
+    -fx-border-color: -delawareRed;
+}
+
+.machine-code {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -deepBlue;
+}
+
+.machine-site {
+    -fx-font-size: 14px;
+    -fx-text-fill: -gray;
+}
+
+.machine-technician {
+    -fx-font-size: 14px;
+    -fx-text-fill: -gray;
+}
+
+.status-indicator {
+    -fx-stroke-width: 0;
+}
+
+.status-indicator.running {
+    -fx-fill: -goodGreen;
+}
+
+.status-indicator.startable {
+    -fx-fill: -okOrange;
+}
+
+.status-indicator.stopped {
+    -fx-fill: -rancidRed;
+}
+
+.status-text {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.status-text.running {
+    -fx-text-fill: -bgGreen;
+}
+
+.status-text.startable {
+    -fx-text-fill: -bgOrange;
+}
+
+.status-text.stopped {
+    -fx-text-fill: -bgRed;
+}
+
+.status-dropdown {
+    -fx-background-color: white;
+    -fx-border-color: -lightGray;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-pref-width: 120px;
+}
+
+.status-dropdown:focused {
+    -fx-border-color: -delawareRed;
+    -fx-border-width: 2px;
+}
+
+.status-dropdown .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.status-dropdown .arrow {
+    -fx-background-color: -deepBlue;
+}
+
+/* Back Button */
+.back-button {
+    -fx-background-color: -deepBlue;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px;
+    -fx-cursor: hand;
+}
+
+.back-button:hover {
+    -fx-background-color: derive(-deepBlue, 10%);
+}
+
+.back-button:pressed {
+    -fx-background-color: derive(-deepBlue, -10%);
+}

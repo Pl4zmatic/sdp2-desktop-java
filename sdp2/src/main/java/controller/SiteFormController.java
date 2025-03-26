@@ -101,7 +101,7 @@ public class SiteFormController {
 
     @FXML
     private void initialize() {
-        ServiceController sc = ServiceController.getInstance();
+        this.sc = ServiceController.getInstance();
 
         setupCallbacks();
         setupScrollPane();

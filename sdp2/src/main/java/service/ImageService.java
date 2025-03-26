@@ -46,7 +46,8 @@ public class ImageService {
     try {
       return Files.readAllBytes(Path.of(path));
     } catch (Exception e) {
-      System.out.printf("%s\n%s%s\n%s\n", "=".repeat(20), "Getting image file failed, from path: ", path, "=".repeat(20));
+      System.out.printf("%s\n%s%s\n%s\n", "=".repeat(20), "Getting image file failed, from path: ", path,
+          "=".repeat(20));
       e.printStackTrace();
     }
 

@@ -7,7 +7,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class SiteTest {
+class SiteTest {
 
     private Site site;
 

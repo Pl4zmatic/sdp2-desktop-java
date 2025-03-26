@@ -55,19 +55,6 @@
 }
 
 .primaryButton {
-    -fx-background-color: -delawareRed;
-    -fx-text-fill: white;
-    -fx-font-family: "Inter";
-    -fx-font-size: 14px;
-    -fx-background-radius: 4px;
-    -fx-padding: 8px 16px;
-}
-
-.primaryButton:hover {
-    -fx-background-color: derive(-delawareRed, -10%);
-}
-
-.cancelButton {
     -fx-background-color: -gray;
     -fx-text-fill: white;
     -fx-font-family: "Inter";
@@ -76,8 +63,21 @@
     -fx-padding: 8px 16px;
 }
 
-.cancelButton:hover {
+.primaryButton:hover {
     -fx-background-color: derive(-gray, -10%);
+}
+
+.cancelButton {
+    -fx-background-color: -delawareRed;
+    -fx-text-fill: white;
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 16px;
+}
+
+.cancelButton:hover {
+    -fx-background-color: derive(-delawareRed, -10%);
 }
 
 .edge-to-edge {

@@ -35,6 +35,7 @@ public class GebruikersBeheerderController {
     private ObservableList<User> users;
     private FilteredList<User> filteredUsers;
     private ServiceController sc = ServiceController.getInstance();
+    private Parent userFormRoot;
     private UserFormController formController;
 
     private void loadUsersFromDatabase() {
@@ -61,6 +62,7 @@ public class GebruikersBeheerderController {
         loadUsersFromDatabase();
         setupRoleFilter();
         setupSearch();
+        loadUserForm();
 
         userTable.widthProperty().addListener((obs, oldVal, newVal) -> {
             searchBarContainer.setPrefWidth(newVal.doubleValue());
@@ -83,6 +85,23 @@ public class GebruikersBeheerderController {
                 }
             }
         });
+    }
+
+    private void loadUserForm() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UserForm.fxml"));
+            userFormRoot = loader.load();
+            formController = loader.getController();
+
+            formController.addCloseButton(event -> hideRightPanel());
+            formController.setOnSaveCallback(() -> {
+                refreshTable();
+                hideRightPanel();
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupTable() {
@@ -259,24 +278,9 @@ public class GebruikersBeheerderController {
     }
 
     private void addUser() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UserForm.fxml"));
-            Parent formRoot = loader.load();
-
-            formController = loader.getController();
-            formController.setEditMode(false);
-
-            formController.addCloseButton(event -> hideRightPanel());
-
-            formController.setOnSaveCallback(() -> {
-                refreshTable();
-                hideRightPanel();
-            });
-
-            showRightPanel(formRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        formController.setEditMode(false);
+        formController.clearForm();
+        showRightPanel(userFormRoot);
     }
 
     private void editUser(User user) {
