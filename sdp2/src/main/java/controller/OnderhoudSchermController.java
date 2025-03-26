@@ -129,6 +129,9 @@ public class OnderhoudSchermController {
 
 		User user = Session.getCurrentUser();
 		Rollen userRole = user.getRol();
+
+		plannedVBox.setSpacing(10);
+		progressVBox.setSpacing(10);
 		
 		fullProgressVBox.setManaged(true);
 		fullProgressVBox.setVisible(true);
