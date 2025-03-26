@@ -1,93 +1,107 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.time.DateTimeException;
-import java.time.LocalDateTime;
-import java.util.stream.Stream;
-
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.ValueSource;
-
-
 import domein.machine.Machine;
 import domein.machine.Maintenance;
+import domein.machine.report.Report;
+import domein.machine.stateMachines.maintenance.PlannedState;
+import domein.user.User;
 
-public class MaintenanceTest {
+import java.time.LocalDate;
+import java.time.DateTimeException;
 
+class MaintenanceTest {
+
+    private Machine mockMachine; 
+    private Report mockReport;   
     private Maintenance maintenance;
-    private Machine machine;
 
-//    @BeforeEach
-//    public void setUp() {
-//        machine = new Machine();
-//        maintenance = new Maintenance(
-//            machine.getCode(),
-//            LocalDateTime.of(2025, 4, 17, 8, 0, 0),
-//            LocalDateTime.of(2025, 4, 17, 19, 0, 0),
-//            "John Doe", "Rusted part", "Report"
-//        );
-//    }
+    @BeforeEach
+    void setUp() {
+        mockMachine = new Machine(); 
+        mockReport = new Report();  
+        maintenance = new Maintenance(mockMachine, LocalDate.now().plusDays(1), LocalDate.now().plusDays(5),
+                "Regular Maintenance", mockReport, "Remarks");
+    }
 
     @Test
-    public void testConstructor() {
+    void testMaintenanceConstructor() {
         assertNotNull(maintenance);
-        assertNotNull(machine);
-        assertEquals(LocalDateTime.of(2025, 4, 17, 8, 0, 0), maintenance.getStartDate());
-        assertEquals(LocalDateTime.of(2025, 4, 17, 19, 0, 0), maintenance.getEndDate());
-        assertEquals("John Doe", maintenance.getNameTechnician());
-        assertEquals("Rusted part", maintenance.getReason());
-        assertEquals("Report", maintenance.getMaintenanceReport());
-        assertEquals(null, maintenance.getRemarks());
+        assertEquals(mockMachine, maintenance.getMachine());
+        assertEquals("Regular Maintenance", maintenance.getReason());
+        assertEquals(mockReport, maintenance.getMaintenanceReport());
+        assertEquals("Remarks", maintenance.getRemarks());
     }
 
-//    @ParameterizedTest
-//    @ValueSource(strings = {"John Doe", "John", "Doe"})
-//    public void testStringSettersValid(String name) {
-//        maintenance.setNameTechnician(name);
-//        assertEquals(name, maintenance.getNameTechnician());
-//    }
-
-//    @ParameterizedTest
-//    @NullAndEmptySource
-//    @ValueSource(strings = {"", " ", "  "})
-//    public void testStringSettersInvalid(String name) {
-//        Exception exception = assertThrows(IllegalArgumentException.class, () -> maintenance.setNameTechnician(name));
-//        assertEquals(String.format("%s has to be filled in", name), exception.getMessage());
-//    }
-
-//    @ParameterizedTest
-//    @MethodSource("generatorValidDates")
-//    public void testDateSettersValid(LocalDateTime localDateTime) {
-//        maintenance.setStartDate(localDateTime);
-//        assertEquals(localDateTime, maintenance.getStartDate());
-//    }
-
-    private static Stream<LocalDateTime> generatorValidDates() {
-        return Stream.of(
-            LocalDateTime.of(2025, 4, 3, 8, 0),
-            LocalDateTime.of(2025, 5, 2, 17, 0),
-            LocalDateTime.of(2025, 6, 6, 7, 0)
-        );
+    @Test
+    void testSetStartDate_validDate() {
+        LocalDate newStartDate = LocalDate.now().plusDays(2);
+        maintenance.setStartDate(newStartDate);
+        assertEquals(newStartDate, maintenance.getStartDate());
     }
 
-//    @ParameterizedTest
-//    @MethodSource("generatorInvalidDates")
-//    public void testDateSettersInvalid(LocalDateTime localDateTime) {
-//        Exception exception = assertThrows(DateTimeException.class, () -> maintenance.setStartDate(localDateTime));
-//        assertEquals("The datetime is from the past", exception.getMessage());
-//    }
+    @Test
+    void testSetStartDate_invalidDate() {
+        LocalDate pastDate = LocalDate.now().minusDays(1);
+        DateTimeException thrown = assertThrows(DateTimeException.class, () -> maintenance.setStartDate(pastDate));
+        assertEquals("The datetime is from the past", thrown.getMessage());
+    }
 
-    private static Stream<LocalDateTime> generatorInvalidDates() {
-        return Stream.of(
-            LocalDateTime.of(2024, 4, 3, 14, 0, 0),
-            LocalDateTime.of(2023, 7, 7, 7, 0, 0),
-            LocalDateTime.of(2025, 3, 12, 8, 0, 0)
-        );
+    @Test
+    void testSetEndDate_validDate() {
+        LocalDate newEndDate = LocalDate.now().plusDays(7);
+        maintenance.setEndDate(newEndDate);
+        assertEquals(newEndDate, maintenance.getEndDate());
+    }
+
+    @Test
+    void testSetEndDate_invalidDateBeforeStartDate() {
+        LocalDate invalidEndDate = LocalDate.now().plusDays(1);
+        maintenance.setStartDate(LocalDate.now().plusDays(2));
+        DateTimeException thrown = assertThrows(DateTimeException.class, () -> maintenance.setEndDate(invalidEndDate));
+        assertEquals("Het opgegeven eindtijdstip ligt voor de startdatum", thrown.getMessage());
+    }
+
+    @Test
+    void testSetReason_validReason() {
+        String validReason = "New Maintenance";
+        maintenance.setReason(validReason);
+        assertEquals(validReason, maintenance.getReason());
+    }
+
+    @Test
+    void testSetReason_invalidReason_empty() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> maintenance.setReason(""));
+        assertEquals(" has to be filled in", thrown.getMessage());
+    }
+
+    @Test
+    void testSetReason_invalidReason_null() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> maintenance.setReason(null));
+        assertEquals("null has to be filled in", thrown.getMessage());
+    }
+
+    @Test
+    void testSetCurrentState() {
+        PlannedState newState = new PlannedState(maintenance);
+        maintenance.setCurrentState(newState);
+        assertEquals(newState.toString(), maintenance.getCurrentState());
+    }
+
+    @Test
+    void testMaintenanceToString() {
+        String result = maintenance.toString();
+        assertTrue(result.contains(String.valueOf(maintenance.getMaintenanceId())));
+        assertTrue(result.contains(maintenance.getCurrentState()));
+        assertTrue(result.contains(maintenance.getStartDate().toString()));
+    }
+
+    @Test
+    void testMaintenanceCopyConstructor() {
+        Maintenance copiedMaintenance = new Maintenance(maintenance);
+        assertEquals(maintenance.getMachine(), copiedMaintenance.getMachine());
+        assertEquals(maintenance.getStartDate(), copiedMaintenance.getStartDate());
+        assertEquals(maintenance.getEndDate(), copiedMaintenance.getEndDate());
     }
 }
