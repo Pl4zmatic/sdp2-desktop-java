@@ -43,7 +43,7 @@
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="5.0">
                                        <children>
-                                          <Label styleClass="fieldLabel" text="Code" />
+                                          <Label styleClass="fieldLabel" text="Serial Number" />
                                           <Label styleClass="required" text="*" />
                                        </children>
                                     </HBox>
@@ -54,21 +54,23 @@
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="5.0">
                                        <children>
-                                          <Label styleClass="fieldLabel" text="Site" />
+                                          <Label styleClass="fieldLabel" text="Plant" />
                                           <Label styleClass="required" text="*" />
                                        </children>
                                     </HBox>
-                                    <ComboBox fx:id="siteComboBox" editable="true" promptText="Select or type to search" />                                 </children>
+                                    <ComboBox fx:id="siteComboBox" editable="true" promptText="Select or type to search" />
+                                 </children>
                               </VBox>
                               <VBox spacing="6.0">
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="5.0">
                                        <children>
-                                          <Label styleClass="fieldLabel" text="Locatie" />
+                                          <Label styleClass="fieldLabel" text="Adress" />
                                           <Label styleClass="required" text="*" />
                                        </children>
                                     </HBox>
-                                    <TextField fx:id="machineLoc" styleClass="inputField" />
+                                    <!-- Changed from TextField to ComboBox -->
+                                    <ComboBox fx:id="machineLocComboBox" editable="true" promptText="Select or type to search" styleClass="comboBox" />
                                  </children>
                               </VBox>
                               <VBox spacing="6.0">
@@ -89,14 +91,14 @@
                                           <Label styleClass="fieldLabel" text="Technician" />
                                        </children>
                                     </HBox>
-                                    <ComboBox fx:id="technicianComboBox" promptText="Select technician" prefWidth="300" editable="true" />
+                                    <ComboBox fx:id="technicianComboBox" editable="true" prefWidth="300" promptText="Select technician" />
                                  </children>
                               </VBox>
                               <VBox fx:id="lastMaintenanceContainer" disable="true" spacing="6.0">
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="5.0">
                                        <children>
-                                          <Label styleClass="fieldLabel" text="Laatste Onderhoud" />
+                                          <Label styleClass="fieldLabel" text="Previous Maintenance" />
                                           <Label styleClass="required" text="*" />
                                           <Pane HBox.hgrow="ALWAYS" />
                                           <Label fx:id="details" styleClass="fieldLabel" text="Details" />
@@ -114,12 +116,12 @@
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="5.0">
                                        <children>
-                                          <Label styleClass="fieldLabel" text="Volgende Onderhoud" />
+                                          <Label styleClass="fieldLabel" text="Next Maintenance" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" spacing="10.0">
                                        <children>
-                                          <Label styleClass="fieldLabel" text="Datum:" />
+                                          <Label styleClass="fieldLabel" text="Date" />
                                           <DatePicker fx:id="nextMaintenance" editable="false" prefHeight="35.0" styleClass="datePicker" />
                                        </children>
                                     </HBox>
@@ -167,12 +169,12 @@
                                     <Pane HBox.hgrow="ALWAYS" />
                                     <HBox spacing="20.0">
                                        <children>
-                                          <RadioButton fx:id="active" mnemonicParsing="false" styleClass="radioButton" text="Actief">
+                                          <RadioButton fx:id="active" mnemonicParsing="false" styleClass="radioButton" text="Active">
                                              <toggleGroup>
                                                 <ToggleGroup fx:id="status" />
                                              </toggleGroup>
                                           </RadioButton>
-                                          <RadioButton fx:id="inactive" mnemonicParsing="false" styleClass="radioButton" text="Inactief" toggleGroup="$status" />
+                                          <RadioButton fx:id="inactive" mnemonicParsing="false" styleClass="radioButton" text="Inactive" toggleGroup="$status" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -184,19 +186,20 @@
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="5.0">
                                        <children>
-                                          <Label styleClass="fieldLabel" text="Productie Status:" />
+                                          <Label styleClass="fieldLabel" text="Production Status" />
                                           <Label styleClass="required" text="*" />
                                        </children>
                                     </HBox>
                                     <VBox spacing="10.0">
                                        <children>
-                                          <RadioButton fx:id="healthy" mnemonicParsing="false" styleClass="radioButton" text="Gezond">
+                                          <!-- Disabled all production status radio buttons -->
+                                          <RadioButton fx:id="healthy" disable="true" mnemonicParsing="false" styleClass="radioButton" text="Active">
                                              <toggleGroup>
                                                 <ToggleGroup fx:id="productionStatus" />
                                              </toggleGroup>
                                           </RadioButton>
-                                          <RadioButton fx:id="maintenance" mnemonicParsing="false" styleClass="radioButton" text="Nood Aan Onderhoud" toggleGroup="$productionStatus" />
-                                          <RadioButton fx:id="failing" mnemonicParsing="false" styleClass="radioButton" text="Falend" toggleGroup="$productionStatus" />
+                                          <RadioButton fx:id="maintenance" disable="true" mnemonicParsing="false" styleClass="radioButton" text="Maintenance required" toggleGroup="$productionStatus" />
+                                          <RadioButton fx:id="failing" disable="true" mnemonicParsing="false" selected="true" styleClass="radioButton" text="Inactive" toggleGroup="$productionStatus" />
                                        </children>
                                        <padding>
                                           <Insets left="20.0" />
@@ -206,8 +209,8 @@
                               </VBox>
                               <HBox alignment="CENTER_RIGHT" spacing="15.0">
                                  <children>
-                                    <Button fx:id="cancel" mnemonicParsing="false" styleClass="cancelButton" text="Annuleer" />
-                                    <Button fx:id="save" mnemonicParsing="false" styleClass="primaryButton" text="Voeg Toe" />
+                                    <Button fx:id="cancel" mnemonicParsing="false" styleClass="cancelButton" text="Cancel" />
+                                    <Button fx:id="save" mnemonicParsing="false" styleClass="primaryButton" text="Add" />
                                  </children>
                                  <VBox.margin>
                                     <Insets top="15.0" />
