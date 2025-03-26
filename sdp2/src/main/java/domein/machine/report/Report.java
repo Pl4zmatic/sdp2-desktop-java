@@ -21,7 +21,6 @@ import lombok.Setter;
 import service.ServiceController;
 
 @Entity
-//@NoArgsConstructor
 @Getter
 public class Report {
   @Id
@@ -40,15 +39,13 @@ public class Report {
   private Maintenance maintenance;
 
   @Transient
-  private ServiceController sc;
+  private ServiceController sc = ServiceController.getInstance();
   public Report(List<String> imagePaths, String steps, Maintenance maintenance) {
     if (images == null)
       images = new ArrayList<>();
     setImagesFromStrings(imagePaths);
     setMaintenance(maintenance);
     setSteps(steps);
-    sc = ServiceController.getInstance();
-
   }
 
   public Report(String steps, Maintenance maintenance) {
@@ -56,6 +53,7 @@ public class Report {
       images = new ArrayList<>();
     setMaintenance(maintenance);
     setSteps(steps);
+
   }
 
   public Report(String steps) {

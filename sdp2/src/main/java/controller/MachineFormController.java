@@ -133,7 +133,7 @@ public class MachineFormController {
     }
 
     private void setupLocationComboBox() {
-        List<String> allLocations = getLocationsInGent();
+        List<String> allLocations = getAllLocations();
 
         if (allLocations.isEmpty()) {
             machineLocComboBox.setDisable(true);
@@ -211,11 +211,13 @@ public class MachineFormController {
         }
     }
 
-    private List<String> getLocationsInGent() {
+    private List<String> getAllLocations() {
         return sc.getAllSites().stream()
                 .filter(site -> !site.getDeleted())
-                .filter(site -> site.getAddress() != null && site.getAddress().toLowerCase().contains("gent"))
+                .filter(site -> site.getAddress() != null && !site.getAddress().isEmpty())
                 .map(Site::getAddress)
+                .distinct()
+                .sorted()
                 .collect(Collectors.toList());
     }
 

@@ -37,24 +37,35 @@
                                  </padding>
                               </HBox>
                               <VBox prefWidth="450.0" spacing="6.0" />
-                              <Button fx:id="viewImagesButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="170.0" styleClass="primaryButton" text="Bekijk afbeelding" />
-                              <HBox prefWidth="450.0" spacing="15.0">
+
+                              <!-- Image section -->
+                              <HBox alignment="CENTER" spacing="10.0">
                                  <children>
-                                    <Region prefWidth="30.0" />
-                                    <ChoiceBox fx:id="choiceboxShowImage" prefHeight="33.0" prefWidth="169.0" />
-                                    <Region prefHeight="33.0" prefWidth="7.0" />
+                                    <Button fx:id="viewImagesButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="170.0" styleClass="primaryButton" text="Bekijk afbeeldingen" />
                                     <Button fx:id="addImagesButton" mnemonicParsing="false" prefWidth="170.0" styleClass="primaryButton" text="Afbeelding Toevoegen" />
-                                    <Region prefHeight="33.0" prefWidth="18.0" />
                                  </children>
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" />
-                                 </VBox.margin>
                               </HBox>
-                              <VBox>
-                                 <children>
-                                    <ImageView fx:id="viewSelectedImage" fitHeight="150.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true" />
-                                 </children>
+
+                              <!-- Image controls - initially hidden -->
+                              <VBox fx:id="imageControlsContainer" spacing="10.0">
+                                 <HBox alignment="CENTER" spacing="10.0">
+                                    <children>
+                                       <ChoiceBox fx:id="choiceboxShowImage" prefHeight="33.0" prefWidth="200.0" />
+                                       <Button fx:id="deleteImageButton" mnemonicParsing="false" prefWidth="170.0" styleClass="cancelButton" text="Verwijder afbeelding" />
+                                    </children>
+                                 </HBox>
                               </VBox>
+
+                              <!-- Image view container - initially hidden -->
+                              <VBox fx:id="imageViewContainer" alignment="CENTER">
+                                 <children>
+                                    <ImageView fx:id="viewSelectedImage" fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+
                               <VBox prefHeight="405.0" prefWidth="450.0" spacing="6.0">
                                  <children>
                                     <Label styleClass="fieldLabel" text="Procedure" />
@@ -90,3 +101,4 @@
       <URL value="@../css/UserForm.css" />
    </stylesheets>
 </BorderPane>
+

@@ -48,10 +48,9 @@ public class NotificationService {
 
     public void createNotification(Notification n, List<User> users) {
 
-        try {
+        //try {
             NotificationDaoJpa.startTransaction();
 
-            // Insert the notification
             notificationDaoJpa.insert(n);
 
             for (User user : users) {
@@ -62,14 +61,12 @@ public class NotificationService {
 
             }
 
-            // Commit the transaction after both Notification and UserNotification are
-            // inserted
+
             NotificationDaoJpa.commitTransaction();
-        } catch (Exception e) {
-            // Rollback the transaction if any error occurs
-            NotificationDaoJpa.rollbackTransaction();
-            throw new RuntimeException("Error occurred while creating notification and user notifications", e);
-        }
+//        } catch (Exception e) {
+//            NotificationDaoJpa.rollbackTransaction();
+//            throw new RuntimeException("Error occurred while creating notification and user notifications", e);
+//        }
     }
 
     public boolean deleteUserNotification(User user, Notification n) {
