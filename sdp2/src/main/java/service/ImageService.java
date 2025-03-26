@@ -1,6 +1,7 @@
 package service;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -48,12 +49,18 @@ public class ImageService {
   }
 
   public void download(String destination, Image image) {
-    String filePath = String.format("%s%s%s", destination, image.getName(), image.getExtension());
-    try {
+    String fileName = new File(image.getName()).getName();
 
-      FileOutputStream outStream  = new FileOutputStream(filePath);
+    if (!destination.endsWith(File.separator)) {
+      destination += File.separator;
+    }
+
+    String filePath = String.format("%s%s%s", destination, fileName, image.getExtension());
+    try {
+      FileOutputStream outStream = new FileOutputStream(filePath);
       outStream.write(image.getData());
       outStream.close();
+      System.out.println("File successfully saved to: " + filePath);
     } catch (IOException e) {
       System.out.printf("%s\n%s%s\n%s\n", "=".repeat(20), "Writing file failed, to: ", filePath, "=".repeat(20));
       e.printStackTrace();

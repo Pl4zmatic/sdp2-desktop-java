@@ -59,7 +59,6 @@ public class Report {
   }
 
   public Report() {
-    maintenance = new Maintenance();
     if(images == null) {
       images = new ArrayList<>();
     }

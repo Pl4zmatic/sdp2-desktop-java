@@ -49,6 +49,7 @@ public class OnderhoudSchermController {
 
 	private MaintenanceService maintenanceService;
 	private MachineService machineService;
+	Maintenance selectedMaintenance;
 	
 	@FXML
 	private BorderPane rootLayout;
@@ -192,6 +193,7 @@ public class OnderhoudSchermController {
 
 	private void navToAddReportPage() {
 		reportPageController.setOnderhoudSchermController(this);
+		Session.setCurrentMaintenance(selectedMaintenance);
 		SceneSwitcher.switchScene("/view/ReportPage.fxml");
 	}
 	
@@ -245,6 +247,8 @@ public class OnderhoudSchermController {
 			
 			}
 			controller.textBox.setOnMouseClicked(event -> {
+				selectedMaintenance = maintenance;
+
 				openPlanMenu();
 				techniekerLabel.setVisible(true);
 				techniekerField.setVisible(true);

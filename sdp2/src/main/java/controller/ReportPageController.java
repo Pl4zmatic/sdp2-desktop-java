@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
@@ -62,6 +64,7 @@ public class ReportPageController {
     private ChoiceBox<String> choiceboxShowImage;
 
     @Getter private Report report;
+    @Getter private List<Image> reportImages;
     private ReportService reportService;
     private ImageService imageService;
     private OnderhoudSchermController onderhoudSchermController;
@@ -69,7 +72,7 @@ public class ReportPageController {
     @FXML
     private void initialize() {
 
-        report = new Report();
+        reportImages = new ArrayList<>();
         imageService = new ImageService();
         reportService = new ReportService();
         onderhoudSchermController = new OnderhoudSchermController();
@@ -96,66 +99,106 @@ public class ReportPageController {
         procedureTextarea.setBorder(null);
     }
 
-    private void addReport() {
-        if(procedureTextarea.getText() == null || procedureTextarea.getText().isEmpty() || procedureTextarea.getText().isBlank()) {
-            procedureTextarea.setBorder(new Border(new BorderStroke(Color.rgb(239, 70, 60), 
-            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+  private void addReport() {
+    if(procedureTextarea.getText() == null || procedureTextarea.getText().isEmpty() || procedureTextarea.getText().isBlank()) {
+      procedureTextarea.setBorder(new Border(new BorderStroke(Color.rgb(239, 70, 60),
+              BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+    } else {
+      procedureTextarea.setBorder(null);
+
+      Maintenance maintenance = Session.getCurrentMaintenance();
+      if (maintenance != null) {
+        Report report;
+
+        if (!reportImages.isEmpty()) {
+          List<String> imagePaths = new ArrayList<>();
+          for (Image image : reportImages) {
+            imagePaths.add(image.getName() + image.getExtension());
+          }
+          report = new Report(imagePaths, procedureTextarea.getText(), maintenance);
         } else {
-            procedureTextarea.setBorder(null);
-            reportService.addReport(report);
-            Session.setCurrentReport(report);
-            onderhoudSchermController.updateButtons();
-            SceneSwitcher.switchScene("/view/OnderhoudScherm.fxml");
+          report = new Report(procedureTextarea.getText(), maintenance);
         }
 
+        reportService.addReport(report);
+        Session.setCurrentReport(report);
+        onderhoudSchermController.updateButtons();
+        SceneSwitcher.switchScene("/view/OnderhoudScherm.fxml");
+      } else {
+        procedureTextarea.setBorder(new Border(new BorderStroke(Color.rgb(239, 70, 60),
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+      }
     }
+  }
 
     private void cancelReport() {
         SceneSwitcher.switchScene("/view/OnderhoudScherm.fxml");
     }
 
-    private void viewImages() {
-        viewSelectedImage.setImage(null);
-        for(Image image: report.getImages()) {
-            if(image.getNameFile().equals(choiceboxShowImage.getValue())) {
-                BufferedImage bufferedImage = null;
-                try {
-                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(image.getData());
-                    bufferedImage = ImageIO.read(byteArrayInputStream);
-                    if(bufferedImage != null) {
-                        WritableImage writableImage = SwingFXUtils.toFXImage(bufferedImage, null);
-                        if(writableImage != null){
-                            viewSelectedImage.setImage(writableImage);
-                            viewSelectedImage.setPreserveRatio(true);
-                            viewSelectedImage.setFitWidth(writableImage.getWidth());
-                            viewSelectedImage.setFitHeight(writableImage.getHeight());
-                        }
-                    }
-                } catch(IOException e) {
-                    e.printStackTrace();
-                }
+  private void viewImages() {
+    viewSelectedImage.setImage(null);
+    for(Image image: reportImages) {
+      if(image.getNameFile().equals(choiceboxShowImage.getValue())) {
+        BufferedImage bufferedImage = null;
+        try {
+          ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(image.getData());
+          bufferedImage = ImageIO.read(byteArrayInputStream);
+          if(bufferedImage != null) {
+            WritableImage writableImage = SwingFXUtils.toFXImage(bufferedImage, null);
+            if(writableImage != null){
+              viewSelectedImage.setImage(writableImage);
+              viewSelectedImage.setPreserveRatio(true);
+              viewSelectedImage.setFitWidth(writableImage.getWidth());
+              viewSelectedImage.setFitHeight(writableImage.getHeight());
             }
+          }
+        } catch(IOException e) {
+          e.printStackTrace();
         }
+      }
     }
+  }
 
-    private void addImageToReport() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Png files", "*.png"),
-            new FileChooser.ExtensionFilter("Jpeg files", "*.jpeg"), 
+  private void addImageToReport() {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Png files", "*.png"),
+            new FileChooser.ExtensionFilter("Jpeg files", "*.jpeg"),
             new FileChooser.ExtensionFilter("Pdf files", "*.pdf"),
             new FileChooser.ExtensionFilter("Svg files", "*.svg"));
-        File selectedFile = fileChooser.showOpenDialog(Window.getWindows().get(0));
-        report.addImageFromPath(selectedFile.toPath().toString());
-    }
+    File selectedFile = fileChooser.showOpenDialog(Window.getWindows().get(0));
 
-    private void fillChoiceboxWithOptions() {
-        choiceboxShowImage.getSelectionModel().selectFirst();
-        for(Image image: report.getImages()) {
-            if(!choiceboxShowImage.getItems().contains(image.getName())) {
-                choiceboxShowImage.getItems().add(imageService.getImageNameFromPath(image.getName()));
-            }
-        }
+    if (selectedFile != null) {
+      String path = selectedFile.toPath().toString();
+
+      ImageService imageService = new ImageService();
+      Matcher fileNameMatcher = Pattern.compile("(?![/])[^./]*(?=[.])").matcher(path);
+      Matcher extensionMatcher = Pattern.compile("[.].*$").matcher(path);
+
+      Image image = new Image();
+      image.setData(imageService.getImageBytesFromPath(path));
+
+      if(fileNameMatcher.find())
+        image.setName(fileNameMatcher.group(0));
+      else
+        throw new IllegalArgumentException("No name found for image.");
+
+      if(extensionMatcher.find())
+        image.setExtension(extensionMatcher.group(0));
+      else
+        throw new IllegalArgumentException("No extension found for image.");
+
+      reportImages.add(image);
     }
+  }
+
+  private void fillChoiceboxWithOptions() {
+    choiceboxShowImage.getSelectionModel().selectFirst();
+    for(Image image: reportImages) {
+      if(!choiceboxShowImage.getItems().contains(image.getName())) {
+        choiceboxShowImage.getItems().add(imageService.getImageNameFromPath(image.getName()));
+      }
+    }
+  }
 
     public void setOnderhoudSchermController(OnderhoudSchermController controller) {
         this.onderhoudSchermController = controller;

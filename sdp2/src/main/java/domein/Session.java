@@ -19,6 +19,7 @@ public class Session {
     private static final Map<String, Object> attributes = new HashMap<>();
     private static Site currentSite;
     private static Report currentReport;
+    private static Maintenance currentMaintenance;
 
     public static Button getActiveNavItem(){
         return activeNavItem;
@@ -84,6 +85,14 @@ public class Session {
 
     public static void removeAttribute(String key) {
         attributes.remove(key);
+    }
+
+    public static void setCurrentMaintenance(Maintenance maintenance) {
+        currentMaintenance = maintenance;
+    }
+
+    public static Maintenance getCurrentMaintenance() {
+        return currentMaintenance;
     }
 
     // Current User op null zetten bij bv. uitloggen
