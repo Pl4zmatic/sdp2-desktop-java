@@ -1,5 +1,6 @@
 package domein.machine;
 
+import domein.machine.report.Report;
 import domein.machine.stateMachines.maintenance.MaintenanceState;
 import domein.machine.stateMachines.maintenance.PlannedState;
 import domein.user.User;
@@ -24,7 +25,7 @@ public class Maintenance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long maintenanceId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "machine_id", nullable = false)  // Deze kolom linkt Maintenance naar Machine
     private Machine machine;
     private String machineCode;
@@ -34,7 +35,10 @@ public class Maintenance {
     private User technician;
     private String nameTechnician;
     private String reason;
-    private String maintenanceReport;
+
+    @OneToOne(cascade=CascadeType.PERSIST)
+    @JoinColumn(name = "MAINTENANCEREPORT_RAPPORTID", referencedColumnName = "rapportId")
+    private Report maintenanceReport;
     private String remarks;
     private String currentStateString;
     @Transient
@@ -44,7 +48,7 @@ public class Maintenance {
     private MachineService machineService;
     
     public Maintenance(String machineCode, LocalDate startDate, LocalDate endDate, 
-    		String reason, String maintenanceReport, String remarks) {
+    		String reason, Report maintenanceReport, String remarks) {
     	machineService = new MachineService();
     	this.machine = machineService.getMachineByCode(machineCode);
     	setStartDate(startDate);
@@ -102,7 +106,7 @@ public class Maintenance {
         this.reason = reason;
     }
 
-    public void setMaintenanceReport(String maintenanceReport) {
+    public void setMaintenanceReport(Report maintenanceReport) {
         this.maintenanceReport = maintenanceReport;
     }
 

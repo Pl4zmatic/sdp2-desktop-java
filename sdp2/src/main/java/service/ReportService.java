@@ -41,7 +41,7 @@ public class ReportService {
       reportDaoJpa.update(report);
       ReportDaoJpa.commitTransaction();
     } catch (Exception e) {
-      System.out.printf("%s\n%s\n%\n", "=".repeat(20), "Updating report failed.", "=".repeat(20));
+      System.out.printf("%s\n%s\n%s\n", "=".repeat(20), "Updating report failed.", "=".repeat(20));
       e.printStackTrace();
     }
   }
@@ -61,7 +61,7 @@ public class ReportService {
     try {
       return Collections.unmodifiableList(reportDaoJpa.findAll());
     } catch (Exception e) {
-      System.out.printf("%s\n%s%d\n%s\n", "=".repeat(20), "getAllReports Failed.", "=".repeat(20));
+      System.out.printf("%s\n%s\n%s\n", "=".repeat(20), "getAllReports Failed.", "=".repeat(20));
       e.printStackTrace();
     }
 

@@ -17,11 +17,13 @@ public class ConsoleAppReport {
   private static ReportService reportService;
   private static Maintenance maintenance;
   private static Scanner inputScanner;
+  private static ImageService imageService;
 
   private static void init() {
     report = new Report();
     inputScanner = new Scanner(System.in);
     reportService = new ReportService();
+    imageService = new ImageService();
   }
 
   public static void main(String[] args) {
@@ -39,18 +41,18 @@ public class ConsoleAppReport {
       System.out.println("-".repeat(20 * 8));
     });
   }
-
+  
   private static void chooseMaintenance() {
     MaintenanceService maintenanceService = new MaintenanceService();
-
+    
     printDbTable(maintenanceService.getAllMaintenance());
-
+    
     System.out.println("Choose a maintenance with id: ");
-    int maintenanceId = inputScanner.nextInt();
-
-    //maintenance = maintenanceService.getMaintenanceById(maintenanceId);
+    long maintenanceId = inputScanner.nextLong();
+    
+    maintenance = maintenanceService.getMaintenanceById(maintenanceId);
   }
-
+  
   private static void printMenu() {
     List<String> menuItems = Arrays.asList("Reports\n" + "-".repeat(10),
     "1. Add",
@@ -103,7 +105,7 @@ public class ConsoleAppReport {
     System.out.println("Notes: ");
     String notes = inputScanner.nextLine();
 
-    report = new Report(paths, steps, notes, maintenance);
+    report = new Report(paths, notes, maintenance);
     reportService.addReport(report);
   }
 
@@ -149,7 +151,7 @@ public class ConsoleAppReport {
     Report toUpdateReport = reportService.getReportById(maintenanceId);
 
     List<String> paths = inputStringList("image path");
-    List<String> steps = inputStringList("step");
+    String steps = "step";
     System.out.println("Notes: ");
     String notes = inputScanner.nextLine();
 
@@ -157,8 +159,6 @@ public class ConsoleAppReport {
       toUpdateReport.setImagesFromStrings(paths);
     if (!steps.isEmpty())
       toUpdateReport.setSteps(steps);
-    if (!notes.isBlank() && !notes.isEmpty())
-      toUpdateReport.setNotes(notes);
 
     reportService.updateReport(toUpdateReport);
   }

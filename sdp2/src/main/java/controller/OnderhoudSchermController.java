@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import domein.Session;
 import domein.machine.Machine;
 import domein.machine.Maintenance;
+import domein.machine.report.Report;
 import domein.machine.stateMachines.machine.StoppedState;
 import domein.machine.stateMachines.maintenance.FinishedState;
 import domein.machine.stateMachines.maintenance.MaintenanceState;
@@ -25,6 +26,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -42,13 +44,15 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import service.MachineService;
 import service.MaintenanceService;
+import service.ReportService;
 import utils.Rollen;
 
 public class OnderhoudSchermController {
 
 	private MaintenanceService maintenanceService;
 	private MachineService machineService;
-
+	Maintenance selectedMaintenance;
+	
 	@FXML
 	private MFXButton completedButton;
 
@@ -97,6 +101,18 @@ public class OnderhoudSchermController {
 	private TextField techniekerField;
 
 	@FXML
+	private Button addReportButton;
+
+	@FXML
+	private Button editAndViewReportButton;
+
+    private FilteredList<Machine> filteredMachines;
+    private FilteredList<String> filteredDates;
+
+	private ReportService reportService;
+	private ReportPageController reportPageController;
+    
+	@FXML
 	private Text techniekerLabel;
 
 	private FilteredList<Machine> filteredMachines;
@@ -104,10 +120,11 @@ public class OnderhoudSchermController {
 
 	@FXML
 	public void initialize() {
-		
+		reportService = new ReportService();
 		maintenanceService = new MaintenanceService();
 		machineService = new MachineService();
-
+		reportPageController = new ReportPageController();
+		
 		rootLayout.setLeft(NavbarManager.getNavbar());
 
 		User user = Session.getCurrentUser();
@@ -118,10 +135,19 @@ public class OnderhoudSchermController {
 
 		if (userRole == Rollen.TECHNIEKER) {
 			planButton.setVisible(false);
-			List<Maintenance> maintenances = maintenanceService.getMaintenanceByTechnieker();
+			List<Maintenance> maintenances = maintenanceService.getMaintenanceByTechnieker(user.getFullName());
+
+			addReportButton.setVisible(true);
+			addReportButton.setManaged(true);
+			editAndViewReportButton.setVisible(false);
+			editAndViewReportButton.setVisible(false);
 			fillVBox(maintenances);
 		} else {
-			List<Maintenance> maintenances = maintenanceService.getMaintenanceForCurrentSite();
+			addReportButton.setVisible(false);
+			addReportButton.setManaged(false);
+			editAndViewReportButton.setVisible(false);
+			editAndViewReportButton.setVisible(false);
+			List<Maintenance> maintenances = maintenanceService.getAllMaintenance();
 			fillVBox(maintenances);
 		}
 
@@ -142,6 +168,8 @@ public class OnderhoudSchermController {
 		submitButton.setOnAction(event -> {
 			planMaintenance();
 		});
+
+		addReportButton.setOnAction(event -> navToAddReportPage());
 		
 		completedButton.setOnAction(event -> {
 			setupCompletedVBox();
@@ -167,6 +195,7 @@ public class OnderhoudSchermController {
 	}
 
 	private void openPlanMenu() {
+
 		fieldVBox.setVisible(true);
 		techniekerField.setVisible(false);
 		techniekerLabel.setVisible(false);
@@ -177,9 +206,8 @@ public class OnderhoudSchermController {
 	}
 
 	private void planMaintenance() {
-		if (checkFields()) {
-			maintenanceService.planMaintenance(machineField.getValue().getCode(), dateField.getValue().split("-"), null,
-					reasonField.getText(), null, notesField.getText());
+		if(checkFields()) {
+			maintenanceService.planMaintenance(machineField.getValue().getCode(), dateField.getValue().split("-"), null, reasonField.getText(), Session.getCurrentReport(), notesField.getText());
 			machineField.setPromptText("");
 			dateField.setPromptText("");
 			reasonField.clear();
@@ -189,6 +217,12 @@ public class OnderhoudSchermController {
 		}
 	}
 
+	private void navToAddReportPage() {
+		reportPageController.setOnderhoudSchermController(this);
+		Session.setCurrentMaintenance(selectedMaintenance);
+		SceneSwitcher.switchScene("/view/ReportPage.fxml");
+	}
+	
 	private boolean checkFields() {
 		if (machineField.getValue() == null || dateField.getValue() == null || dateField.getValue().isBlank()
 				|| dateField.getValue().isEmpty() || reasonField.getText() == null || reasonField.getText().isBlank()
@@ -282,6 +316,8 @@ public class OnderhoudSchermController {
 
 			}
 			controller.textBox.setOnMouseClicked(event -> {
+				selectedMaintenance = maintenance;
+
 				openPlanMenu();
 				techniekerLabel.setVisible(true);
 				techniekerField.setVisible(true);
@@ -501,15 +537,21 @@ public class OnderhoudSchermController {
 			}
 		});
 
-		dateField.setPromptText("Select or type to search");
+	        dateField.setPromptText("Select or type to search");
+	    }
+	
+	 private void showAlert(String title, String message, Alert.AlertType alertType) {
+	        Alert alert = new Alert(alertType);
+	        alert.setTitle(title);
+	        alert.setHeaderText(null);
+	        alert.setContentText(message);
+	        alert.showAndWait();
 	}
 
-	private void showAlert(String title, String message, Alert.AlertType alertType) {
-		Alert alert = new Alert(alertType);
-		alert.setTitle(title);
-		alert.setHeaderText(null);
-		alert.setContentText(message);
-		alert.showAndWait();
-	}
-
+	public void updateButtons() {
+		//addReportButton.setVisible(false);
+        //addReportButton.setManaged(false);
+        //editAndViewReportButton.setVisible(true);
+        //editAndViewReportButton.setManaged(true);
+	}	
 }

@@ -24,6 +24,7 @@
             <property name="jakarta.persistence.jdbc.user" value="SDP2-2425-G02"/>
             <property name="jakarta.persistence.jdbc.password" value="admin"/>
             <property name="jakarta.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
+            <property name="eclipselink.connection-pool.max" value="10"/>
 
             <!-- <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/schooldb?serverTimezone=UTC"/>
             <property name="jakarta.persistence.jdbc.user" value="root"/>
