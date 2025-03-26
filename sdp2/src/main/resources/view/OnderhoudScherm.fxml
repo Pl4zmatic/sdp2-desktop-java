@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane fx:id="rootLayout" maxHeight="10000.0" maxWidth="10000.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OnderhoudSchermController">
+<BorderPane fx:id="rootLayout" maxHeight="10000.0" maxWidth="10000.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OnderhoudSchermController">
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #f5f5f5;" BorderPane.alignment="CENTER">
          <children>
@@ -24,7 +24,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="50.0" style="-fx-background-color: #f8f8f8; -fx-background-radius: 8 8 0 0;">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Planned" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                              <Text fx:id="plannedTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Planned" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>

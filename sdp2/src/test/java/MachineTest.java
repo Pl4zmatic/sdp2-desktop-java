@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MachineTest {
+class MachineTest {
 
     private Machine machine;
     private Site site;
