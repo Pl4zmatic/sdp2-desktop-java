@@ -45,12 +45,12 @@ public class NotificationViewController {
     @FXML
     private VBox buttonAndNotificationVbox;
 
-	private NotificationService notificationService;
+
 	private NotificationElement notificationElement;
 
     @FXML
 	public void initialize() {
-        notificationService = NotificationService.getInstance();
+
 		rootLayout.setLeft(NavbarManager.getNavbar());
 		//List<Notification> notifications = notificationService.getAllNotificationsByUser(Session.getCurrentUser());
         List<Notification> notifications = new ArrayList<>();

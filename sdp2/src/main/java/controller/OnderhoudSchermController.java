@@ -44,15 +44,15 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import service.MachineService;
 import service.MaintenanceService;
-import service.ReportService;
+import service.ServiceController;
 import utils.Rollen;
 
 public class OnderhoudSchermController {
 
-	private MaintenanceService maintenanceService;
-	private MachineService machineService;
+
+	private ServiceController sc;
+
 	Maintenance selectedMaintenance;
-	
 	@FXML
 	private MFXButton completedButton;
 
@@ -120,11 +120,10 @@ public class OnderhoudSchermController {
 
 	@FXML
 	public void initialize() {
-		reportService = new ReportService();
-		maintenanceService = new MaintenanceService();
-		machineService = new MachineService();
-		reportPageController = new ReportPageController();
 		
+		this.sc = ServiceController.getInstance();
+
+		reportPageController = new ReportPageController();
 		rootLayout.setLeft(NavbarManager.getNavbar());
 
 		User user = Session.getCurrentUser();
@@ -138,19 +137,18 @@ public class OnderhoudSchermController {
 
 		if (userRole == Rollen.TECHNIEKER) {
 			planButton.setVisible(false);
-			List<Maintenance> maintenances = maintenanceService.getMaintenanceByTechnieker();
-
+			List<Maintenance> maintenances = sc.getMaintenanceByTechnieker(user.getFullName());
 			addReportButton.setVisible(true);
 			addReportButton.setManaged(true);
 			editAndViewReportButton.setVisible(false);
 			editAndViewReportButton.setVisible(false);
 			fillVBox(maintenances);
 		} else {
+			List<Maintenance> maintenances = sc.getAllMaintenances();
 			addReportButton.setVisible(false);
 			addReportButton.setManaged(false);
 			editAndViewReportButton.setVisible(false);
 			editAndViewReportButton.setVisible(false);
-			List<Maintenance> maintenances = maintenanceService.getAllMaintenance();
 			fillVBox(maintenances);
 		}
 
@@ -192,7 +190,7 @@ public class OnderhoudSchermController {
         fullProgressVBox.setManaged(false);
 		planButton.setText("Go back");
         planButton.setOnAction(eventt -> initialize());
-        List<Maintenance> maintenances = maintenanceService.getAllMaintenance();	        
+        List<Maintenance> maintenances = sc.getAllMaintenances();
         fillCompletedVBox(maintenances.stream().filter(m -> m.getCurrentStateString().equals("FinishedState")).collect(Collectors.toList()));
 
 	}
@@ -209,13 +207,14 @@ public class OnderhoudSchermController {
 	}
 
 	private void planMaintenance() {
-		if(checkFields()) {
-			maintenanceService.planMaintenance(machineField.getValue().getCode(), dateField.getValue().split("-"), null, reasonField.getText(), Session.getCurrentReport(), notesField.getText());
+		if (checkFields()) {
+			sc.planMaintenance(machineField.getValue(), dateField.getValue().split("-"), null,
+					reasonField.getText(), null, notesField.getText());
 			machineField.setPromptText("");
 			dateField.setPromptText("");
 			reasonField.clear();
 			notesField.clear();
-			List<Maintenance> maintenancesList = maintenanceService.getAllMaintenance();
+			List<Maintenance> maintenancesList = sc.getAllMaintenances();
 			fillVBox(maintenancesList);
 		}
 	}
@@ -242,7 +241,7 @@ public class OnderhoudSchermController {
 		if (checkFields()) {
 			maintenance.setReason(reasonField.getText());
 			maintenance.setRemarks(notesField.getText());
-			maintenanceService.editMaintenance(maintenance);
+			sc.editMaintenance(maintenance);
 			machineField.setPromptText("");
 			dateField.setPromptText("");
 			reasonField.clear();
@@ -364,9 +363,9 @@ public class OnderhoudSchermController {
 							"Machine has to be in stopped state in order for a maintenance to be done",
 							Alert.AlertType.ERROR);
 				}
-				maintenanceService.editMaintenance(maintenance);
+				sc.editMaintenance(maintenance);
 
-				List<Maintenance> maintenancesList = maintenanceService.getAllMaintenance();
+				List<Maintenance> maintenancesList = sc.getAllMaintenances();
 				fillVBox(maintenancesList);
 			});
 
@@ -376,7 +375,7 @@ public class OnderhoudSchermController {
 	}
 
 	private void setupMachineComboBox() {
-		List<Machine> allMachines = machineService.getAllMachines().stream().collect(Collectors.toList());
+		List<Machine> allMachines = sc.getAllMachines().stream().collect(Collectors.toList());
 
 		if (allMachines.isEmpty()) {
 			machineField.setDisable(true);

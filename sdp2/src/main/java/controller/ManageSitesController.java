@@ -20,6 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
+import service.ServiceController;
 import service.SiteService;
 
 public class ManageSitesController {
@@ -49,12 +50,12 @@ public class ManageSitesController {
 
     private ObservableList<Site> sites;
     private FilteredList<Site> filteredSites;
-    private SiteService siteService;
+    private ServiceController sc;
     private SiteFormController formController;
 
     @FXML
     private void initialize() throws IOException {
-        siteService = SiteService.getInstance();
+        sc = ServiceController.getInstance();
         setupTable();
         setupNavbar();
         setupLocationFilter();
@@ -68,7 +69,7 @@ public class ManageSitesController {
     }
 
     private void setupLocationFilter() {
-        List<String> cities = siteService.getAllSites().stream()
+        List<String> cities = sc.getAllSites().stream()
                 .map(site -> {
                     String address = site.getAddress();
                     if (address != null && address.contains(",")) {
@@ -240,7 +241,7 @@ public class ManageSitesController {
 
         confirmDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
-                boolean success = siteService.deleteSite(site.getId());
+                boolean success = sc.deleteSite(site.getId());
                 if (success) {
                     refreshTable();
                     hideRightPanel();
@@ -315,10 +316,10 @@ public class ManageSitesController {
         }
 
         if (showDeletedMachines.isSelected()) {
-            sites = FXCollections.observableArrayList(siteService.getAllSites());
+            sites = FXCollections.observableArrayList(sc.getAllSites());
         } else {
             sites = FXCollections.observableArrayList(
-                    siteService.getAllSites().stream()
+                    sc.getAllSites().stream()
                             .filter(site -> !site.getDeleted())
                             .collect(Collectors.toList())
             );

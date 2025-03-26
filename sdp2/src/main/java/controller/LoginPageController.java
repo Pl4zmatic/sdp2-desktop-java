@@ -4,6 +4,7 @@ import domein.Session;
 import domein.user.User;
 
 import domein.polling.NotificationPoller;
+import service.ServiceController;
 import service.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -25,10 +26,10 @@ public class LoginPageController {
     @FXML
     private Button loginButton;
 
-    private final UserService userService;
+    private final ServiceController sc;
 
     public LoginPageController() {
-        this.userService = UserService.getInstance();
+        this.sc = ServiceController.getInstance();
     }
 
     @FXML
@@ -41,18 +42,19 @@ public class LoginPageController {
         String email = emailField.getText();
         String password = passwordField.getText();
 
-        if (userService.login(email, password)) {
+        if (sc.userLogin(email, password)) {
             String nextScene = getNextSceneString();
 
             SceneSwitcher.switchScene(nextScene);
+            NotificationPoller.getInstance().startPolling();
 
             NavbarController navbarController = (NavbarController) NavbarManager.getNavbar().getUserData();
-            if (navbarController != null) {
-                navbarController.updateNavbar();
-                NotificationPoller.getInstance().startPolling();
-
-                
-            }
+//            if (navbarController != null) {
+//                navbarController.updateNavbar();
+//
+//
+//
+//            }
 
         } else {
             showAlert("Login Mislukt", "Ongeldige gebruikersnaam of wachtwoord.", Alert.AlertType.ERROR);

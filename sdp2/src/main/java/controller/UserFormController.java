@@ -1,5 +1,6 @@
 package controller;
 
+import service.ServiceController;
 import service.UserService;
 import domein.user.User;
 import javafx.collections.FXCollections;
@@ -36,7 +37,7 @@ public class UserFormController {
     @FXML private VBox passwordContainer;
     @FXML private Label phoneRequiredLabel;
 
-    private final UserService userService = UserService.getInstance();
+    private final ServiceController sc = ServiceController.getInstance();
     private User currentUser;
     private boolean isEditMode;
 
@@ -110,11 +111,11 @@ public class UserFormController {
             currentUser.setRol(role);
             currentUser.setDeleted(!isActive);
 
-            success = userService.editUser(currentUser);
+            success = sc.editUser(currentUser);
         } else {
             User newUser = new User(firstName, lastName, birthDate,email, password, adres, phoneNumber, role);
             newUser.setDeleted(!isActive);
-            success = userService.register(firstName, lastName, birthDate,email, password, adres, phoneNumber, role);
+            success = sc.userRegister(firstName, lastName, birthDate,email, password, adres, phoneNumber, role);
         }
 
         if (success) {
@@ -285,7 +286,7 @@ public class UserFormController {
     }
 
     private void resetPassword(User user, String newPw) throws IOException {
-        userService.resetPassword(user, newPw);
+        sc.resetPassword(user, newPw);
         showAlert("Success!", "The password has been successfully reset.", Alert.AlertType.INFORMATION);
 
         // Call the callback instead of switching scenes

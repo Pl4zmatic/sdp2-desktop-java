@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import service.ServiceController;
 import service.SiteService;
 
 public class SiteSelectionController {
@@ -33,11 +34,11 @@ public class SiteSelectionController {
 
     private ObservableList<Site> plants;
     private FilteredList<Site> filteredPlants;
-    private SiteService siteService;
+   private ServiceController sc;
 
     @FXML
     private void initialize() throws IOException {
-        siteService = SiteService.getInstance();
+        sc = ServiceController.getInstance();
         setupNavbar();
         setupLocationFilter();
         loadPlantCards();
@@ -49,7 +50,7 @@ public class SiteSelectionController {
     }
 
     private void setupLocationFilter() {
-        List<String> cities = siteService.getAllSites().stream()
+        List<String> cities = sc.getAllSites().stream()
                 .filter(site -> !site.getDeleted())
                 .map(site -> {
                     String address = site.getAddress();
@@ -109,7 +110,7 @@ public class SiteSelectionController {
             plants.clear();
         }
 
-        plants = FXCollections.observableArrayList(siteService.getAllSites());
+        plants = FXCollections.observableArrayList(sc.getAllSites());
         filteredPlants = new FilteredList<>(plants, site -> !site.getDeleted());
 
         updatePlantCards();

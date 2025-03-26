@@ -60,29 +60,10 @@ public class LogService{
         logUserAction("USER_ADD", details);
     }
 
-    public void logUserEdit(User oldUser, User updatedUser) {
+    public void logUserEdit(User updatedUser) {
         StringBuilder changes = new StringBuilder("User Changed: " + updatedUser.getFullName() + " (" + updatedUser.getEmail() + ")");
 
-        // Voeg details toe over wat er precies is gewijzigd
-        if (!oldUser.getFirstName().equals(updatedUser.getFirstName())) {
-            changes.append(", First Name: ").append(oldUser.getFirstName()).append(" → ").append(updatedUser.getFirstName());
-        }
-        if (!oldUser.getLastName().equals(updatedUser.getLastName())) {
-            changes.append(", Last Name: ").append(oldUser.getLastName()).append(" → ").append(updatedUser.getLastName());
-        }
-        if (!oldUser.getEmail().equals(updatedUser.getEmail())) {
-            changes.append(", Email: ").append(oldUser.getEmail()).append(" → ").append(updatedUser.getEmail());
-        }
-        if (!oldUser.getAdres().equals(updatedUser.getAdres())) {
-            changes.append(", Adress Changed");
-        }
-        if ((oldUser.getGsmNummer() == null && updatedUser.getGsmNummer() != null) ||
-                (oldUser.getGsmNummer() != null && !oldUser.getGsmNummer().equals(updatedUser.getGsmNummer()))) {
-            changes.append(", Phone Number Changed");
-        }
-        if (!oldUser.getRol().equals(updatedUser.getRol())) {
-            changes.append(", Role: ").append(oldUser.getRol()).append(" → ").append(updatedUser.getRol());
-        }
+
 
         logUserAction("USER_EDIT", changes.toString());
     }
@@ -105,20 +86,15 @@ public class LogService{
         logUserAction("MACHINE_ADD", details);
     }
 
-    public void logMachineDelete(Machine machine) {
-        String details = "Machine Deleted: " + machine.getCode();
+    public void logMachineDelete(String code) {
+        String details = "Machine Deleted: " + code;
         logUserAction("MACHINE_DELETE", details);
     }
 
 
-    public void logMachineEdit(Machine machineOld, Machine machineNew) {
-        StringBuilder changes = new StringBuilder("Machine Changed : " + machineOld.getCode());
-        if(!machineOld.getProductInfo().equals(machineNew.getProductInfo())) {
-            changes.append(", Product Info: ").append(machineOld.getProductInfo()).append(" → ").append(machineNew.getProductInfo());
-        }
-        if(!machineOld.getCurrentState().equals(machineNew.getCurrentState())) {
-            changes.append(", Current State: ").append(machineOld.getCurrentState()).append(" → ").append(machineNew.getCurrentState());
-        }
+    public void logMachineEdit(Machine machineNew) {
+        StringBuilder changes = new StringBuilder("Machine Changed : " + machineNew.getCode());
+
 
         logUserAction("MACHINE_EDIT", changes.toString());
     }

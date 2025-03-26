@@ -44,13 +44,11 @@ public class Maintenance {
     @Transient
     private MaintenanceState currentState;
     
-    @Transient
-    private MachineService machineService;
+
     
-    public Maintenance(String machineCode, LocalDate startDate, LocalDate endDate, 
-    		String reason, Report maintenanceReport, String remarks) {
-    	machineService = new MachineService();
-    	this.machine = machineService.getMachineByCode(machineCode);
+    public Maintenance(Machine machine, LocalDate startDate, LocalDate endDate,
+    		String reason, String maintenanceReport, String remarks) {
+        this.machine = machine;
     	setStartDate(startDate);
     	this.technician = machine.getTechnieker();
     	this.nameTechnician = machine.getTechniekerNaam();

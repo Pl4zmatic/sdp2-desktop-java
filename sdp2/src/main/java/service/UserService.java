@@ -53,24 +53,23 @@ public class UserService{
         return false;  // Return false als login mislukt
     }
 
-    public boolean register(String firstName, String lastName, LocalDate birthDate, String email, String password,
-                            String adres, String gsmNummer, Rollen rol) {
+    public boolean register(User user) {
         try {
             // Controleer of een gebruiker met dit e-mailadres al bestaat
-            if (userDao.getUserByEmail(email) != null) {
+            if (userDao.getUserByEmail(user.getEmail()) != null) {
                 return false;
             }
 
             // Maak een nieuwe gebruiker aan
-            User newUser = new User(firstName, lastName, birthDate,email, password, adres, gsmNummer, rol);
+
 
             // Voeg de gebruiker toe aan de database
             UserDaoJpa.startTransaction();
-            userDao.insert(newUser);
+            userDao.insert(user);
             UserDaoJpa.commitTransaction();
 
             // Log de actie
-            logService.logUserCreation(newUser);
+
 
             return true;
         } catch (Exception e) {
@@ -132,7 +131,7 @@ public class UserService{
                 UserDaoJpa.commitTransaction();
 
                 // Log de actie
-                logService.logUserEdit(oldUser, existingUser);
+                logService.logUserEdit( existingUser);
 
                 return true;
             } else {
@@ -156,8 +155,8 @@ public class UserService{
                 userDao.update(existingUser);
                 UserDaoJpa.commitTransaction();
 
-                // Log de actie
-                logService.logPasswordReset(existingUser);
+
+
 
                 return true;
             } else {

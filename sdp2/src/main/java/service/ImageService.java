@@ -21,11 +21,23 @@ import lombok.NoArgsConstructor;
 import repository.ImageDaoJpa;
 import repository.ReportDaoJpa;
 
-@NoArgsConstructor
+
 public class ImageService {
 
   private ImageDaoJpa imageDaoJpa;
-  private ReportService reportService;
+
+  private static ImageService instance;
+
+  private ImageService() {
+    this.imageDaoJpa = new ImageDaoJpa();
+  }
+
+  public static ImageService getInstance() {
+    if (instance == null) {
+      instance = new ImageService();
+    }
+    return instance;
+  }
 
   public byte[] getImageBytesFromPath(String path) {
     try {

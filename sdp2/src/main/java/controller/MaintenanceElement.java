@@ -15,7 +15,7 @@ import service.MaintenanceService;
 
 public class MaintenanceElement {
 
-	private MaintenanceService maintenanceService;
+
 	
     @FXML
     private Text dateLabel;
@@ -33,7 +33,7 @@ public class MaintenanceElement {
     
     @FXML
     public void intialize() {
-    	maintenanceService = new MaintenanceService();	
+
     	FXMLLoader fxmlLoader = new FXMLLoader(getClass()
     			.getResource("/view/MaintenanceItem.fxml"));
     	

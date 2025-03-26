@@ -9,12 +9,12 @@ import domein.machine.Maintenance;
 import domein.machine.report.Image;
 import domein.machine.report.Report;
 import service.ImageService;
-import service.MaintenanceService;
-import service.ReportService;
+import service.ServiceController;
+
 
 public class ConsoleAppReport {
   private static Report report;
-  private static ReportService reportService;
+  private static ServiceController sc;
   private static Maintenance maintenance;
   private static Scanner inputScanner;
   private static ImageService imageService;
@@ -22,8 +22,7 @@ public class ConsoleAppReport {
   private static void init() {
     report = new Report();
     inputScanner = new Scanner(System.in);
-    reportService = new ReportService();
-    imageService = new ImageService();
+    sc = ServiceController.getInstance();
   }
 
   public static void main(String[] args) {
@@ -43,10 +42,10 @@ public class ConsoleAppReport {
   }
   
   private static void chooseMaintenance() {
-    MaintenanceService maintenanceService = new MaintenanceService();
-    
-    printDbTable(maintenanceService.getAllMaintenance());
-    
+
+
+    printDbTable(sc.getAllMaintenances());
+
     System.out.println("Choose a maintenance with id: ");
     long maintenanceId = inputScanner.nextLong();
     
@@ -85,7 +84,7 @@ public class ConsoleAppReport {
         break;
 
       case 4:
-        printDbTable(reportService.getAllReports());
+        printDbTable(sc.getAllReports());
         break;
 
       case 5:
@@ -106,7 +105,7 @@ public class ConsoleAppReport {
     String notes = inputScanner.nextLine();
 
     report = new Report(paths, notes, maintenance);
-    reportService.addReport(report);
+    sc.addReport(report);
   }
 
   private static List<String> inputStringList(String item) {
@@ -131,24 +130,24 @@ public class ConsoleAppReport {
   }
 
   private static void deleteReport() {
-    ReportService reportService = new ReportService();
-    printDbTable(reportService.getAllReports());
+
+    printDbTable(sc.getAllReports());
 
     System.out.println("Choose a report with id: ");
     int maintenanceId = inputScanner.nextInt();
 
-    Report toDeleteReport = reportService.getReportById(maintenanceId);
-    reportService.deleteReport(toDeleteReport);
+    Report toDeleteReport = sc.getReportById(maintenanceId);
+    sc.deleteReport(toDeleteReport);
   }
 
   private static void updateReport() {
-    ReportService reportService = new ReportService();
-    printDbTable(reportService.getAllReports());
+
+    printDbTable(sc.getAllReports());
 
     System.out.println("Choose a report with id: ");
     int maintenanceId = inputScanner.nextInt();
 
-    Report toUpdateReport = reportService.getReportById(maintenanceId);
+    Report toUpdateReport = sc.getReportById(maintenanceId);
 
     List<String> paths = inputStringList("image path");
     String steps = "step";
@@ -160,26 +159,26 @@ public class ConsoleAppReport {
     if (!steps.isEmpty())
       toUpdateReport.setSteps(steps);
 
-    reportService.updateReport(toUpdateReport);
+    sc.updateReport(toUpdateReport);
   }
 
   private static void downloadImages() {
-    ReportService reportService = new ReportService();
-    printDbTable(reportService.getAllReports());
+
+    printDbTable(sc.getAllReports());
 
     System.out.println("Choose a report with id: ");
     int maintenanceId = inputScanner.nextInt();
     scannerFlush();
 
-    Report report = reportService.getReportById(maintenanceId);
+    Report report = sc.getReportById(maintenanceId);
 
     System.out.println("Give a destination for the file: ");
     String destination = inputScanner.nextLine();
 
-    ImageService imageService = new ImageService();
+
 
     for(Image image : report.getImages()) {
-      imageService.download(destination, image);
+      sc.downloadImage(destination, image);
     }
   }
 

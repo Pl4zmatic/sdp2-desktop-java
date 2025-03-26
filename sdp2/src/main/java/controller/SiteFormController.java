@@ -40,6 +40,7 @@ import javafx.util.StringConverter;
 import lombok.Getter;
 import lombok.Setter;
 import service.MachineService;
+import service.ServiceController;
 import service.SiteService;
 import service.UserService;
 import utils.Rollen;
@@ -50,9 +51,7 @@ public class SiteFormController {
     @Setter
     private Site site;
 
-    private SiteService siteService;
-    private MachineService machineService;
-    private UserService userService;
+    private ServiceController sc;
 
     @FXML
     private BorderPane rootLayout;
@@ -102,9 +101,7 @@ public class SiteFormController {
 
     @FXML
     private void initialize() {
-        siteService = SiteService.getInstance();
-        machineService = MachineService.getInstance();
-        userService = UserService.getInstance();
+        ServiceController sc = ServiceController.getInstance();
 
         setupCallbacks();
         setupScrollPane();
@@ -117,7 +114,7 @@ public class SiteFormController {
     }
 
     private void setupResponsibleComboBox() {
-        List<User> allResponsibles = userService.getAllActiveUsers().stream()
+        List<User> allResponsibles = sc.getAllActiveUsers().stream()
                 .filter(user -> user.getRol() == Rollen.VERANTWOORDELIJKE)
                 .collect(Collectors.toList());
 
@@ -301,7 +298,7 @@ public class SiteFormController {
     private void checkSiteName(String error) {
         errors.remove(error);
         if (!isEditingFlag) {
-            List<String> siteNamesInDatabase = siteService.getAllSites().stream()
+            List<String> siteNamesInDatabase = sc.getAllSites().stream()
                     .map((site) -> site.getName())
                     .collect(Collectors.toList());
             if (siteNamesInDatabase.contains(siteName.getText().trim())) {
@@ -366,9 +363,9 @@ public class SiteFormController {
 
             boolean success;
             if (isEditingFlag) {
-                success = siteService.update(site);
+                success = sc.updateSite(site);
             } else {
-                success = siteService.addSite(site);
+                success = sc.addSite(site);
             }
 
             if (success) {

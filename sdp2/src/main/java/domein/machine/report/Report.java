@@ -1,5 +1,6 @@
 package domein.machine.report;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -16,7 +17,8 @@ import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import service.ImageService;
+
+import service.ServiceController;
 
 @Entity
 //@NoArgsConstructor
@@ -37,12 +39,15 @@ public class Report {
   @Setter
   private Maintenance maintenance;
 
+  @Transient
+  private ServiceController sc;
   public Report(List<String> imagePaths, String steps, Maintenance maintenance) {
     if (images == null)
       images = new ArrayList<>();
     setImagesFromStrings(imagePaths);
     setMaintenance(maintenance);
     setSteps(steps);
+    sc = ServiceController.getInstance();
   }
 
   public Report(String steps, Maintenance maintenance) {
@@ -69,13 +74,13 @@ public class Report {
     if (images == null)
       images = new ArrayList<>();
 
-    ImageService imageService = new ImageService();
+
     for (String path : imagePaths) {
       Matcher fileNameMatcher = Pattern.compile("(?![/])[^./]*(?=[.])").matcher(path);
       Matcher extensionMatcher = Pattern.compile("[.].*$").matcher(path);
 
       Image image = new Image();
-      image.setData(imageService.getImageBytesFromPath(path));
+      image.setData(sc.getImageBytesFromPath(path));
 
       if(fileNameMatcher.find())
         image.setName(fileNameMatcher.group(0));

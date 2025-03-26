@@ -1,6 +1,7 @@
 package controller;
 
 import domein.user.User;
+import service.ServiceController;
 import service.UserService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,7 +34,7 @@ public class GebruikersBeheerderController {
 
     private ObservableList<User> users;
     private FilteredList<User> filteredUsers;
-    private UserService userService = UserService.getInstance();
+    private ServiceController sc = ServiceController.getInstance();
     private UserFormController formController;
 
     private void loadUsersFromDatabase() {
@@ -42,9 +43,9 @@ public class GebruikersBeheerderController {
         }
 
         if(showDeletedUsers.isSelected())
-            users = FXCollections.observableArrayList(userService.getAllUsers());
+            users = FXCollections.observableArrayList(sc.getAllUsers());
         else
-            users = FXCollections.observableArrayList(userService.getAllActiveUsers());
+            users = FXCollections.observableArrayList(sc.getAllActiveUsers());
 
         filteredUsers = new FilteredList<>(users, p -> true);
 
@@ -322,7 +323,7 @@ public class GebruikersBeheerderController {
 
         confirmDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
-                boolean success = userService.deleteUser(user.getEmail());
+                boolean success = sc.deleteUser(user.getEmail());
                 if (success) {
                     refreshTable();
                     hideRightPanel();

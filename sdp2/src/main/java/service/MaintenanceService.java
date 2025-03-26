@@ -19,25 +19,25 @@ import repository.UserDaoJpa;
 
 public class MaintenanceService {
 	private final MaintenanceDaoJpa maintenanceDaoJpa;
-    private static UserService instance;
-    private final MachineService machineService;
+    private static MaintenanceService instance;
+
     
     public MaintenanceService() {
     	this.maintenanceDaoJpa = new MaintenanceDaoJpa();
-    	this.machineService = MachineService.getInstance();
+
     }
     
-    public static UserService getInstance() {
+    public static MaintenanceService getInstance() {
         if (instance == null) {
-            instance = new UserService();
+            instance = new MaintenanceService();
         }
         return instance;
     }
     
-    public boolean planMaintenance(String machineCode, String[] startDate, LocalDate endDate, 
-    		String reason, Report maintenanceReport, String remarks) {
+    public boolean planMaintenance(Machine machine, String[] startDate, LocalDate endDate,
+    		String reason, String maintenanceReport, String remarks) {
     	try {
-    		Maintenance newMaintenance = new Maintenance(machineCode, LocalDate.of(Integer.parseInt(startDate[0]), Integer.parseInt(startDate[1]), Integer.parseInt(startDate[2])), endDate, reason, maintenanceReport, remarks);
+    		Maintenance newMaintenance = new Maintenance(machine,  LocalDate.of(Integer.parseInt(startDate[0]), Integer.parseInt(startDate[1]), Integer.parseInt(startDate[2])), endDate, reason, maintenanceReport, remarks);
     		MaintenanceDaoJpa.startTransaction();
     		maintenanceDaoJpa.insert(newMaintenance);
     		MaintenanceDaoJpa.commitTransaction();

@@ -34,6 +34,14 @@ public class NotificationPoller implements Subject {
         return instance;
     }
 
+    public void printObservers(){
+        observers.forEach(o -> System.out.println(o.toString()));
+    }
+
+    public void clearObservers(){
+        this.observers.clear();
+    }
+
     // Start the polling process
     public void startPolling() {
         timer = new Timer();
@@ -49,11 +57,12 @@ public class NotificationPoller implements Subject {
     private void notifyObserver(){
         if(sc.hasNotificationsByUser(Session.getCurrentUser())){
             observers.forEach(o -> o.update(true));
-            System.out.println(true);
+            observers.forEach(o -> System.out.println("Observer updated"));
+            printObservers();
             return;
         }
         observers.forEach(o -> o.update(false));
-        System.out.println(false);
+
     }
 
     // Stop the polling process

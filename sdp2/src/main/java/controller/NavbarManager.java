@@ -47,6 +47,7 @@ public class NavbarManager {
     }
 
     public static void reloadNavbar() {
+
         navbar = null;
         getNavbar();
     }

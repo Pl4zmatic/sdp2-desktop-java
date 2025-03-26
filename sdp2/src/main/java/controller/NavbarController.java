@@ -19,6 +19,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import service.NotificationService;
 import domein.polling.NotificationPoller;
+import service.ServiceController;
 import utils.Observer;
 import utils.Rollen;
 
@@ -71,11 +72,11 @@ public class NavbarController implements Observer {
     private Parent expandedNavbar;
     private Parent collapsedNavbarView;
 
-    private NotificationService notificationService;
+
 
     @FXML
     public void initialize() {
-        notificationService = NotificationService.getInstance();
+
         NotificationPoller.getInstance().addObserver(this);
         if (rootLayout != null) {
             expandedNavbar = rootLayout;
@@ -425,6 +426,7 @@ public class NavbarController implements Observer {
         Session.clear();
         SceneSwitcher.switchScene("/view/LoginPage.fxml");
         NotificationPoller.getInstance().stopPolling();
+        NotificationPoller.getInstance().clearObservers();
     }
 
     private void setTextToUsername(Text text, String fullName) {
@@ -442,24 +444,11 @@ public class NavbarController implements Observer {
     public void update(boolean hasNotifications) {
         System.out.println(hasNotifications + " poep");
 
-
         notificationCircle.setVisible(hasNotifications);
-        notificationCircle.getParent().layout();
 
 
-        System.out.println(notificationCircle.visibleProperty());
-
-
-//            Image image = new Image(getClass().getResourceAsStream("/images/User_fill_notif_3x.png"));
-//            ImageView imageView = new ImageView(image);
-//            imageView.setFitHeight(40);
-//            imageView.setFitWidth(40);
-//            profileIcon.setGraphic(imageView);
         }
-//        } else {
-//            Image image = new Image(getClass().getResourceAsStream("/images/User_fill.png"));
-//            profileIcon.setGraphic(new ImageView(image));
-//        }
+//
 
     }
 

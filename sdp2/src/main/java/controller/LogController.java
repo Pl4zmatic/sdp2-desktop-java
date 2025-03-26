@@ -11,8 +11,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import service.LogService;
+import service.ServiceController;
+
 import java.net.URL;
+import java.security.Provider;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -38,7 +40,7 @@ public class LogController implements Initializable {
     @FXML
     private BorderPane rootLayout;
 
-    private final LogService logService = LogService.getInstance();
+    private final ServiceController service = ServiceController.getInstance();
     private ObservableList<LogEntry> logEntries;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
@@ -143,7 +145,7 @@ public class LogController implements Initializable {
 
     private void loadData() {
         // Haal alleen de toegestane acties op
-        List<LogEntry> logs = logService.getAllLogs().stream()
+        List<LogEntry> logs = service.getAllLogs().stream()
                 .filter(log -> ALLOWED_ACTIONS.contains(log.getAction()))
                 .sorted(Comparator.comparing(LogEntry::getTimestamp).reversed())
                 .collect(Collectors.toList());
@@ -157,7 +159,7 @@ public class LogController implements Initializable {
         LocalDate dateFilter = dateFilterPicker.getValue();
         String searchText = searchField.getText().toLowerCase();
 
-        List<LogEntry> filteredLogs = logService.getAllLogs().stream()
+        List<LogEntry> filteredLogs = service.getAllLogs().stream()
                 .filter(log -> ALLOWED_ACTIONS.contains(log.getAction()))
                 .filter(log -> {
                     // Filter op actie

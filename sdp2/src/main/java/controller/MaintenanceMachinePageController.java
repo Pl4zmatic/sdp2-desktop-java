@@ -3,6 +3,7 @@ package controller;
 import domein.machine.Machine;
 import service.MachineService;
 import javafx.fxml.FXML;
+import service.ServiceController;
 import utils.MaintenanceStatus;
 
 import java.util.Scanner;
@@ -12,12 +13,12 @@ import java.time.LocalTime;
 
 public class MaintenanceMachinePageController {
     
-    private MachineService ms;
+    private ServiceController sc;
 
     @FXML
     private void initialize() {
         Scanner in = new Scanner(System.in);
-        List<Machine> machines = ms.getAllMachines();
+        List<Machine> machines = sc.getAllMachines();
 
         machines.forEach(machine -> System.out.println(machine.getCode()));
         int indexMachine = in.nextInt();

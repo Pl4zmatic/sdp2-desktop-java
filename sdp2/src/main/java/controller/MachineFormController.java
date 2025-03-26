@@ -32,6 +32,7 @@ import javafx.util.StringConverter;
 import lombok.Getter;
 import lombok.Setter;
 import service.MachineService;
+import service.ServiceController;
 import service.SiteService;
 import service.UserService;
 import utils.Rollen;
@@ -42,9 +43,7 @@ public class MachineFormController {
     @Setter
     private Machine machine;
 
-    private MachineService machineService;
-    private SiteService siteService;
-    private UserService userService;
+    ServiceController sc;
 
     @Setter
     private BorderPane parent;
@@ -120,9 +119,7 @@ public class MachineFormController {
 
     @FXML
     private void initialize() {
-        machineService = new MachineService();
-        siteService = SiteService.getInstance();
-        userService = UserService.getInstance();
+        this.sc = ServiceController.getInstance();
         setupCallbacks();
         setupScrollPane();
         setupSiteComboBox();
@@ -135,7 +132,7 @@ public class MachineFormController {
     }
 
     private void setupTechnicianComboBox() {
-        List<User> allTechnicians = userService.getAllActiveUsers().stream()
+        List<User> allTechnicians = sc.getAllActiveUsers().stream()
                 .filter(user -> user.getRol() == Rollen.TECHNIEKER)
                 .collect(Collectors.toList());
 
@@ -255,7 +252,7 @@ public class MachineFormController {
         technicianComboBox.setPromptText("Select or type to search");
     }
     private void setupSiteComboBox() {
-        List<Site> allSites = siteService.getAllSites().stream()
+        List<Site> allSites = sc.getAllSites().stream()
                 .filter(site -> !site.getDeleted())
                 .collect(Collectors.toList());
 
@@ -503,7 +500,7 @@ public class MachineFormController {
     private void checkMachineCode(String error) {
         errors.remove(error);
         if (!isEditingFlag) {
-            Set<String> codesInDatabase = machineService.getAllMachines().stream()
+            Set<String> codesInDatabase = sc.getAllMachines().stream()
                     .map((machine) -> machine.getCode())
                     .collect(Collectors.toSet());
             if (codesInDatabase.contains(machineCode.getText().trim())) {
@@ -606,9 +603,9 @@ public class MachineFormController {
 
             boolean success;
             if (isEditingFlag) {
-                success = machineService.update(machine);
+                success = sc.updateMachine(machine);
             } else {
-                success = machineService.addMachine(machine);
+                success = sc.addMachine(machine);
             }
 
             if (success) {

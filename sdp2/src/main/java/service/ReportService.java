@@ -1,17 +1,29 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import domein.machine.report.Report;
+import repository.LogDaoJpa;
 import repository.ReportDaoJpa;
 
 public class ReportService {
   private ReportDaoJpa reportDaoJpa;
+  private static ReportService instance;
 
-  public ReportService() {
+  private ReportService() {
     this.reportDaoJpa = new ReportDaoJpa();
   }
+
+  public static ReportService getInstance() {
+    if (instance == null) {
+      instance = new ReportService();
+    }
+    return instance;
+  }
+
+
 
   public void addReport(Report report) {
     try {
@@ -65,7 +77,7 @@ public class ReportService {
       e.printStackTrace();
     }
 
-    return null;
+    return new ArrayList<>();
   }
 
 

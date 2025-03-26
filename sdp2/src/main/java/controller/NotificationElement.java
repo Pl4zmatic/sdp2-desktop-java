@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import service.NotificationService;
+import service.ServiceController;
 import utils.NotificationType;
     
 public class NotificationElement {
@@ -41,7 +42,7 @@ public class NotificationElement {
     @FXML
     private HBox notificationItemHbox;
 
-    private NotificationService notificationService;
+    private ServiceController sc;
     private String message;
         
     @FXML
@@ -53,7 +54,7 @@ public class NotificationElement {
     }
     
     public void fillNotificationElement(Notification notification, VBox parentContainer) {
-        notificationService = NotificationService.getInstance();
+        sc = ServiceController.getInstance();
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = notification.getDateAndTime().format(dateFormat);
         notificationDateLabel.setText(date);
@@ -80,7 +81,7 @@ public class NotificationElement {
 
     @FXML
     public void deleteNotification(Notification notification) {
-        notificationService.deleteNotification(notification);
+        sc.deleteNotification(notification);
     }
     @FXML
     public void showNotificationDetails() {

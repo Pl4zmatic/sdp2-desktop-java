@@ -1,5 +1,6 @@
 package controller;
 import java.io.IOException;
+import java.io.Serial;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import service.MachineService;
+import service.ServiceController;
 
 public class ManageMachinesController {
         @FXML
@@ -55,12 +57,12 @@ public class ManageMachinesController {
 
         private ObservableList<Machine> machines;
         private FilteredList<Machine> filteredMachines;
-        private MachineService machineService;
+        private ServiceController sc;
         private MachineFormController formController;
 
         @FXML
         private void initialize() throws IOException {
-                machineService = MachineService.getInstance();
+                this.sc = ServiceController.getInstance();
                 setupTable();
                 setupNavbar();
                 setupLocationFilter();
@@ -76,7 +78,7 @@ public class ManageMachinesController {
         }
 
         private void setupLocationFilter() {
-                List<String> locations = machineService.getAllLocations().stream()
+                List<String> locations = sc.getAllLocations().stream()
                         .distinct()
                         .sorted()
                         .collect(Collectors.toList());
@@ -268,7 +270,7 @@ public class ManageMachinesController {
 
                 confirmDialog.showAndWait().ifPresent(response -> {
                         if (response == ButtonType.YES) {
-                                boolean success = machineService.deleteMachine(machine.getCode());
+                                boolean success = sc.deleteMachine(machine.getCode());
                                 if (success) {
                                         refreshTable();
                                         hideRightPanel(); // Verberg het rechterpaneel na verwijderen
@@ -364,13 +366,13 @@ public class ManageMachinesController {
 
                         if (showDeletedMachines.isSelected()) {
                                 machines = FXCollections.observableArrayList(
-                                        machineService.getAllMachines().stream()
+                                        sc.getAllMachines().stream()
                                                 .filter(machine -> machine.getSite().getId() == currentSite.getId())
                                                 .collect(Collectors.toList())
                                 );
                         } else {
                                 machines = FXCollections.observableArrayList(
-                                        machineService.getAllActiveMachines().stream()
+                                        sc.getAllActiveMachines().stream()
                                                 .filter(machine -> machine.getSite().getId() == currentSite.getId())
                                                 .collect(Collectors.toList())
                                 );

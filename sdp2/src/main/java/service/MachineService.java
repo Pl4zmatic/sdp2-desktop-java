@@ -15,12 +15,12 @@ import java.util.List;
 
 public class MachineService {
     private final MachineDaoJpa machineDao;
-    private final LogService logService;
+
     private static MachineService instance;
-    public MachineService() {
+    private MachineService() {
 
         this.machineDao = new MachineDaoJpa();
-        this.logService = LogService.getInstance();
+
     }
     public static MachineService getInstance() {
         if (instance == null) {
@@ -42,7 +42,7 @@ public class MachineService {
                 MachineDaoJpa.startTransaction();
                 machineDao.update(m);
                 MachineDaoJpa.commitTransaction();
-                logService.logMachineEdit(clone, m);
+
 
                 return true;
             } else {
@@ -61,7 +61,7 @@ public class MachineService {
             MachineDaoJpa.startTransaction();
             machineDao.softDelete(existingMachine);
             MachineDaoJpa.commitTransaction();
-            logService.logMachineDelete(existingMachine);
+
 
             return true;
         } else {
@@ -78,7 +78,7 @@ public class MachineService {
             MachineDaoJpa.startTransaction();
             machineDao.insert(m);
             MachineDaoJpa.commitTransaction();
-            logService.logMachineCreation(m);
+
 
             return true;
         } catch (Exception e) {
