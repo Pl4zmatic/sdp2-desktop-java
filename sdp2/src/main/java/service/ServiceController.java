@@ -14,6 +14,7 @@ import utils.Rollen;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ServiceController {
@@ -154,7 +155,7 @@ public class ServiceController {
 
         createNotification(new Notification(NotificationType.MAINTENANCE
                 , "Machine : " + machine.getCode() + " will be undergoing maintenance on "
-                        + startDate, "Maintenance on one of your machines")
+                        + Arrays.toString(startDate), "Maintenance on one of your machines")
                 , users);
     }
 
@@ -175,7 +176,7 @@ public class ServiceController {
         List<User> users = new ArrayList<>();
         users.add(maintenance.getMachine().getTechnieker());
         createNotification(new Notification(NotificationType.MAINTENANCE
-                        , "Maintenance on Machine : " + maintenance.getMachine().getCode() + "has changed", "Maintenance changed")
+                        , "Maintenance on Machine : " + maintenance.getMachine().getCode() + " has changed", "Maintenance changed")
                 , users);
 
     }
