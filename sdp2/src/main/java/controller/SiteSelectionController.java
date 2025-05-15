@@ -97,7 +97,7 @@ public class SiteSelectionController {
                 boolean matchesSearch = searchText == null || searchText.isEmpty()
                         || (site.getName() != null && site.getName().toLowerCase().contains(searchText))
                         || (site.getAddress() != null && site.getAddress().toLowerCase().contains(searchText))
-                        || (site.getVerantwoordelijke() != null && site.getVerantwoordelijke().toLowerCase().contains(searchText));
+                        || (site.getVerantwoordelijke() != null && site.getVerantwoordelijke().getFullName().toLowerCase().contains(searchText));
 
                 boolean isActive = !site.getDeleted();
 
@@ -175,7 +175,7 @@ public class SiteSelectionController {
         responsibleBox.setAlignment(Pos.CENTER_LEFT);
         Label responsibleLabel = new Label("Responsible: ");
         responsibleLabel.getStyleClass().add("plant-info-label");
-        Label responsibleValue = new Label(plant.getVerantwoordelijke());
+        Label responsibleValue = new Label(plant.getVerantwoordelijke().getFullName());
         responsibleValue.getStyleClass().add("plant-info-value");
         responsibleBox.getChildren().addAll(responsibleLabel, responsibleValue);
 

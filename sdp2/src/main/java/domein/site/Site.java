@@ -1,6 +1,7 @@
 package domein.site;
 
 import domein.machine.Machine;
+import domein.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,13 +33,14 @@ public class Site implements SoftDeletable, Serializable, Cloneable {
     @Column(unique = true, nullable = false)
     private int Id;
 
-    @Column(nullable = false)
-    private String verantwoordelijke;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "verantwoordelijke_id", referencedColumnName = "id", nullable = true)
+    private User verantwoordelijke;
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Machine> machines;
 
-    public Site(String name, String address, String verantwoordelijke) {
+    public Site(String name, String address, User verantwoordelijke) {
         this.name = name;
         this.address = address;
         this.verantwoordelijke = verantwoordelijke;

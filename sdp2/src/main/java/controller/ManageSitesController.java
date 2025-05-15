@@ -112,7 +112,7 @@ public class ManageSitesController {
                 boolean matchesSearch = searchText == null || searchText.isEmpty()
                         || (site.getName() != null && site.getName().toLowerCase().contains(searchText))
                         || (site.getAddress() != null && site.getAddress().toLowerCase().contains(searchText))
-                        || (site.getVerantwoordelijke() != null && site.getVerantwoordelijke().toLowerCase().contains(searchText));
+                        || (site.getVerantwoordelijke() != null && site.getVerantwoordelijke().getFullName().toLowerCase().contains(searchText));
 
                 return matchesLocation && matchesSearch;
             });

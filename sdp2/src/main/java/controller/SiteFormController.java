@@ -343,12 +343,7 @@ public class SiteFormController {
 
             User selectedResponsible = verantwoordelijkeComboBox.getValue();
             if (selectedResponsible != null) {
-                site.setVerantwoordelijke(selectedResponsible.getFirstName() + " " + selectedResponsible.getLastName());
-            } else {
-                String manualEntry = verantwoordelijkeComboBox.getEditor().getText();
-                if (manualEntry != null && !manualEntry.isEmpty()) {
-                    site.setVerantwoordelijke(manualEntry);
-                }
+                site.setVerantwoordelijke(selectedResponsible);
             }
 
             if (site.getMachines() == null) {
@@ -405,7 +400,7 @@ public class SiteFormController {
                 city.setText(cityParts.length > 1 ? cityParts[1] : "");
             }
 
-            String responsibleName = site.getVerantwoordelijke();
+            String responsibleName = site.getVerantwoordelijke().getFullName();
             if (responsibleName != null && !responsibleName.isEmpty()) {
                 for (User responsible : filteredResponsibles) {
                     String fullName = responsible.getFirstName() + " " + responsible.getLastName();
