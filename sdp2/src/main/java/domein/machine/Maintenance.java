@@ -51,7 +51,6 @@ public class Maintenance {
         this.machine = machine;
     	setStartDate(startDate);
     	this.technician = machine.getTechnieker();
-    	this.nameTechnician = machine.getTechniekerNaam();
         setReason(reason);
         setMaintenanceReport(maintenanceReport);
         setRemarks(remarks);
