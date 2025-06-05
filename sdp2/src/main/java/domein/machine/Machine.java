@@ -55,9 +55,6 @@ public class Machine implements Serializable, SoftDeletable,Cloneable {
 	@Column(nullable = true)
 	private int uptimeInHours;
 
-	@Column(name = "technieker_naam", nullable = true)
-	private String techniekerNaam;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "technieker_id", referencedColumnName = "id", nullable = true)
 	private User technieker;
@@ -105,7 +102,6 @@ public class Machine implements Serializable, SoftDeletable,Cloneable {
         this.productieStatus = productieStatus;
         this.uptimeInHours = 0;
         this.technieker = technieker;
-        this.techniekerNaam = technieker.getFullName();
         this.currentState = new StartableState(this);
         this.currentStateString = getCurrentState();
 		this.laatsteOnderhoudDatum = LocalDate.now();
@@ -179,7 +175,7 @@ public class Machine implements Serializable, SoftDeletable,Cloneable {
 
 		return this.currentStateString + "Machine [codenaam=" + this.code + ", sitenaam=" + site.getName() + ", locatie=" + locatie
 				+ ", productInfo=" + productInfo + ", productieStatus=" + productieStatus + ", uptimeInHours=" + this.getUptime()
-				+ ", techniekerNaam=" + techniekerNaam + ", laatsteOnderhoudDatum=" + laatsteOnderhoudDatum ;
+				+ ", laatsteOnderhoudDatum=" + laatsteOnderhoudDatum ;
 	}
 
 

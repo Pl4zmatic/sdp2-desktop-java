@@ -137,9 +137,8 @@ public class SiteSelectionController {
         }
 
         if (currentUser.getRol() == Rollen.VERANTWOORDELIJKE) {
-            String fullName = currentUser.getFirstName() + " " + currentUser.getLastName();
             return site.getVerantwoordelijke() != null &&
-                    site.getVerantwoordelijke().equals(fullName);
+                    site.getVerantwoordelijke().getId().equals(currentUser.getId());
         }
 
         return false;
