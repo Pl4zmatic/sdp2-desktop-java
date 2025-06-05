@@ -688,7 +688,6 @@ public class MachineFormController {
             User selectedTechnician = technicianComboBox.getValue();
             if (selectedTechnician != null) {
                 machine.setTechnieker(selectedTechnician);
-                machine.setTechniekerNaam(selectedTechnician.getFullName());
                 machine.setLaatsteOnderhoudDatum(lastMaintenance.getValue());
             }
 
@@ -749,7 +748,7 @@ public class MachineFormController {
 
             productInfo.setText(machine.getProductInfo());
 
-            String technicianName = machine.getTechniekerNaam();
+            String technicianName = machine.getTechnieker().getFirstName() + " " + machine.getTechnieker().getLastName();
             if (technicianName != null && !technicianName.isEmpty()) {
                 for (User technician : filteredTechnicians) {
                     String fullName = technician.getFirstName() + " " + technician.getLastName();
