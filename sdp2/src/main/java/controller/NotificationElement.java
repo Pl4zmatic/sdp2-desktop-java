@@ -2,6 +2,7 @@ package controller;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 
+import domein.Session;
 import domein.notification.Notification;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -74,14 +75,14 @@ public class NotificationElement {
         message = notification.getMessage();
         notificationDeleteButton.setOnAction(event -> {
             parentContainer.getChildren().remove(notificationItemHbox);
-            
+            deleteNotification(notification);
         });
         notificationItemHbox.setOnMouseClicked(event -> showNotificationDetails());
     }
 
     @FXML
     public void deleteNotification(Notification notification) {
-        sc.deleteNotification(notification);
+        sc.deleteUserNotification(Session.getCurrentUser(), notification);
     }
     @FXML
     public void showNotificationDetails() {

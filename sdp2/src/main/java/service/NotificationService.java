@@ -39,7 +39,7 @@ public class NotificationService {
             return new ArrayList<>();
         }
         return notificationDaoJpa
-                .getNotificationsByIds(idList.stream().map(UserNotification::getId).collect(Collectors.toList()));
+                .getNotificationsByIds(idList.stream().map(obj -> obj.getNotification().getId()).collect(Collectors.toList()));
     }
 
     public boolean hasNotifications(User user) {

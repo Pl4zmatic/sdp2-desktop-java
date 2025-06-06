@@ -86,6 +86,7 @@ public class NotificationViewController {
     }
 
     private void loadFiveNotifications(List<Notification> notifications) {
+        notifications.forEach((not) -> System.out.println(not.toString()));
         loadAllNotifications(notifications, 5);
     }
 

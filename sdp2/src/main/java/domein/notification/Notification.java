@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import utils.NotificationType;
 
 @Entity
@@ -15,6 +16,7 @@ import utils.NotificationType;
 @Setter
 @Getter
 @NoArgsConstructor
+@ToString
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +37,5 @@ public class Notification {
         this.message = message;
         this.title = title;
 
-    }
-
-    @Override
-    public String toString() {
-        return message;
     }
 }
