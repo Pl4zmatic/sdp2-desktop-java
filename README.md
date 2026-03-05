@@ -39,3 +39,6 @@ Go to [Maven Installation](https://maven.apache.org/install.html) and follow the
 
 ### **! Important !** Make sure you've setup the Back-end for this project, which is found in a seperate repository
 
+Once everything is setup, you only need to hit run in the maven section.
+
+![alt text](readme/image3.png)
