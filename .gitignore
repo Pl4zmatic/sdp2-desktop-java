@@ -4,3 +4,6 @@ sdp2/.idea/
 sdp2/src/main/java/main/MainConsole.java
 
 .idea/
+
+jdk*
+apache*
