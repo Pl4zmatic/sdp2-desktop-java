@@ -9,7 +9,6 @@ This ReadMe is for setting up with the use of **Visual Studio Code**.
     * Lombok Annotations Support for VS Code
 - Java 21
 - Apache Maven
-- Back-End SDP2 (other repository)
 
 ### Java Version
 JDK 21 is required, because of the use of lombok in this project, which does not have compatibility with the latest JDK at this time of writing.
