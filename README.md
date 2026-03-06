@@ -37,8 +37,13 @@ Go to [Maven Installation](https://maven.apache.org/install.html) and follow the
 
 ## Run
 
-### **! Important !** Make sure you've setup the Back-end for this project, which is found in a seperate repository
+### **! Important !** Make sure you've setup the database for this project via the Back-End, either via Back-End (seperate repository: sdp2-back-end) or using the data-dump.sql and executing it with MySql Workbench.
 
-Once everything is setup, you only need to hit run in the maven section.
+if using the script you can create the database via docker, run the command in a terminal:
+```bash
+docker compose up -d
+```
+
+Once everything is setup, you only need to hit **run** in the maven section.
 
 ![alt text](readme/image3.png)
