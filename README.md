@@ -9,6 +9,7 @@ This ReadMe is for setting up with the use of **Visual Studio Code**.
     * Lombok Annotations Support for VS Code
 - Java 21
 - Apache Maven
+- javafx sdk 21.0.10 for debugging (optional)
 
 ### Java Version
 JDK 21 is required, because of the use of lombok in this project, which does not have compatibility with the latest JDK at this time of writing.
@@ -46,3 +47,18 @@ docker compose up -d
 Once everything is setup, you only need to hit **run** in the maven section.
 
 ![alt text](readme/image3.png)
+
+## Example Credentials
+
+1. Admin Role
+    * Email: admin@mail.com
+    * Password: Admin
+2. Technician Role
+    * Email: technieker@mail.com
+    * Password: Technieker
+3. Manager Role
+    * Email: manager@mail.com
+    * Password: Manager
+4. Responsible Person Role
+    * Email: Verantwoordelijke@mail.com
+    * Password: Verantwoordelijke
