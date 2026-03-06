@@ -272,8 +272,7 @@ public class ServiceController {
     // USER SERVICE
 
     public boolean userLogin(String email, String password) {
-        userService.login(email, password);
-        return true;
+        return userService.login(email, password);
     }
 
     public boolean userRegister(String firstName, String lastName, LocalDate birthDate, String email, String password,

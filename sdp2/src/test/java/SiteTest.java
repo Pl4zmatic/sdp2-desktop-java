@@ -1,10 +1,15 @@
 import domein.site.Site;
+import domein.user.User;
+import utils.Rollen;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDate;
 
 @ExtendWith(MockitoExtension.class)
 class SiteTest {
@@ -13,7 +18,8 @@ class SiteTest {
 
     @BeforeEach
     public void setUp() {
-        site = new Site("Main Site", "123 Street", "John Doe");
+        User verantwoordelijke = new User("John", "Doe", LocalDate.of(1998, 7, 20), "john.doe@example.com", "password", "TestStreet", "987654321", Rollen.VERANTWOORDELIJKE);
+        site = new Site("Main Site", "123 Street", verantwoordelijke);
     }
 
     @Test

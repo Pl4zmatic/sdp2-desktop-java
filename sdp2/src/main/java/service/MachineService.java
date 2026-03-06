@@ -7,7 +7,7 @@ import domein.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import repository.MachineDaoJpa;
 import repository.UserDaoJpa;
-import org.mindrot.jbcrypt.BCrypt;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import utils.Rollen;
 
 import java.util.Collections;

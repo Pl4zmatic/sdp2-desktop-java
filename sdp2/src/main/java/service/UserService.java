@@ -3,7 +3,7 @@ package service;
 import domein.Session;
 import domein.user.User;
 import repository.UserDaoJpa;
-import org.mindrot.jbcrypt.BCrypt;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import utils.Rollen;
 
 import java.io.Serializable;
@@ -36,8 +36,8 @@ public class UserService{
         try {
             // Haal het gehashte wachtwoord op uit de database
             String hashedPassword = userDao.getHashedPasswordByEmail(email);
-
-            if (hashedPassword != null && BCrypt.checkpw(password, hashedPassword)) {
+            BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), hashedPassword);
+            if (hashedPassword != null && result.verified) {
                 // Zet de ingelogde gebruiker in de sessie als het wachtwoord klopt
                 User user = userDao.getUserByEmail(email);
                 if (!user.getDeleted()) {

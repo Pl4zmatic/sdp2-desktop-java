@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import utils.Rollen;
 
-import org.mindrot.jbcrypt.BCrypt;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import utils.SoftDeletable;
 
 import java.io.Serializable;
@@ -75,7 +75,7 @@ public class User implements Serializable, SoftDeletable {
         checkString(password);
         // Als het wachtwoord nog niet gehasht is, dan doen we dat hier
         if (!password.startsWith("$2a$")) {
-            this.password = BCrypt.hashpw(password, BCrypt.gensalt());  // Hashen van het wachtwoord
+            this.password = BCrypt.withDefaults().hashToString(12, password.toCharArray());  // Hashen van het wachtwoord
             System.out.println(this.password);
         } else {
             this.password = password; // Als het al gehasht is, slaan we het gewoon op

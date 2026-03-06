@@ -18,8 +18,9 @@ class MachineTest {
 
     @BeforeEach
     public void setUp() {
-        site = new Site("TestSite", "TestAddress", "TestVerantwoordelijke");
+        User verantwoordelijke = new User("John", "Doe", LocalDate.of(1998, 7, 20), "john.doe@example.com", "password", "TestStreet", "987654321", Rollen.VERANTWOORDELIJKE);
         technieker = new User("John", "Doe", LocalDate.of(1990, 5, 15), "john.doe@example.com", "password", "TestStreet", "987654321", Rollen.TECHNIEKER);
+        site = new Site("TestSite", "TestAddress", verantwoordelijke);
         machine = new Machine(site, "M001", "TestLocatie", "ProductInfo", "Operational", technieker);
     }
 
