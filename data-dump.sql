@@ -94,7 +94,7 @@ CREATE TABLE `_prisma_migrations` (
 
 LOCK TABLES `_prisma_migrations` WRITE;
 /*!40000 ALTER TABLE `_prisma_migrations` DISABLE KEYS */;
-INSERT INTO `_prisma_migrations` VALUES ('0324af79-a90d-4d84-864b-df641304ace2','4af2021241ff5bce2deadeb0ada4d7a3b190eeea7ec887d6760247ae378120d6','2026-03-06 15:03:47.248','20250507203703_product_relation_in_machines',NULL,NULL,'2026-03-06 15:03:47.088',1),('799bccb9-2fc1-4043-b6e5-77c8e58cf29a','1c5732d26eff09e2460a769588f3019b033eac297a2418481023a0a52d8e20da','2026-03-06 15:03:46.469','20250507095951_kpi_data',NULL,NULL,'2026-03-06 15:03:46.399',1),('8f1b5edf-6554-4aee-8bcc-5a8943a8442f','168c74f2bb56f94ad964ab6ab84c9926ea7fbb10bb0518343ec41d47e5f6c172','2026-03-06 15:03:47.463','20250515105317_site_user',NULL,NULL,'2026-03-06 15:03:47.253',1),('c4d78254-f115-4fe2-983a-8b7b8151eef4','35b76fcf9d3ee82f9dbdf3696a6c6910b9da16276fd43468a340b94ba7a2878f','2026-03-06 15:03:47.084','20250507160734_maintenace_cost_and_decimal_limits_added',NULL,NULL,'2026-03-06 15:03:46.894',1),('d6f6fddc-572b-46e6-ad7b-89e1b18a215c','5abc397a2de0dcf9cdc2ff63a8a9ba2001a942fd2690164c750cfa9c25e8bb37','2026-03-06 15:03:46.731','20250507103252_product_and_site_name_reference',NULL,NULL,'2026-03-06 15:03:46.473',1),('d9d60e95-2549-4f34-8029-8bcc13fdd286','9dd0aa7acde3264a36c7e9a8a7504372d9e28820ed6de3e9ed715a7a96af5afc','2026-03-06 15:03:46.890','20250507120331_machine_code_added_to_kpi',NULL,NULL,'2026-03-06 15:03:46.735',1),('fe7a0ca4-a882-4ab5-9425-c6630bd66371','f89e1dcb04401ac048dca5c72f84e700fdcb2b71064bb5286b9086b663d7744c','2026-03-06 15:03:46.392','20250506220312_kpi',NULL,NULL,'2026-03-06 15:03:45.339',1);
+INSERT INTO `_prisma_migrations` VALUES ('02430c99-a719-4d92-a090-00ec9041fbb6','168c74f2bb56f94ad964ab6ab84c9926ea7fbb10bb0518343ec41d47e5f6c172','2026-03-06 18:13:40.339','20250515105317_site_user',NULL,NULL,'2026-03-06 18:13:40.123',1),('2ba8f24a-7af5-4195-a288-a733f64270dd','f89e1dcb04401ac048dca5c72f84e700fdcb2b71064bb5286b9086b663d7744c','2026-03-06 18:13:39.208','20250506220312_kpi',NULL,NULL,'2026-03-06 18:13:38.113',1),('2c600f0f-82a2-4315-97fc-d67cc259a67c','9dd0aa7acde3264a36c7e9a8a7504372d9e28820ed6de3e9ed715a7a96af5afc','2026-03-06 18:13:39.743','20250507120331_machine_code_added_to_kpi',NULL,NULL,'2026-03-06 18:13:39.552',1),('6dd377cb-5ebc-459e-ba7e-2b1535142be5','35b76fcf9d3ee82f9dbdf3696a6c6910b9da16276fd43468a340b94ba7a2878f','2026-03-06 18:13:39.939','20250507160734_maintenace_cost_and_decimal_limits_added',NULL,NULL,'2026-03-06 18:13:39.748',1),('723d7297-5a4e-4328-a314-116b57c1d9b6','5abc397a2de0dcf9cdc2ff63a8a9ba2001a942fd2690164c750cfa9c25e8bb37','2026-03-06 18:13:39.548','20250507103252_product_and_site_name_reference',NULL,NULL,'2026-03-06 18:13:39.292',1),('910aece0-1fc6-4d8d-a543-a355f9988818','4af2021241ff5bce2deadeb0ada4d7a3b190eeea7ec887d6760247ae378120d6','2026-03-06 18:13:40.118','20250507203703_product_relation_in_machines',NULL,NULL,'2026-03-06 18:13:39.944',1),('b22a473a-e05d-4ef1-b3a8-0d901ac70b07','1c5732d26eff09e2460a769588f3019b033eac297a2418481023a0a52d8e20da','2026-03-06 18:13:39.288','20250507095951_kpi_data',NULL,NULL,'2026-03-06 18:13:39.216',1);
 /*!40000 ALTER TABLE `_prisma_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -277,7 +277,7 @@ CREATE TABLE `product` (
   `NAME` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `product_NAME_key` (`NAME`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -286,7 +286,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Aardbeien'),(4,'Komkommers'),(6,'Sla'),(3,'Tomaten'),(5,'Wortelen');
+INSERT INTO `product` VALUES (1,'Aardbeien'),(3,'Komkommers'),(5,'Sla'),(2,'Tomaten'),(4,'Wortelen');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -395,7 +395,7 @@ CREATE TABLE `users` (
   `ROL` int NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -404,7 +404,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Techniekstraat 42','1985-07-13',0,'technieker@mail.com','Technieker','9876543','de Technieker','$2b$10$8AD9Uu6dqiLvvrxlOwCwOuKh9mBO3nYx7JMuPZPY1G0GQqEAOfxsS',2),(2,'Verantwoordelijkestraat 59','1958-03-20',0,'Verantwoordelijke@mail.com','Verantwoordelijke','1234562','de Verantwoordelijke','$2b$10$v2pe0pXIYfkGYqdCfuoG0ePcw7xTkjk30J4Rawmu84m0q/oUTIgL.',1),(3,'Adminstraat 59','2003-05-13',0,'admin@email.com','admin','1234561','de Admin','$2b$10$KK7Ye3be6Vyiz8c9pnRU0OjPDJWpIINDcFAMyUf4ZIjsxeQv5rJki',0);
+INSERT INTO `users` VALUES (1,'Verantwoordelijkestraat 59','1958-03-20',0,'Verantwoordelijke@mail.com','Verantwoordelijke','1234562','de Verantwoordelijke','$2b$10$SXcKmQ6L8HFhgHwa80o4fOg6pHgQCqbKnz5dOpLweFOlI4xDS3C4C',1),(2,'Techniekstraat 42','1985-07-13',0,'technieker@mail.com','Technieker','9876543','de Technieker','$2b$10$avMkyHCF.6ljBao/uXYurOWVM7lvXgIANGGStmW9QZ3Xt.zeRFrD.',2),(3,'Managerstraat 82','1995-02-21',0,'manager@mail.com','Manager','0493246751','de Manager','$2b$10$hi3.tv5X8pK6wQh4.BiO/eE/Yg1CChqtRSAgzsCdiEJx2mXtBqWFC',3),(4,'Adminstraat 59','2003-05-13',0,'admin@mail.com','admin','1234561','de Admin','$2b$10$pRSZgqFqmp5i78aW6tqvlexU0DN8Fk5pgUmCaZ5oR5miiCN4DbPnG',0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
@@ -418,4 +418,4 @@ SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-03-06 18:30:10
+-- Dump completed on 2026-03-06 19:45:03
