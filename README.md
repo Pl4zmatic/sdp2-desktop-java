@@ -60,5 +60,5 @@ Once everything is setup, you only need to hit **run** in the maven section.
     * Email: manager@mail.com
     * Password: Manager
 4. Responsible Person Role
-    * Email: Verantwoordelijke@mail.com
+    * Email: verantwoordelijke@mail.com
     * Password: Verantwoordelijke
