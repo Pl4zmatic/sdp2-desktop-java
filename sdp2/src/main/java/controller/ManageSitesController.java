@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import domein.site.Site;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -14,6 +16,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -132,7 +135,12 @@ public class ManageSitesController {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
-        responsibleColumn.setCellValueFactory(new PropertyValueFactory<>("verantwoordelijke"));
+
+        responsibleColumn.setCellValueFactory(new Callback<CellDataFeatures<Site, String>, ObservableValue<String>>() {
+            public javafx.beans.value.ObservableValue<String> call(CellDataFeatures<Site,String> param) {
+                return new ReadOnlyObjectWrapper<>(param.getValue().getVerantwoordelijke().getFullName());
+            };
+        });
 
         machinesColumn.setCellValueFactory(cellData -> {
             Site site = cellData.getValue();
